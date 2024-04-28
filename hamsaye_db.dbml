@@ -1,0 +1,1224 @@
+Project Hamasye {
+    database_type: 'PostgreSQL'
+    Note: '''
+        # db_hamasye Database
+        ### version: 1.0.0
+
+        It contains all stuff about main component of hamsaye project such as:
+        - storage management
+        - user management
+        - financial management
+
+        Note: This partitions are temporarily in **db_hamsaye** and it might be in another database for more convenience and order in the system in future.
+    '''
+}
+
+Table user_management.tb_users {
+    user_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    nid string [note: 'It is an abbreviation for **national code**']
+    phone string [note: 'foramt: 9120009988']
+    first_name string 
+    last_name string 
+    enabled boolean 
+    password text 
+    profile_img text 
+    become_host boolean 
+    status string 
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (user_uid) [pk, name: 'tb_user_pkey', type: btree]
+
+        // unique constraints
+        (nid) [name: 'nid_unique', type: btree, unique]
+        (phone) [name: 'phone_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **user_management.tb_users** as below:
+
+        ```
+        -- Table: user_management.tb_users
+
+        -- DROP TABLE IF EXISTS user_management.tb_users;
+
+        CREATE TABLE IF NOT EXISTS user_management.tb_users
+        (
+            user_uid uuid NOT NULL,
+            nid string COLLATE pg_catalog."default" NOT NULL,
+            phone string COLLATE pg_catalog."default" NOT NULL,
+            first_name string COLLATE pg_catalog."default" NOT NULL,
+            last_name string COLLATE pg_catalog."default" NOT NULL,
+            enabled boolean NOT NULL,
+            password text COLLATE pg_catalog."default" NOT NULL,
+            profile_img text COLLATE pg_catalog."default",
+            become_host boolean NOT NULL,
+            status string COLLATE pg_catalog."default" NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_user_pkey pk (user_uid),
+            CONSTRAINT nid_unique UNIQUE (nid),
+            CONSTRAINT phone_unique UNIQUE (phone)
+        )
+
+        /* allow database administrators to define locations in the file system where the files */
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS user_management.tb_users
+            OWNER to postgres;
+        -- Index: nid_index
+
+        -- DROP INDEX IF EXISTS user_management.nid_index;
+
+        CREATE INDEX IF NOT EXISTS nid_index
+            ON user_management.tb_users USING btree
+            (nid COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        -- Index: phone_index
+
+        -- DROP INDEX IF EXISTS user_management.phone_index;
+
+        CREATE INDEX IF NOT EXISTS phone_index
+            ON user_management.tb_users USING btree
+            (phone COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table storage_management.tb_storages {
+    storage_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    width integer 
+    height integer 
+    max_weight integer
+    amount money 
+    discount_amt decimal 
+    description string
+    status string 
+    user_uid uuid [ref: > user_management.tb_users.user_uid] // many-to-one
+    category_uid uuid [ref: > storage_management.tb_storage_categories.category_uid] // many-to-one
+    category_topic string [note: 'This feild should be updated every time that we change topic of each category']
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (storage_uid) [pk, name: 'tb_storage_pkey', type: btree]
+
+        // foreign keys
+        (category_uid) [name: 'fk_category_uid', type: btree]
+        (user_uid) [name: 'fk_user_uid', type: btree]
+
+        // indexes
+        (category_topic) [name: '', type: btree]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **storage_management.tb_storages** as below:
+
+        ```
+        -- Table: storage_management.tb_storages
+
+        -- DROP TABLE IF EXISTS storage_management.tb_storages;
+
+        CREATE TABLE IF NOT EXISTS storage_management.tb_storages
+        (
+            storage_uid uuid NOT NULL,
+            width integer NOT NULL,
+            height integer NOT NULL,
+            max_weight integer,
+            amount money NOT NULL,
+            discount_amt decimal NOT NULL,
+            description string COLLATE pg_catalog."default",
+            status string COLLATE pg_catalog."default" NOT NULL,
+            user_uid uuid NOT NULL,
+            category_uid uuid NOT NULL,
+            category_topic string COLLATE pg_catalog."default" NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_storage_pkey pk (storage_uid),
+            CONSTRAINT fk_category_uid FOREIGN KEY (category_uid)
+                REFERENCES storage_management.tb_storage_categories (category_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT fk_user_uid FOREIGN KEY (user_uid)
+                REFERENCES user_management.tb_users (user_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        /* allow database administrators to define locations in the file system where the files */
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS storage_management.tb_storages
+            OWNER to postgres;
+        -- Index: category_topic_index
+
+        -- DROP INDEX IF EXISTS storage_management.category_topic_index;
+
+        CREATE INDEX IF NOT EXISTS category_topic_index
+            ON storage_management.tb_storages USING btree
+            (category_topic COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table storage_management.tb_storage_reviews {
+    review_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    writer_id uuid 
+    writer_comment string 
+    owner_id uuid
+    owner_comment string
+    rating real 
+    edited boolean 
+    has_been_answered boolean 
+    status string 
+    storage_uid uuid [ref: > storage_management.tb_storages.storage_uid] // many-to-one
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (review_uid) [pk, name: 'tb_storage_reviews_pkey', type: btree]
+
+        // foreign keys
+        (storage_uid) [name: 'fk_storage_uid', type: btree]
+
+        // indexes
+        (writer_id, owner_id, storage_uid) [name: 'review_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **storage_management.tb_storage_reviews** as below:
+
+        ```
+        -- Table: storage_management.tb_storage_reviews
+
+        -- DROP TABLE IF EXISTS storage_management.tb_storage_reviews;
+
+        CREATE TABLE IF NOT EXISTS storage_management.tb_storage_reviews
+        (
+            review_uid uuid NOT NULL,
+            writer_id uuid NOT NULL,
+            writer_comment string COLLATE pg_catalog."default" NOT NULL,
+            owner_id uuid,
+            owner_comment string COLLATE pg_catalog."default",
+            rating real NOT NULL,
+            edited boolean NOT NULL,
+            has_been_answered boolean NOT NULL,
+            status string COLLATE pg_catalog."default" NOT NULL,
+            storage_uid uuid NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_storage_reviews_pkey pk (review_uid),
+            CONSTRAINT review_unique UNIQUE (writer_id, owner_id, storage_uid),
+            CONSTRAINT fk_storage_uid FOREIGN KEY (storage_uid)
+                REFERENCES storage_management.tb_storages (storage_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        /* allow database administrators to define locations in the file system where the files */
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS storage_management.tb_storage_reviews
+            OWNER to postgres;
+        ```
+    '''
+
+}
+
+Table storage_management.tb_storage_images {
+    storage_img_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    image1 text 
+    image2 text
+    image3 text
+    image4 text
+    image5 text
+    image6 text
+    image7 text
+    storage_uid uuid [ref: > storage_management.tb_storages.storage_uid] // many-to-one
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (storage_img_uid) [pk, name: 'tb_storage_img_pkey', type: btree]
+
+        // foreign keys
+        (storage_uid) [name: 'fk_storage_uid', type: btree]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **storage_management.tb_storage_images** as below:
+
+        ```
+        -- Table: storage_management.tb_storage_images
+
+        -- DROP TABLE IF EXISTS storage_management.tb_storage_images;
+
+        CREATE TABLE IF NOT EXISTS storage_management.tb_storage_images
+        (
+            storage_img_uid uuid NOT NULL,
+            image1 text COLLATE pg_catalog."default" NOT NULL,
+            image2 text COLLATE pg_catalog."default",
+            image3 text COLLATE pg_catalog."default",
+            image4 text COLLATE pg_catalog."default",
+            image5 text COLLATE pg_catalog."default",
+            image6 text COLLATE pg_catalog."default",
+            image7 text COLLATE pg_catalog."default",
+            storage_uid uuid NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_storage_img_pkey pk (storage_img_uid),
+            CONSTRAINT fk_storage_uid FOREIGN KEY (storage_uid)
+                REFERENCES storage_management.tb_storages (storage_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        /* allow database administrators to define locations in the file system where the files */
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS storage_management.tb_storage_images
+            OWNER to postgres;
+        ```
+    '''
+
+}
+
+Table storage_management.tb_storage_features {
+    feature_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    title string 
+    description string [note: 'It is optional for features. But it is necessary for support and safety']
+    icon_image text
+    has_icon_image boolean 
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (feature_uid) [pk, name: 'tb_storage_features_pkey', type: btree]
+
+        // indexes
+        (title) [name: 'storage_feature_title_index', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **storage_management.tb_storage_features** as below:
+
+        ```
+        -- Table: storage_management.tb_storage_features
+
+        -- DROP TABLE IF EXISTS storage_management.tb_storage_features;
+
+        CREATE TABLE IF NOT EXISTS storage_management.tb_storage_features
+        (
+            feature_uid uuid NOT NULL,
+            title string COLLATE pg_catalog."default" NOT NULL,
+            description string COLLATE pg_catalog."default",
+            icon_image text COLLATE pg_catalog."default",
+            has_icon_image boolean NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_storage_features_pkey pk (feature_uid)
+        )
+
+        /* allow database administrators to define locations in the file system where the files */
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS storage_management.tb_storage_features
+            OWNER to postgres;
+        -- Index: storage_feature_title_index
+
+        -- DROP INDEX IF EXISTS storage_management.storage_feature_title_index;
+
+        CREATE UNIQUE INDEX IF NOT EXISTS storage_feature_title_index
+            ON storage_management.tb_storage_features USING btree
+            (title COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table storage_management.tb_storage_categories {
+    category_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    parent_uid uuid [note: 'nested relationship']
+    name string 
+    code string
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (category_uid) [pk, name: 'tb_storage_categories_pkey', type: btree]
+
+        // indexes
+        (code) [name: 'storage_category_code_index', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **storage_management.tb_storage_categories** as below:
+
+        ```
+        -- Table: storage_management.tb_storage_categories
+
+        -- DROP TABLE IF EXISTS storage_management.tb_storage_categories;
+
+        CREATE TABLE IF NOT EXISTS storage_management.tb_storage_categories
+        (
+            category_uid uuid NOT NULL,
+            parent_uid uuid,
+            name string COLLATE pg_catalog."default" NOT NULL,
+            code string COLLATE pg_catalog."default" NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_storage_categories_pkey pk (category_uid)
+        )
+
+        /* allow database administrators to define locations in the file system where the files */
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS storage_management.tb_storage_categories
+            OWNER to postgres;
+        -- Index: storage_category_code_index
+
+        -- DROP INDEX IF EXISTS storage_management.storage_category_code_index;
+
+        CREATE UNIQUE INDEX IF NOT EXISTS storage_category_code_index
+            ON storage_management.tb_storage_categories USING btree
+            (code COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+// interface table for (tb_storages, tb_storage_features)
+Table storage_management.tb_feature_of_storages {
+    feature_uid uuid [ref: > storage_management.tb_storage_features.feature_uid]
+    storage_uid uuid [ref: > storage_management.tb_storages.storage_uid]
+
+    indexes {
+        // foreign keys
+        (feature_uid) [name: 'fk_feature_uid', type: btree]
+        (storage_uid) [name: 'fk_storage_uid', type: btree]
+
+        // indexes
+        (feature_uid, storage_uid) [name: 'feature_storage_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **storage_management.tb_feature_of_storages** as below:
+
+        ```
+        -- Table: storage_management.tb_feature_of_storages
+
+        -- DROP TABLE IF EXISTS storage_management.tb_feature_of_storages;
+
+        CREATE TABLE IF NOT EXISTS storage_management.tb_feature_of_storages
+        (
+            feature_uid uuid NOT NULL,
+            storage_uid uuid NOT NULL,
+            CONSTRAINT feature_storage_unique UNIQUE (feature_uid, storage_uid),
+            CONSTRAINT fk_feature_uid FOREIGN KEY (feature_uid)
+                REFERENCES storage_management.tb_storage_features (feature_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT fk_storage_uid FOREIGN KEY (storage_uid)
+                REFERENCES storage_management.tb_storages (storage_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS storage_management.tb_feature_of_storages
+            OWNER to postgres;
+        ```
+    '''
+
+}
+
+Table storage_management.tb_bookmarks {
+    // bookmark_uid uuid [pk]
+    user_uid uuid [ref: > user_management.tb_users.user_uid] // many-to-one
+    storage_uid uuid [ref: <> storage_management.tb_storages.storage_uid] // many-to-many
+    created_at timestamp 
+
+    indexes {
+        // foreign keys
+        (user_uid) [name: 'fk_user_uid', type: btree]
+        (storage_uid) [name: 'fk_storage_uid', type: btree]
+
+        // indexes
+        (user_uid, storage_uid) [name: 'bookmark_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **storage_management.tb_bookmarks** as below:
+
+        ```
+        -- Table: storage_management.tb_bookmarks
+
+        -- DROP TABLE IF EXISTS storage_management.tb_bookmarks;
+
+        CREATE TABLE IF NOT EXISTS storage_management.tb_bookmarks
+        (
+            user_uid uuid NOT NULL,
+            storage_uid uuid NOT NULL,
+            created_at timestamp NOT NULL,
+            CONSTRAINT bookmark_unique UNIQUE (user_uid, storage_uid),
+            CONSTRAINT fk_storage_uid FOREIGN KEY (storage_uid)
+                REFERENCES storage_management.tb_storages (storage_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT fk_user_uid FOREIGN KEY (user_uid)
+                REFERENCES user_management.tb_users (user_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS storage_management.tb_bookmarks
+            OWNER to postgres;
+        ```
+    '''
+
+}
+
+Table reservation_management.tb_reservations {
+    reservation_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    from_date date 
+    to_date date 
+    total_fees money 
+    rent_per money [note: 'The number of installments is obtained from this parameter and the total fees']
+    amount_paid money 
+    per string [note: 'check constraint per::text - any of this ("day", "month", "year")']
+    storage_uid uuid [ref: > storage_management.tb_storages.storage_uid] // many-to-one
+    user_uid uuid [ref: > user_management.tb_users.user_uid] // many-to-one
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (reservation_uid) [pk, name: 'tb_reservations_pkey', type: btree]
+
+        // foreign keys
+        (storage_uid) [name: 'fk_storage_uid', type: btree]
+        (user_uid) [name: 'fk_user_uid', type: btree]
+
+        // indexes
+        (per) [name: 'reserv_per_index', type: btree]
+        (from_date, to_date, storage_uid, user_uid) [name: 'reserv_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **reservation_management.tb_reservations** as below:
+
+        ```
+        -- Table: reservation_management.tb_reservations
+
+        -- DROP TABLE IF EXISTS reservation_management.tb_reservations;
+
+        CREATE TABLE IF NOT EXISTS reservation_management.tb_reservations
+        (
+            reservation_uid uuid NOT NULL,
+            from_date date NOT NULL,
+            to_date date NOT NULL,
+            total_fees money NOT NULL,
+            rent_per money NOT NULL,
+            amount_paid money NOT NULL,
+            per string COLLATE pg_catalog."default" NOT NULL,
+            storage_uid uuid NOT NULL,
+            user_uid uuid NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_reservations_pkey pk (reservation_uid),
+            CONSTRAINT reserv_unique UNIQUE (from_date, to_date, storage_uid, user_uid),
+            CONSTRAINT fk_storage_uid FOREIGN KEY (storage_uid)
+                REFERENCES storage_management.tb_storages (storage_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT fk_user_uid FOREIGN KEY (user_uid)
+                REFERENCES user_management.tb_users (user_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT reserv_per_check CHECK (per::text - ANY (ARRAY['day'::string, 'month'::string, 'year'::string]::text[]))
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS reservation_management.tb_reservations
+            OWNER to postgres;
+        -- Index: reserv_per_index
+
+        -- DROP INDEX IF EXISTS reservation_management.reserv_per_index;
+
+        CREATE INDEX IF NOT EXISTS reserv_per_index
+            ON reservation_management.tb_reservations USING btree
+            (per COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+// interface table for (tb_reservations, tb_products)
+Table reservation_management.tb_reservation_products {
+    reservation_uid uuid [ref: > reservation_management.tb_reservations.reservation_uid]
+    product_uid uuid [ref: > reservation_management.tb_products.product_uid]
+
+    indexes {
+        // foreign keys
+        (product_uid) [name: 'fk_product_uid', type: btree]
+        (reservation_uid) [name: 'fk_reservation_uid', type: btree]
+
+        // indexes
+        (reservation_uid, product_uid) [name: 'reserv_product_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **reservation_management.tb_reservation_products** as below:
+
+        ```
+        -- Table: reservation_management.tb_reservation_products
+
+        -- DROP TABLE IF EXISTS reservation_management.tb_reservation_products;
+
+        CREATE TABLE IF NOT EXISTS reservation_management.tb_reservation_products
+        (
+            reservation_uid uuid NOT NULL,
+            product_uid uuid NOT NULL,
+            CONSTRAINT reserv_product_unique UNIQUE (reservation_uid, product_uid),
+            CONSTRAINT fk_product_uid FOREIGN KEY (product_uid)
+                REFERENCES reservation_management.tb_products (product_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT fk_reservation_uid FOREIGN KEY (reservation_uid)
+                REFERENCES reservation_management.tb_reservations (reservation_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS reservation_management.tb_reservation_products
+            OWNER to postgres;
+        ```
+    '''
+
+}
+
+// interface table for (tb_reservation_histories, tb_products)
+Table reservation_management.tb_reservation_history_products {
+    history_uid uuid [ref: > reservation_management.tb_reservation_histories.history_uid]
+    product_uid uuid [ref: > reservation_management.tb_products.product_uid]
+
+    indexes {
+        // foreign keys
+        (product_uid) [name: 'fk_product_uid', type: btree]
+        (history_uid) [name: 'fk_history_uid', type: btree]
+
+        // indexes
+        (history_uid, product_uid) [name: 'reserv_product_history_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **reservation_management.tb_reservation_history_products** as below:
+
+        ```
+        -- Table: reservation_management.tb_reservation_history_products
+
+        -- DROP TABLE IF EXISTS reservation_management.tb_reservation_history_products;
+
+        CREATE TABLE IF NOT EXISTS reservation_management.tb_reservation_history_products
+        (
+            history_uid uuid NOT NULL,
+            product_uid uuid NOT NULL,
+            CONSTRAINT reserv_product_history_unique UNIQUE (history_uid, product_uid),
+            CONSTRAINT fk_history_uid FOREIGN KEY (history_uid)
+                REFERENCES reservation_management.tb_reservation_histories (history_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT fk_product_uid FOREIGN KEY (product_uid)
+                REFERENCES reservation_management.tb_products (product_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS reservation_management.tb_reservation_history_products
+            OWNER to postgres;
+        ```
+    '''
+
+}
+
+Table reservation_management.tb_reservation_histories {
+    history_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    from_date date 
+    to_date date 
+    total_fees money 
+    rent_per money [note: 'The number of installments is obtained from this parameter and the total amount']
+    amount_paid money 
+    per string [note: 'check constraint per::text - any of this ("day", "month", "year")']
+    status string 
+    storage_uid uuid [ref: > storage_management.tb_storages.storage_uid] // many-to-one
+    user_uid uuid [ref: > user_management.tb_users.user_uid] // many-to-one
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (history_uid) [pk, name: 'tb_reservation_history_pkey', type: btree]
+
+        // foreign keys
+        (storage_uid) [name: 'fk_storage_uid', type: btree]
+        (user_uid) [name: 'fk_user_uid', type: btree]
+
+        // indexes
+        (per) [name: 'reserv_history_per_index', type: btree]
+        (from_date, to_date, storage_uid, user_uid) [name: 'reserv_history_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **reservation_management.tb_reservation_histories** as below:
+
+        ```
+        -- Table: reservation_management.tb_reservation_histories
+
+        -- DROP TABLE IF EXISTS reservation_management.tb_reservation_histories;
+
+        CREATE TABLE IF NOT EXISTS reservation_management.tb_reservation_histories
+        (
+            history_uid uuid NOT NULL,
+            from_date date NOT NULL,
+            to_date date NOT NULL,
+            total_fees money NOT NULL,
+            rent_per money NOT NULL,
+            amount_paid money NOT NULL,
+            per string COLLATE pg_catalog."default" NOT NULL,
+            status string COLLATE pg_catalog."default" NOT NULL,
+            storage_uid uuid NOT NULL,
+            user_uid uuid NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_reservation_history_pkey pk (history_uid),
+            CONSTRAINT reserv_history_unique UNIQUE (from_date, to_date, storage_uid, user_uid),
+            CONSTRAINT fk_storage_uid FOREIGN KEY (storage_uid)
+                REFERENCES storage_management.tb_storages (storage_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT fk_user_uid FOREIGN KEY (user_uid)
+                REFERENCES user_management.tb_users (user_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT reserv_history_per_check CHECK (per::text - ANY (ARRAY['day'::string, 'month'::string, 'year'::string]::text[]))
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS reservation_management.tb_reservation_histories
+            OWNER to postgres;
+        -- Index: reserv_history_per_index
+
+        -- DROP INDEX IF EXISTS reservation_management.reserv_history_per_index;
+
+        CREATE INDEX IF NOT EXISTS reserv_history_per_index
+            ON reservation_management.tb_reservation_histories USING btree
+            (per COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table reservation_management.tb_products {
+    product_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    description string 
+    price money 
+    type_uid uuid [ref: > reservation_management.tb_product_types.type_uid]
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (product_uid) [pk, name: 'tb_products_pkey', type: btree]
+
+        // foreign keys
+        (type_uid) [name: 'fk_product_type_uid', type: btree]
+
+        // indexes
+        (description) [name: 'product_desc_index', type: btree]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **reservation_management.tb_products** as below:
+
+        ```
+        -- Table: reservation_management.tb_products
+
+        -- DROP TABLE IF EXISTS reservation_management.tb_products;
+
+        CREATE TABLE IF NOT EXISTS reservation_management.tb_products
+        (
+            product_uid uuid NOT NULL,
+            description string COLLATE pg_catalog."default" NOT NULL,
+            price money NOT NULL,
+            type_uid uuid NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_products_pkey pk (product_uid),
+            CONSTRAINT fk_product_type_uid FOREIGN KEY (type_uid)
+                REFERENCES reservation_management.tb_product_types (type_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS reservation_management.tb_products
+            OWNER to postgres;
+        -- Index: product_desc_index
+
+        -- DROP INDEX IF EXISTS reservation_management.product_desc_index;
+
+        CREATE INDEX IF NOT EXISTS product_desc_index
+            ON reservation_management.tb_products USING btree
+            (description COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table reservation_management.tb_product_types {
+    type_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    name string 
+    active boolean 
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (type_uid) [pk, name: 'tb_product_type_pkey', type: btree]
+
+        // indexes
+        (name) [name: 'product_type_name_index', type: btree]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **reservation_management.tb_product_types** as below:
+
+        ```
+        -- Table: reservation_management.tb_product_types
+
+        -- DROP TABLE IF EXISTS reservation_management.tb_product_types;
+
+        CREATE TABLE IF NOT EXISTS reservation_management.tb_product_types
+        (
+            type_uid uuid NOT NULL,
+            name string COLLATE pg_catalog."default" NOT NULL,
+            active boolean NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_product_type_pkey pk (type_uid)
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS reservation_management.tb_product_types
+            OWNER to postgres;
+        -- Index: product_type_name_index
+
+        -- DROP INDEX IF EXISTS reservation_management.product_type_name_index;
+
+        CREATE INDEX IF NOT EXISTS product_type_name_index
+            ON reservation_management.tb_product_types USING btree
+            (name COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table reservation_management.tb_product_sub_types {
+    sub_type_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    name string 
+    active boolean 
+    created_at timestamp 
+    modified_at timestamp
+    type_uid uuid [ref: > reservation_management.tb_product_types.type_uid]
+
+    indexes {
+        // pk
+        (sub_type_uid) [pk, name: 'tb_sub_product_type_pkey', type: btree]
+
+        // foreign key
+        (type_uid) [name: 'fk_type_uid', type: btree]
+
+        // indexes
+        (name) [name: 'product_sub_type_name_index', type: btree]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **reservation_management.tb_product_sub_types** as below:
+
+        ```
+        -- Table: reservation_management.tb_product_sub_types
+
+        -- DROP TABLE IF EXISTS reservation_management.tb_product_sub_types;
+
+        CREATE TABLE IF NOT EXISTS reservation_management.tb_product_sub_types
+        (
+            sub_type_uid uuid NOT NULL,
+            name string COLLATE pg_catalog."default" NOT NULL,
+            active boolean NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            type_uid uuid NOT NULL,
+            CONSTRAINT tb_sub_product_type_pkey pk (sub_type_uid),
+            CONSTRAINT fk_type_uid FOREIGN KEY (type_uid)
+                REFERENCES reservation_management.tb_product_types (type_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS reservation_management.tb_product_sub_types
+            OWNER to postgres;
+        -- Index: product_sub_type_name_index
+
+        -- DROP INDEX IF EXISTS reservation_management.product_sub_type_name_index;
+
+        CREATE INDEX IF NOT EXISTS product_sub_type_name_index
+            ON reservation_management.tb_product_sub_types USING btree
+            (name COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table message_queue_schema.tb_notifications {
+    notification_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    title string 
+    message text
+    created_at timestamp 
+    is_seen boolean 
+    user_uid uuid [ref: > user_management.tb_users.user_uid]
+
+    indexes {
+        // pk
+        (notification_uid) [pk, name: 'tb_notification_pkey', type: btree]
+
+        // foreign key
+        (user_uid) [name: 'fk_user_uid', type: btree]
+
+        // indexes
+        (title) [name: 'notification_title_index', type: btree]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **message_queue_schema.tb_notifications** as below:
+
+        ```
+        -- Table: message_queue_schema.tb_notifications
+
+        -- DROP TABLE IF EXISTS message_queue_schema.tb_notifications;
+
+        CREATE TABLE IF NOT EXISTS message_queue_schema.tb_notifications
+        (
+            notification_uid uuid NOT NULL,
+            title string COLLATE pg_catalog."default" NOT NULL,
+            message text COLLATE pg_catalog."default",
+            created_at timestamp NOT NULL,
+            is_seen boolean NOT NULL,
+            user_uid uuid NOT NULL,
+            CONSTRAINT tb_notification_pkey pk (notification_uid),
+            CONSTRAINT fk_user_uid FOREIGN KEY (user_uid)
+                REFERENCES user_management.tb_users (user_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS message_queue_schema.tb_notifications
+            OWNER to postgres;
+        -- Index: notification_title_index
+
+        -- DROP INDEX IF EXISTS message_queue_schema.notification_title_index;
+
+        CREATE UNIQUE INDEX IF NOT EXISTS notification_title_index
+            ON message_queue_schema.tb_notifications USING btree
+            (title COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table geo_schema.tb_locations {
+    location_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    geo_point point 
+    address string 
+    storage_uid uuid [ref: - storage_management.tb_storages.storage_uid]
+    city_uid uuid [ref: - geo_schema.tb_cities.city_uid]
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (location_uid) [pk, name: 'tb_location_pkey', type: btree]
+
+        // foreign keys
+        (city_uid) [name: 'fk_city_uid', type: btree]
+        (storage_uid) [name: 'fk_storage_uid', type: btree]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **geo_schema.tb_locations** as below:
+
+        ```
+        -- Table: geo_schema.tb_locations
+
+        -- DROP TABLE IF EXISTS geo_schema.tb_locations;
+
+        CREATE TABLE IF NOT EXISTS geo_schema.tb_locations
+        (
+            location_uid uuid NOT NULL,
+            geo_point point NOT NULL,
+            address string COLLATE pg_catalog."default" NOT NULL,
+            storage_uid uuid NOT NULL,
+            city_uid uuid NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_location_pkey pk (location_uid),
+            CONSTRAINT fk_city_uid FOREIGN KEY (city_uid)
+                REFERENCES geo_schema.tb_cities (city_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION,
+            CONSTRAINT fk_storage_uid FOREIGN KEY (storage_uid)
+                REFERENCES storage_management.tb_storages (storage_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS geo_schema.tb_locations
+            OWNER to postgres;
+        ```
+    '''
+
+}
+
+Table geo_schema.tb_cities {
+    city_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    name string 
+    abv string [note: 'abbreviation for each city - help searching by index']
+    active boolean 
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (city_uid) [pk, name: 'tb_city_pkey', type: btree]
+
+        // indexes
+        (abv) [name: 'city_abv_index', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **geo_schema.tb_cities** as below:
+
+        ```
+        -- Table: geo_schema.tb_cities
+
+        -- DROP TABLE IF EXISTS geo_schema.tb_cities;
+
+        CREATE TABLE IF NOT EXISTS geo_schema.tb_cities
+        (
+            city_uid uuid NOT NULL,
+            name string COLLATE pg_catalog."default" NOT NULL,
+            abv character(6) COLLATE pg_catalog."default" NOT NULL,
+            active boolean NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_city_pkey pk (city_uid)
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS geo_schema.tb_cities
+            OWNER to postgres;
+        -- Index: city_abv_index
+
+        -- DROP INDEX IF EXISTS geo_schema.city_abv_index;
+
+        CREATE UNIQUE INDEX IF NOT EXISTS city_abv_index
+            ON geo_schema.tb_cities USING btree
+            (abv COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+
+}
+
+Table financial_management.tb_transactions {
+    transaction_uid uuid [pk, note: 'It is implemented with **uuid_generate_v4()** function (completely random)']
+    type string 
+    code smallint 
+    site_fees money
+    total_fees money
+    discount_amt decimal [note: 'abbreviation of discount amount']
+    transfer_on timestamp 
+    status string 
+    reservation_uid uuid [ref: > reservation_management.tb_reservations.reservation_uid]
+    created_at timestamp 
+    modified_at timestamp
+
+    indexes {
+        // pk
+        (transaction_uid) [pk, name: 'tb_transactions_pkey', type: btree]
+
+        // foreign keys
+        (reservation_uid) [name: 'fk_reservation_uid', type: btree]
+        
+        // indexes
+        (type) [name: 'transaction_type_index', type: btree]
+        (transfer_on, reservation_uid) [name: 'transaction_unique', type: btree, unique]
+    }
+
+    Note: '''
+        # Table script
+
+        The Create Script related to this table is placed below for more accessibility and convenience.
+
+        ## The Creation Script of **financial_management.tb_transactions** as below:
+
+        ```
+        -- Table: financial_management.tb_transactions
+
+        -- DROP TABLE IF EXISTS financial_management.tb_transactions;
+
+        CREATE TABLE IF NOT EXISTS financial_management.tb_transactions
+        (
+            transaction_uid uuid NOT NULL,
+            type string COLLATE pg_catalog."default" NOT NULL,
+            code smallint NOT NULL,
+            site_fees money,
+            total_fees money,
+            discount_amt decimal NOT NULL,
+            transfer_on timestamp NOT NULL,
+            status string COLLATE pg_catalog."default" NOT NULL,
+            reservation_uid uuid NOT NULL,
+            created_at timestamp NOT NULL,
+            modified_at timestamp,
+            CONSTRAINT tb_transactions_pkey pk (transaction_uid),
+            CONSTRAINT transaction_unique UNIQUE (transfer_on, reservation_uid),
+            CONSTRAINT fk_reservation_uid FOREIGN KEY (reservation_uid)
+                REFERENCES reservation_management.tb_reservations (reservation_uid) MATCH SIMPLE
+                ON UPDATE NO ACTION
+                ON DELETE NO ACTION
+        )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS financial_management.tb_transactions
+            OWNER to postgres;
+        -- Index: transaction_type_index
+
+        -- DROP INDEX IF EXISTS financial_management.transaction_type_index;
+
+        CREATE INDEX IF NOT EXISTS transaction_type_index
+            ON financial_management.tb_transactions USING btree
+            (type COLLATE pg_catalog."default" ASC NULLS LAST)
+            TABLESPACE pg_default;
+        ```
+    '''
+        
+}
