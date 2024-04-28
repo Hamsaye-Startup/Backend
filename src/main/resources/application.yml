@@ -1,0 +1,12 @@
+
+spring:
+  profiles:
+    include:
+      - dbconfig
+  application:
+    name: hamsaye-project
+
+server:
+  port: 8086
+
+
