@@ -1,10 +1,21 @@
 package org.hamsaye.storages.models;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hamsaye.generals.models.BaseModel;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @Entity
 @Builder
@@ -13,7 +24,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "tb_storage_comments")
-public class StorageCommentEntity extends BaseModel implements Serializable {
+public class StorageCommentEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,6 +33,14 @@ public class StorageCommentEntity extends BaseModel implements Serializable {
 
     @Column(name = "comment", columnDefinition = "character varying", length = 1024)
     private String message;
+
+    @CreationTimestamp
+    @Column(name = "created_at", columnDefinition = "timestamp", nullable = false)
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "modified_at", columnDefinition = "timestamp")
+    private Timestamp modifiedAt;
 
     // TODO: generate the owner or writer of message as user
 

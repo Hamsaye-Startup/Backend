@@ -6,6 +6,8 @@ import java.io.Serializable;
 
 @Builder
 public record StorageDto (
+
+        String name,
         Integer width,
         Integer height,
         Integer maxWeight,

@@ -1,23 +1,17 @@
 package org.hamsaye.storages.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hamsaye.generals.models.BaseModel;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,13 +20,29 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "tb_storages")
-public class StorageEntity extends BaseModel implements Serializable {
+@Table(
+        name = "tb_storages",
+        indexes = {
+                @Index(name = "storage_name_index", columnList = "storage_name")
+        }
+)
+public class StorageEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "storage_uid", columnDefinition = "uuid", unique = true, nullable = false)
     private UUID uid;
+
+    @Column(name = "storage_name", columnDefinition = "character varying", length = 64, nullable = false)
+    private String name;
+
+    @CreationTimestamp
+    @Column(name = "created_at", columnDefinition = "timestamp", nullable = false)
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "modified_at", columnDefinition = "timestamp")
+    private Timestamp modifiedAt;
 
     @Column(name = "width", columnDefinition = "integer", nullable = false)
     private Integer width;
@@ -55,29 +65,17 @@ public class StorageEntity extends BaseModel implements Serializable {
     @Column(name = "status", columnDefinition = "character varying", length = 32, nullable = false)
     private String status;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_uid", columnDefinition = "uuid", nullable = false)
     private StorageCategoryEntity category;
 
-    /*
-    @OneToMany
-    @JoinColumn(name = "", columnDefinition = "uuid", nullable = false)
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "tb_features_storage",
+            joinColumns = @JoinColumn(name = "storage_uid", columnDefinition = "uuid"),
+            inverseJoinColumns = @JoinColumn(name = "feature_uid", columnDefinition = "uuid")
+    )
     private List<StorageFeatureEntity> features;
-    */
 
     // TODO: generate a relationship with user
-
-    @Override
-    public String toString() {
-        return "Storage{" +
-                "uid=" + uid +
-                ", width=" + width +
-                ", height=" + height +
-                ", maxWeight=" + maxWeight +
-                ", amount=" + amount +
-                ", discountAmount=" + discountAmount +
-                ", description='" + description + '\'' +
-                ", status='" + status + '\'' +
-                '}';
-    }
 }

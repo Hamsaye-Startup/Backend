@@ -4,12 +4,12 @@ import org.hamsaye.storages.dtos.StorageDto;
 import org.hamsaye.storages.models.StorageEntity;
 import org.springframework.core.convert.converter.Converter;
 
-@jakarta.persistence.Converter
 public class MapStorageDtoToStorageEntity implements Converter<StorageDto, StorageEntity> {
 
     @Override
     public StorageEntity convert(StorageDto source) {
         return StorageEntity.builder()
+                .name(source.name())
                 .width(source.width())
                 .height(source.height())
                 .maxWeight(source.maxWeight())

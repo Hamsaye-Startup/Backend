@@ -1,15 +1,24 @@
 package org.hamsaye.storages.models;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hamsaye.generals.models.BaseModel;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
@@ -19,7 +28,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_storage_images")
-public class StorageImageEntity extends BaseModel implements Serializable {
+public class StorageImageEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -32,6 +41,14 @@ public class StorageImageEntity extends BaseModel implements Serializable {
 
     @Column(name = "image1", columnDefinition = "text", nullable = false)
     private String coverImage;
+
+    @CreationTimestamp
+    @Column(name = "created_at", columnDefinition = "timestamp", nullable = false)
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "modified_at", columnDefinition = "timestamp")
+    private Timestamp modifiedAt;
 
     @Column(name = "image2", columnDefinition = "text")
     private String secondImage;

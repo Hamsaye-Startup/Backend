@@ -6,8 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -16,9 +14,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hamsaye.generals.models.BaseModel;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Entity
@@ -33,7 +33,7 @@ import java.util.UUID;
                 @Index(name = "storage_category_code_index", columnList = "code", unique = true)
         }
 )
-public class StorageCategoryEntity extends BaseModel implements Serializable {
+public class StorageCategoryEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -49,6 +49,14 @@ public class StorageCategoryEntity extends BaseModel implements Serializable {
 
     @Column(name = "code", columnDefinition = "character varying", length = 8, nullable = false)
     private String code;
+
+    @CreationTimestamp
+    @Column(name = "created_at", columnDefinition = "timestamp", nullable = false)
+    private Timestamp createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "modified_at", columnDefinition = "timestamp")
+    private Timestamp modifiedAt;
 
     @Override
     public String toString() {
