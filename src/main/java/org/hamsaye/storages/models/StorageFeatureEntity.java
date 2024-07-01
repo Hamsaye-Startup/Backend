@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hamsaye.utils.log.Functionality;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -25,7 +26,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "tb_storage_features")
-public class StorageFeatureEntity implements Serializable {
+public class StorageFeatureEntity implements Serializable, Functionality {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

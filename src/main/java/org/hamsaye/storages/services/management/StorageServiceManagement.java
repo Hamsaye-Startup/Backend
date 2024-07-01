@@ -11,7 +11,7 @@ import org.hamsaye.storages.status.StorageStatus;
 import org.hamsaye.storages.status.StorageStatusGenerator;
 import org.hamsaye.utils.log.Functionality;
 import org.hamsaye.utils.log.Functional;
-import org.hamsaye.utils.wrapper.StorageWrapper;
+import org.hamsaye.storages.wrapper.StorageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;

@@ -1,4 +1,4 @@
-package org.hamsaye.utils.wrapper;
+package org.hamsaye.storages.wrapper;
 
 import lombok.RequiredArgsConstructor;
 import org.hamsaye.storages.mappers.StorageMapper;

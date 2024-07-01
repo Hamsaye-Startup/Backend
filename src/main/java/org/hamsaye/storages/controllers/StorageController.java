@@ -42,7 +42,7 @@ public class StorageController {
         storageServiceManagement.deleteStorage(uid);
 
         // TODO generate a format for sending response
-        return new ResponseEntity<>("delete was successful", HttpStatus.OK);
+        return new ResponseEntity<>("storage was deleted successfully", HttpStatus.OK);
     }
 
     @GetMapping

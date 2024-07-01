@@ -14,6 +14,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hamsaye.utils.log.Functionality;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -33,7 +34,7 @@ import java.util.UUID;
                 @Index(name = "storage_category_code_index", columnList = "code", unique = true)
         }
 )
-public class StorageCategoryEntity implements Serializable {
+public class StorageCategoryEntity implements Serializable, Functionality {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

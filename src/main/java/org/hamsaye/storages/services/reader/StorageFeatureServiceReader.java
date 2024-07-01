@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class StorageFeatureServiceReader implements ReadService<StorageFeatureEntity> {
@@ -22,6 +23,25 @@ public class StorageFeatureServiceReader implements ReadService<StorageFeatureEn
     @Autowired
     public StorageFeatureServiceReader(StorageFeatureRepository featureRepository) {
         this.featureRepository = featureRepository;
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
+    public StorageFeatureEntity findById(UUID uid) {
+        // find a specific storage's feature by its id and if it is not existed throw specific exception
+        return featureRepository.findById(uid)
+                .orElseThrow(() -> {
+                    // generate an error log
+                    logger.log(
+                            LogLevel.ERROR,
+                            String.format(
+                                    "{0} is not exist in our storage's feature dataset.)",
+                                    uid
+                            )
+                    );
+
+                    // throw an exception
+                    return new RuntimeException();
+                });
     }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
