@@ -12,6 +12,5 @@ import java.util.UUID;
 @Repository
 public interface StorageCategoryRepository extends JpaRepository<StorageCategoryEntity, UUID> {
 
-    @Query("SELECT c FROM StorageCategoryEntity c WHERE c.name = :name")
-    Optional<StorageCategoryEntity> selectByName(@Param("name") String name);
+    StorageCategoryEntity findStorageCategoryEntityByCode (String code);
 }

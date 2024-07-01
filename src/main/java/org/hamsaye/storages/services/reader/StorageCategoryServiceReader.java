@@ -1,4 +1,4 @@
-package org.hamsaye.storages.services;
+package org.hamsaye.storages.services.reader;
 
 import org.hamsaye.generals.services.ReadService;
 import org.hamsaye.storages.daos.StorageCategoryRepository;
@@ -11,37 +11,36 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
-public class StorageCategoryService implements ReadService<StorageCategoryEntity> {
+public class StorageCategoryServiceReader implements ReadService<StorageCategoryEntity> {
 
     private final StorageCategoryRepository categoryRepository;
 
     private final Logger logger = Logger.getInstance();
 
     @Autowired
-    public StorageCategoryService(StorageCategoryRepository categoryRepository) {
+    public StorageCategoryServiceReader(StorageCategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-    public StorageCategoryEntity findByName(String name) {
-        // find a specific storage's category by its id and if it is not existed throw specific exception
-        return categoryRepository.selectByName(name)
-                .orElseThrow(() -> {
-                    // generate an error log
-                    logger.log(
-                            LogLevel.ERROR,
-                            String.format(
-                                    "{0} is not exist in our storage's category dataset.)",
-                                    name
-                            )
-                    );
+    public StorageCategoryEntity findByCode(String code) {
+        StorageCategoryEntity category = categoryRepository.findStorageCategoryEntityByCode(code);
+        if (category == null) {
+            // generate an error log
+            logger.log(
+                    LogLevel.ERROR,
+                    String.format(
+                            "{0} is not exist in our storage's category dataset.)",
+                            code
+                    )
+            );
 
-                    // throw an exception
-                    return new RuntimeException();
-                });
+            // throw an exception
+            throw new RuntimeException();
+        }
+        return category;
     }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRED)

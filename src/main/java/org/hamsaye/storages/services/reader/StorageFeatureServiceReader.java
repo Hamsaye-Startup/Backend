@@ -1,4 +1,4 @@
-package org.hamsaye.storages.services;
+package org.hamsaye.storages.services.reader;
 
 import org.hamsaye.generals.services.ReadService;
 import org.hamsaye.storages.daos.StorageFeatureRepository;
@@ -11,17 +11,16 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
-public class StorageFeatureService implements ReadService<StorageFeatureEntity> {
+public class StorageFeatureServiceReader implements ReadService<StorageFeatureEntity> {
 
     private final StorageFeatureRepository featureRepository;
 
     private final Logger logger = Logger.getInstance();
 
     @Autowired
-    public StorageFeatureService(StorageFeatureRepository featureRepository) {
+    public StorageFeatureServiceReader(StorageFeatureRepository featureRepository) {
         this.featureRepository = featureRepository;
     }
 

@@ -1,9 +1,8 @@
-package org.hamsaye.storages.services;
+package org.hamsaye.storages.services.writer;
 
-import org.hamsaye.generals.services.ReadService;
 import org.hamsaye.generals.services.WriteService;
-import org.hamsaye.storages.daos.StorageRepository;
-import org.hamsaye.storages.models.StorageEntity;
+import org.hamsaye.storages.daos.StorageCategoryRepository;
+import org.hamsaye.storages.models.StorageCategoryEntity;
 import org.hamsaye.utils.log.LogLevel;
 import org.hamsaye.utils.log.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,46 +11,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.UUID;
-
 @Service
-public class StorageService implements WriteService<StorageEntity>, ReadService<StorageEntity> {
+public class StorageCategoryServiceWriter implements WriteService<StorageCategoryEntity> {
 
-    private final StorageRepository storageRepository;
+    private final StorageCategoryRepository categoryRepository;
 
     private final Logger logger = Logger.getInstance();
 
     @Autowired
-    public StorageService(StorageRepository storageRepository) {
-        this.storageRepository = storageRepository;
+    public StorageCategoryServiceWriter(StorageCategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public StorageEntity persist(StorageEntity object) {
-        // check null point exception
-        if (object == null) {
-            // generate an error log
-            logger.log(
-                    LogLevel.ERROR,
-                    String.format(
-                            "null pointer exception is happened in {0})",
-                            this.getClass().getName()
-                            )
-            );
-
-            // throw an exception
-            throw new RuntimeException();
-        }
-
-        // persist object
-        return storageRepository.save(object);
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED)
-    @Override
-    public StorageEntity persistAndFlush(StorageEntity object) {
+    public StorageCategoryEntity persist(StorageCategoryEntity object) {
         // check null point exception
         if (object == null) {
             // generate an error log
@@ -63,23 +37,45 @@ public class StorageService implements WriteService<StorageEntity>, ReadService<
                     )
             );
 
-            // throw an exception
+            // TODO throw an exception
             throw new RuntimeException();
         }
 
         // persist object
-        return storageRepository.saveAndFlush(object);
+        return categoryRepository.save(object);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public StorageEntity update(StorageEntity object) {
+    public StorageCategoryEntity persistAndFlush(StorageCategoryEntity object) {
+        // check null point exception
+        if (object == null) {
+            // generate an error log
+            logger.log(
+                    LogLevel.ERROR,
+                    String.format(
+                            "null pointer exception is happened in {0})",
+                            this.getClass().getName()
+                    )
+            );
+
+            // TODO throw an exception
+            throw new RuntimeException();
+        }
+
+        // persist object
+        return categoryRepository.saveAndFlush(object);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public StorageCategoryEntity update(StorageCategoryEntity object) {
         return null;
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
     @Override
-    public void delete(StorageEntity object) {
+    public void delete(StorageCategoryEntity object) {
         // check null pointer exception
         if (object == null) {
             // generate an error log
@@ -91,13 +87,13 @@ public class StorageService implements WriteService<StorageEntity>, ReadService<
                     )
             );
 
-            // throw an exception
+            // TODO throw an exception
             throw new RuntimeException();
         }
 
         // check the object is existed or not and if yes, it should be deleted
-        if (storageRepository.exists(Example.of(object))) {
-            storageRepository.delete(object);
+        if (categoryRepository.exists(Example.of(object))) {
+            categoryRepository.delete(object);
         } else {
             // generate an error log
             logger.log(
@@ -108,35 +104,8 @@ public class StorageService implements WriteService<StorageEntity>, ReadService<
                     )
             );
 
-            // throw an exception if it doesn't exist
+            // TODO throw an exception if it doesn't exist
             throw new RuntimeException();
         }
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-    public StorageEntity findByName(String name) {
-        // find a specific storage by its id and if it is not existed throw specific exception
-        return storageRepository.selectByName(name)
-                .orElseThrow(() -> {
-                    // generate an error log
-                    logger.log(
-                            LogLevel.ERROR,
-                            String.format(
-                                    "{0} is not exist in our storage dataset.",
-                                    name
-                            )
-                    );
-
-                    // throw an exception
-                    return new RuntimeException();
-                });
-    }
-
-    @Transactional(readOnly = true, propagation = Propagation.REQUIRED)
-    @Override
-    public List<StorageEntity> findAll() {
-        // find all storages without any condition
-        // Note: this is really dangerous , don't use this function as much as possible
-        return storageRepository.findAll();
     }
 }

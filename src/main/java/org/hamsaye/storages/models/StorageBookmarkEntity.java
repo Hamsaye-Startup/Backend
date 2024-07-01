@@ -1,3 +1,4 @@
+/*
 package org.hamsaye.storages.models;
 
 import jakarta.persistence.*;
@@ -31,3 +32,4 @@ public class StorageBookmarkEntity implements Serializable {
     @CreationTimestamp
     private Timestamp createdAt;
 }
+*/

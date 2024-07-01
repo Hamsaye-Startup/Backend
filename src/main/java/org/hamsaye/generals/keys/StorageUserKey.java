@@ -8,7 +8,7 @@ import java.io.Serializable;
 @Embeddable
 public class StorageUserKey implements Serializable {
 
-    private StorageEntity storage;
+    // private StorageEntity storage;
 
     // TODO: generate a reference to user
 }

@@ -13,5 +13,7 @@ import java.util.UUID;
 public interface StorageRepository extends JpaRepository<StorageEntity, UUID> {
 
     @Query("SELECT s FROM StorageEntity s WHERE s.name = :name")
-    Optional<StorageEntity> selectByName(@Param("name") String name);
+    Optional<StorageEntity> findByName(@Param("name") String name);
+
+    StorageEntity findByUid(UUID uid);
 }

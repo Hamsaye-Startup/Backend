@@ -1,7 +1,8 @@
-package org.hamsaye.storages.services;
+package org.hamsaye.storages.services.reader;
 
 import org.hamsaye.storages.daos.StorageFeatureRepository;
 import org.hamsaye.storages.models.StorageFeatureEntity;
+import org.hamsaye.storages.services.reader.StorageFeatureServiceReader;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,15 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class StorageFeatureServiceTest {
+class StorageFeatureServiceReaderTest {
 
     @Mock
     private StorageFeatureRepository featureRepository;
-    private StorageFeatureService underTest;
+    private StorageFeatureServiceReader underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new StorageFeatureService(featureRepository);
+        underTest = new StorageFeatureServiceReader(featureRepository);
     }
 
     @AfterEach

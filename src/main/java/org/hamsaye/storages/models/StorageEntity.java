@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hamsaye.utils.log.Functionality;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -26,7 +27,7 @@ import java.util.UUID;
                 @Index(name = "storage_name_index", columnList = "storage_name")
         }
 )
-public class StorageEntity implements Serializable {
+public class StorageEntity implements Serializable, Functionality {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -65,9 +66,9 @@ public class StorageEntity implements Serializable {
     @Column(name = "status", columnDefinition = "character varying", length = 32, nullable = false)
     private String status;
 
-    @OneToOne(cascade = CascadeType.PERSIST)
+    /*@OneToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_uid", columnDefinition = "uuid", nullable = false)
-    private StorageCategoryEntity category;
+    private StorageCategoryEntity category;*/
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
