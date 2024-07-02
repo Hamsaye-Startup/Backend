@@ -1,7 +1,7 @@
 package org.hamsaye.storages.dtos.responses;
 
 import lombok.Builder;
-import org.hamsaye.utils.log.Functionality;
+import org.hamsaye.utils.functional.Functionality;
 
 @Builder
 public record StorageImageResponse(

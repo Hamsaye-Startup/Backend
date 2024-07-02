@@ -2,6 +2,7 @@ package org.hamsaye.storages.services.reader;
 
 import org.hamsaye.generals.services.ReadService;
 import org.hamsaye.storages.daos.StorageFeatureRepository;
+import org.hamsaye.storages.exceptions.NotFoundStorageFeatureException;
 import org.hamsaye.storages.models.StorageFeatureEntity;
 import org.hamsaye.utils.log.LogLevel;
 import org.hamsaye.utils.log.Logger;
@@ -40,7 +41,7 @@ public class StorageFeatureServiceReader implements ReadService<StorageFeatureEn
                     );
 
                     // throw an exception
-                    return new RuntimeException();
+                    return new NotFoundStorageFeatureException();
                 });
     }
 
@@ -59,7 +60,7 @@ public class StorageFeatureServiceReader implements ReadService<StorageFeatureEn
                     );
 
                     // throw an exception
-                    return new RuntimeException();
+                    return new NotFoundStorageFeatureException();
                 });
     }
 

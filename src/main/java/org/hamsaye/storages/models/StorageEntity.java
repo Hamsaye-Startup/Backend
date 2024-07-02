@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hamsaye.utils.log.Functionality;
+import org.hamsaye.utils.functional.Functionality;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -66,15 +66,15 @@ public class StorageEntity implements Serializable, Functionality {
     @Column(name = "status", columnDefinition = "character varying", length = 32, nullable = false)
     private String status;
 
-    /*@OneToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "category_uid", columnDefinition = "uuid", nullable = false)
-    private StorageCategoryEntity category;*/
+    @OneToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "fk_category_uid", columnDefinition = "uuid", nullable = false)
+    private StorageCategoryEntity category;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "tb_features_storage",
-            joinColumns = @JoinColumn(name = "storage_uid", columnDefinition = "uuid"),
-            inverseJoinColumns = @JoinColumn(name = "feature_uid", columnDefinition = "uuid")
+            joinColumns = @JoinColumn(name = "fk_storage_uid", columnDefinition = "uuid"),
+            inverseJoinColumns = @JoinColumn(name = "fk_feature_uid", columnDefinition = "uuid")
     )
     private List<StorageFeatureEntity> features;
 

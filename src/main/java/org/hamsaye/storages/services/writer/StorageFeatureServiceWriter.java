@@ -2,6 +2,7 @@ package org.hamsaye.storages.services.writer;
 
 import org.hamsaye.generals.services.WriteService;
 import org.hamsaye.storages.daos.StorageFeatureRepository;
+import org.hamsaye.storages.exceptions.NotFoundStorageFeatureException;
 import org.hamsaye.storages.models.StorageFeatureEntity;
 import org.hamsaye.utils.log.LogLevel;
 import org.hamsaye.utils.log.Logger;
@@ -37,8 +38,8 @@ public class StorageFeatureServiceWriter implements WriteService<StorageFeatureE
                     )
             );
 
-            // TODO throw an exception
-            throw new RuntimeException();
+            // throw an exception
+            throw new NullPointerException();
         }
 
         // persist object
@@ -59,8 +60,8 @@ public class StorageFeatureServiceWriter implements WriteService<StorageFeatureE
                     )
             );
 
-            // TODO throw an exception
-            throw new RuntimeException();
+            // throw an exception
+            throw new NullPointerException();
         }
 
         // persist object
@@ -87,8 +88,8 @@ public class StorageFeatureServiceWriter implements WriteService<StorageFeatureE
                     )
             );
 
-            // TODO throw an exception
-            throw new RuntimeException();
+            // throw an exception
+            throw new NullPointerException();
         }
 
         // check the object is existed or not and if yes, it should be deleted
@@ -104,8 +105,8 @@ public class StorageFeatureServiceWriter implements WriteService<StorageFeatureE
                     )
             );
 
-            // TODO throw an exception if it doesn't exist
-            throw new RuntimeException();
+            // throw an exception if it doesn't exist
+            throw new NotFoundStorageFeatureException();
         }
     }
 }

@@ -1,4 +1,4 @@
-package org.hamsaye.utils.log;
+package org.hamsaye.utils.functional;
 
 import java.util.HashMap;
 import java.util.Map;

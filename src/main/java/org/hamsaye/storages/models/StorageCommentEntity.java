@@ -1,11 +1,6 @@
 package org.hamsaye.storages.models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -41,6 +36,10 @@ public class StorageCommentEntity implements Serializable {
     @UpdateTimestamp
     @Column(name = "modified_at", columnDefinition = "timestamp")
     private Timestamp modifiedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_storage_uid", columnDefinition = "uuid", nullable = false)
+    private StorageEntity storage;
 
     // TODO: generate the owner or writer of message as user
 

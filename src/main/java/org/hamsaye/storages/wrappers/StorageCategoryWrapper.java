@@ -1,10 +1,10 @@
-package org.hamsaye.storages.wrapper;
+package org.hamsaye.storages.wrappers;
 
 
 import lombok.RequiredArgsConstructor;
 import org.hamsaye.storages.mappers.StorageCategoryMapper;
 import org.hamsaye.storages.models.StorageCategoryEntity;
-import org.hamsaye.utils.log.Functionality;
+import org.hamsaye.utils.functional.Functionality;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

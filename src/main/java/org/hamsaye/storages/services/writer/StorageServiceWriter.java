@@ -1,8 +1,8 @@
 package org.hamsaye.storages.services.writer;
 
-import org.hamsaye.generals.services.ReadService;
 import org.hamsaye.generals.services.WriteService;
 import org.hamsaye.storages.daos.StorageRepository;
+import org.hamsaye.storages.exceptions.NotFoundStorageException;
 import org.hamsaye.storages.models.StorageEntity;
 import org.hamsaye.utils.log.LogLevel;
 import org.hamsaye.utils.log.Logger;
@@ -11,8 +11,6 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class StorageServiceWriter implements WriteService<StorageEntity> {
@@ -40,8 +38,8 @@ public class StorageServiceWriter implements WriteService<StorageEntity> {
                             )
             );
 
-            // TODO throw an exception
-            throw new RuntimeException();
+            // throw an exception
+            throw new NullPointerException();
         }
 
         // persist object
@@ -62,8 +60,8 @@ public class StorageServiceWriter implements WriteService<StorageEntity> {
                     )
             );
 
-            // TODO throw an exception
-            throw new RuntimeException();
+            // throw an exception
+            throw new NullPointerException();
         }
 
         // persist object
@@ -90,8 +88,8 @@ public class StorageServiceWriter implements WriteService<StorageEntity> {
                     )
             );
 
-            // TODO throw an exception
-            throw new RuntimeException();
+            // throw an exception
+            throw new NullPointerException();
         }
 
         // check the object is existed or not and if yes, it should be deleted
@@ -107,8 +105,8 @@ public class StorageServiceWriter implements WriteService<StorageEntity> {
                     )
             );
 
-            // TODO throw an exception if it doesn't exist
-            throw new RuntimeException();
+            // throw an exception if it doesn't exist
+            throw new NotFoundStorageException();
         }
     }
 }

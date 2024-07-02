@@ -1,9 +1,9 @@
-package org.hamsaye.storages.wrapper;
+package org.hamsaye.storages.wrappers;
 
 import lombok.RequiredArgsConstructor;
 import org.hamsaye.storages.mappers.StorageFeatureMapper;
 import org.hamsaye.storages.models.StorageFeatureEntity;
-import org.hamsaye.utils.log.Functionality;
+import org.hamsaye.utils.functional.Functionality;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

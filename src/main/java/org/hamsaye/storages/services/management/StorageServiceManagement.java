@@ -4,19 +4,23 @@ import lombok.RequiredArgsConstructor;
 import org.hamsaye.storages.dtos.requests.StorageRequest;
 import org.hamsaye.storages.dtos.responses.StorageResponse;
 import org.hamsaye.storages.mappers.StorageMapper;
+import org.hamsaye.storages.models.StorageCategoryEntity;
 import org.hamsaye.storages.models.StorageEntity;
+import org.hamsaye.storages.models.StorageFeatureEntity;
+import org.hamsaye.storages.services.facade.StorageComponentsResearcher;
 import org.hamsaye.storages.services.reader.StorageServiceReader;
 import org.hamsaye.storages.services.writer.StorageServiceWriter;
 import org.hamsaye.storages.status.StorageStatus;
 import org.hamsaye.storages.status.StorageStatusGenerator;
-import org.hamsaye.utils.log.Functionality;
-import org.hamsaye.utils.log.Functional;
-import org.hamsaye.storages.wrapper.StorageWrapper;
+import org.hamsaye.utils.functional.Functionality;
+import org.hamsaye.utils.functional.Functional;
+import org.hamsaye.storages.wrappers.StorageWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -29,17 +33,18 @@ public class StorageServiceManagement {
     private StorageServiceReader storageServiceReader;
     private StorageServiceWriter storageServiceWriter;
     private StorageMapper mapper;
-
     private StorageWrapper wrapper;
+    private StorageComponentsResearcher researcher;
 
     @Autowired
     public StorageServiceManagement(StorageServiceReader storageServiceReader,
                                     StorageServiceWriter storageServiceWriter,
-                                    StorageMapper mapper, StorageWrapper wrapper) {
+                                    StorageMapper mapper, StorageWrapper wrapper, StorageComponentsResearcher researcher) {
         this.storageServiceReader = storageServiceReader;
         this.storageServiceWriter = storageServiceWriter;
         this.mapper = mapper;
         this.wrapper = wrapper;
+        this.researcher = researcher;
     }
 
     /*
@@ -62,11 +67,22 @@ public class StorageServiceManagement {
         // set status
         storage.setStatus(mapper.storageStatusToString(status));
 
+        // find the category and feature records
+        StorageCategoryEntity storageCategory = researcher.findStorageCategory(storage.getCategory().getCode());
+        List<StorageFeatureEntity> features = new ArrayList<>();
+        for (StorageFeatureEntity feature : storage.getFeatures()) {
+            features.add(researcher.findStorageFeature(feature.getUid()));
+        }
+
+        // set new values
+        storage.setCategory(storageCategory);
+        storage.setFeatures(features);
+
         /*
         * apply all activities (operations):
         * insert new storage
-        *
         * */
+
         Map<String, Functionality> results =
                 functional.apply("storage", storageServiceWriter::persistAndFlush, storage)
                         .getResults();

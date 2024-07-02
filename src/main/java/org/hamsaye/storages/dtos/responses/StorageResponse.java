@@ -1,9 +1,10 @@
 package org.hamsaye.storages.dtos.responses;
 
 import lombok.Builder;
-import org.hamsaye.utils.log.Functionality;
+import org.hamsaye.utils.functional.Functionality;
 import org.hamsaye.storages.status.StorageStatus;
 
+import java.util.List;
 import java.util.UUID;
 
 @Builder
@@ -16,5 +17,8 @@ public record StorageResponse(
         Double amount,
         Double discountAmount,
         String description,
-        StorageStatus status
+        StorageStatus status,
+        StorageCategoryResponse category,
+        List<StorageFeatureResponse> features
+
 ) implements Functionality {}

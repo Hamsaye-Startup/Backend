@@ -1,20 +1,22 @@
-package org.hamsaye.storages.wrapper;
+package org.hamsaye.geo.wrappers;
 
 import lombok.RequiredArgsConstructor;
-import org.hamsaye.storages.mappers.StorageMapper;
-import org.hamsaye.storages.models.StorageEntity;
-import org.hamsaye.utils.log.Functionality;
+import org.hamsaye.geo.mappers.CityMapper;
+import org.hamsaye.geo.mappers.StorageLocationMapper;
+import org.hamsaye.geo.models.CityEntity;
+import org.hamsaye.geo.models.StorageLocationEntity;
+import org.hamsaye.utils.functional.Functionality;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class StorageWrapper {
+public class StorageLocationWrapper {
 
-    private StorageMapper mapper;
+    private StorageLocationMapper mapper;
 
     @Autowired
-    public StorageWrapper(StorageMapper mapper) {
+    public StorageLocationWrapper(StorageLocationMapper mapper) {
         this.mapper = mapper;
     }
 
@@ -25,8 +27,8 @@ public class StorageWrapper {
     *
     * */
     public <Result extends Functionality> Result typeOf(Functionality object) {
-        if (object instanceof StorageEntity) {
-            Result result = (Result) mapper.storageToStorageResponse((StorageEntity) object);
+        if (object instanceof StorageLocationEntity) {
+            Result result = (Result) mapper.storageLocationToStorageLocationResponse((StorageLocationEntity) object);
             return result;
         }
         throw new RuntimeException("unknown type is recognized");

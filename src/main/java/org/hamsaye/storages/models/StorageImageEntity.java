@@ -36,7 +36,7 @@ public class StorageImageEntity implements Serializable {
     private UUID uid;
 
     @OneToOne
-    @JoinColumn(name = "storage_uid", unique = true, nullable = false)
+    @JoinColumn(name = "fk_storage_uid", unique = true, nullable = false)
     private StorageEntity storage;
 
     @Column(name = "image1", columnDefinition = "text", nullable = false)

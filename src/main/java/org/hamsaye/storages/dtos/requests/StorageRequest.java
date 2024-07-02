@@ -1,6 +1,9 @@
 package org.hamsaye.storages.dtos.requests;
 
-import org.hamsaye.storages.models.StorageCategoryEntity;
+import org.hamsaye.storages.dtos.responses.StorageCategoryResponse;
+import org.hamsaye.storages.dtos.responses.StorageFeatureResponse;
+
+import java.util.List;
 
 public record StorageRequest(
         String name,
@@ -10,5 +13,6 @@ public record StorageRequest(
         Double amount,
         Double discountAmount,
         String description,
-        StorageCategoryRequest category
+        StorageCategoryResponse category,
+        List<StorageFeatureResponse> features
 ) {}

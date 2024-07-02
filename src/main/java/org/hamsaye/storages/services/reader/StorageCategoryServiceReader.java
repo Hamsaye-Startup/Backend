@@ -2,6 +2,7 @@ package org.hamsaye.storages.services.reader;
 
 import org.hamsaye.generals.services.ReadService;
 import org.hamsaye.storages.daos.StorageCategoryRepository;
+import org.hamsaye.storages.exceptions.NotFoundStorageCategoryException;
 import org.hamsaye.storages.models.StorageCategoryEntity;
 import org.hamsaye.utils.log.LogLevel;
 import org.hamsaye.utils.log.Logger;
@@ -38,7 +39,7 @@ public class StorageCategoryServiceReader implements ReadService<StorageCategory
             );
 
             // throw an exception
-            throw new RuntimeException();
+            throw new NotFoundStorageCategoryException();
         }
         return category;
     }

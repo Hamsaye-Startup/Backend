@@ -3,6 +3,8 @@ package org.hamsaye.storages.services.reader;
 import org.hamsaye.generals.services.ReadService;
 import org.hamsaye.generals.services.WriteService;
 import org.hamsaye.storages.daos.StorageRepository;
+import org.hamsaye.storages.exceptions.NotFoundStorageException;
+import org.hamsaye.storages.exceptions.StorageException;
 import org.hamsaye.storages.models.StorageEntity;
 import org.hamsaye.utils.log.LogLevel;
 import org.hamsaye.utils.log.Logger;
@@ -42,8 +44,8 @@ public class StorageServiceReader implements ReadService<StorageEntity> {
                     )
             );
 
-            // TODO throw an exception
-            throw new RuntimeException();
+            // throw an exception
+            throw new NotFoundStorageException();
         }
         return storage;
     }
@@ -57,13 +59,13 @@ public class StorageServiceReader implements ReadService<StorageEntity> {
                     logger.log(
                             LogLevel.ERROR,
                             String.format(
-                                    "{0} is not exist in our storage dataset.",
+                                    "storage exception occurred in repo layer by {0}",
                                     name
                             )
                     );
 
-                    // TODO throw an exception
-                    return new RuntimeException();
+                    // throw an exception
+                    return new StorageException("storage exception occurred in repo layer");
                 });
     }
 
