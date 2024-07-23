@@ -22,6 +22,14 @@ public class MessageMapper {
                 .build();
     }
 
+    public ResponseMessage toResponse() {
+        return ResponseMessage.builder()
+                .code(ResponseMessageType.SUCCESS.code())
+                .message(ResponseMessageType.SUCCESS.message())
+                .timestamp(LocalDateTime.now())
+                .build();
+    }
+
     public <T extends CustomRuntimeException> ExceptionMessage toException(T ex, int code) {
         ExceptionMessage exceptionMessage;
         if (ex.getCause() != null) {

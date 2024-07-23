@@ -1,5 +1,6 @@
 package com.microservices.user.passwords.controller;
 
+import com.microservices.user.application.mapper.MessageMapper;
 import com.microservices.user.passwords.requests.PasswordRequest;
 import com.microservices.user.passwords.services.PasswordServiceManagement;
 import jakarta.validation.Valid;
@@ -18,12 +19,13 @@ import java.util.UUID;
 public class PasswordController {
 
     private final PasswordServiceManagement management;
+    private final MessageMapper mapper;
 
     @PreAuthorize("hasAuthority('UPDATE_PASS')")
     @PutMapping
     public ResponseEntity<?> update(@Valid @RequestBody PasswordRequest request, Principal principal) {
         management.update(request, principal);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(mapper.toResponse(), HttpStatus.OK);
     }
 
     @PreAuthorize("hasAuthority('RESET_PASS')")
