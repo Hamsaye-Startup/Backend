@@ -20,7 +20,6 @@ public class PasswordServiceManagement {
     private final UserService userService;
     private final PasswordEncoder encoder;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void update(PasswordRequest request, Principal principal) {
 
         // check the authenticated user with request

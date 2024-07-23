@@ -1,7 +1,6 @@
 package com.hamsaye.customer.customers.controllers;
 
 import com.hamsaye.customer.application.mapper.MessageMapper;
-import com.hamsaye.customer.customers.models.CustomerStatus;
 import com.hamsaye.customer.customers.requests.CustomerRequest;
 import com.hamsaye.customer.customers.requests.NewCustomerRequest;
 import com.hamsaye.customer.customers.responses.CustomerResponse;

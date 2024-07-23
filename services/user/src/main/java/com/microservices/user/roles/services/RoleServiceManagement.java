@@ -25,7 +25,6 @@ public class RoleServiceManagement {
     private final RoleService roleService;
     private final RoleMapper mapper;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public RoleResponse add(NewRollRequest request) {
 
         // generate the role entity and persist
@@ -33,7 +32,6 @@ public class RoleServiceManagement {
         return mapper.toResponse(roleService.persist(role));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public RoleResponse update(RoleRequest request) {
 
         // check the role by uid
@@ -43,7 +41,6 @@ public class RoleServiceManagement {
         return mapper.toResponse(roleService.persist(newRole));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public RoleResponse delete(UUID uid) {
 
         // fetch the role by uid
@@ -69,7 +66,6 @@ public class RoleServiceManagement {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public RoleResponse findById(UUID uid) {
         return mapper.toResponse(roleService.findRoleById(uid));
     }

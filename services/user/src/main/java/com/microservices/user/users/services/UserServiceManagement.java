@@ -83,7 +83,6 @@ public class UserServiceManagement {
         throw new NotFoundScopeException(request.uid().toString());
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public UserResponse delete(UUID uid) {
 
         // find the user by uid
@@ -109,7 +108,6 @@ public class UserServiceManagement {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public UserResponse findById(UUID uid, String scope, Principal principal) {
 
         // find the user by uid
@@ -126,7 +124,6 @@ public class UserServiceManagement {
         throw new NotFoundScopeException(uid.toString());
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public UserResponse blockUser(UUID uid, boolean unblock) {
 
         // find the user by uid

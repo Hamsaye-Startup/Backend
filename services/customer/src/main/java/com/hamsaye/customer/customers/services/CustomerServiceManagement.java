@@ -25,7 +25,6 @@ public class CustomerServiceManagement {
     /*
     * register new customer
     * */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CustomerResponse register(NewCustomerRequest request) {
         // check the user uid exists
 
@@ -41,7 +40,6 @@ public class CustomerServiceManagement {
     /*
      * update general attributes of customer
      * */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CustomerResponse update(CustomerRequest request) {
         // check the user uid exists
 
@@ -51,7 +49,6 @@ public class CustomerServiceManagement {
         return mapper.toResponse(service.persist(newCustomer));
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CustomerResponse delete(UUID uid) {
         // fetch the customer by uid
         CustomerEntity customer = service.findById(uid);
@@ -61,7 +58,6 @@ public class CustomerServiceManagement {
     /*
      * find the customer by uid
      * */
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CustomerResponse findById(UUID uid) {
         return mapper.toResponse(service.findById(uid));
     }
