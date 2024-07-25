@@ -26,7 +26,7 @@
         modified_at timestamp without time zone
     );
 
-/*----------------------------customer table---------------------------------*/
+/*------------------------------user table----------------------------------*/
     create table if not exists tb_users (
         user_id uuid not null primary key,
         phone character varying(12) not null,
@@ -41,3 +41,20 @@
     create unique index if not exists tb_user_phone_unique on tb_users using btree (phone);
 
     update tb_users set role = '908419e2-c7a2-4039-a37d-a7b289c5dd78' where phone = '+989120137406';
+
+/*----------------------------customer table---------------------------------*/
+create table if not exists tb_customers (
+                                            customer_id uuid not null primary key,
+                                            nid character varying(10) not null,
+                                            user_id uuid not null,
+                                            created_at timestamp without time zone not null,
+                                            modified_at timestamp without time zone,
+                                            become_host boolean not null,
+                                            status character varying(31) not null,
+                                            bio text
+);
+
+create index if not exists tb_customers_pkey on tb_customers using btree (customer_id);
+create unique index if not exists tb_customers_nid_unique on tb_customers using btree (nid);
+create unique index if not exists tb_customers_user_id_unique on tb_customers using btree (user_id);
+

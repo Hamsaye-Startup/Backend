@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/db_sec_user
+    url: jdbc:postgresql://localhost:5433/db_users
     username: pouria
     password: hamsaye1g8S9QJsp61wD53L4nW9d5mou879cSQpD7e38BDB0LwLesB3Rog5eWzU1mp4BEY7
     driver-class-name: org.postgresql.Driver

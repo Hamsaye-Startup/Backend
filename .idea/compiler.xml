@@ -10,10 +10,10 @@
         <module name="config-server" />
         <module name="user" />
         <module name="discovery" />
-        <module name="customer" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="customer" target="21" />
       <module name="hamsaye-project" target="21" />
     </bytecodeTargetLevel>
   </component>
