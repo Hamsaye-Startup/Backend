@@ -7,8 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 
 @Builder
-public record WarehouseRequest(
-        Long id,
+public record NewWarehouseRequest(
         UUID owner,
         CategoryEnum category,
         Set<String> features,

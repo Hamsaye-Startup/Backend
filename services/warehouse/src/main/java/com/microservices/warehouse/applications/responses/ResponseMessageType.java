@@ -31,9 +31,19 @@ public class ResponseMessageType {
             .message("policy not found")
             .build();
 
+    public static final ResponseFormat WAREHOUSE_NOT_FOUND = ResponseFormat.builder()
+            .code(14007)
+            .message("warehouse not found")
+            .build();
+
     public static final ResponseFormat PERSIST_FEATURE = ResponseFormat.builder()
             .code(16053)
             .message("feature information cannot be registered")
+            .build();
+
+    public static final ResponseFormat PERSIST_WAREHOUSE = ResponseFormat.builder()
+            .code(16054)
+            .message("warehouse information cannot be registered")
             .build();
 
     public static final ResponseFormat ILLEGAL_REQUEST = ResponseFormat.builder()

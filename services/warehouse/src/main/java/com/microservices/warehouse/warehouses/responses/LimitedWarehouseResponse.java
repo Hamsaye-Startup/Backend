@@ -1,22 +1,23 @@
-package com.microservices.warehouse.warehouses.requests;
+package com.microservices.warehouse.warehouses.responses;
 
 import com.microservices.warehouse.warehouses.models.CategoryEnum;
+import com.microservices.warehouse.warehouses.models.WarehouseStatus;
 import lombok.Builder;
 
-import java.util.Set;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Builder
-public record WarehouseRequest(
+public record LimitedWarehouseResponse(
         Long id,
         UUID owner,
         CategoryEnum category,
-        Set<String> features,
-        Set<String> policies,
+        LocalDateTime createAt,
         Integer width,
         Integer height,
         Double amount,
         Double discountAmount,
-        String desc
+        List<WarehouseStatus> status
 ) {
 }

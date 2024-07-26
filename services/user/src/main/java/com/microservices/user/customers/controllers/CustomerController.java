@@ -8,14 +8,13 @@ import com.microservices.user.customers.services.CustomerServiceManagement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/customer")
 @RequiredArgsConstructor
 public class CustomerController {

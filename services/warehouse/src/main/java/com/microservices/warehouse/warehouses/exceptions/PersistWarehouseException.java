@@ -3,15 +3,15 @@ package com.microservices.warehouse.warehouses.exceptions;
 import com.microservices.warehouse.applications.exceptions.CustomRuntimeException;
 import com.microservices.warehouse.applications.responses.ResponseMessageType;
 
-public class NotFoundPolicyException extends CustomRuntimeException {
+public class PersistWarehouseException extends CustomRuntimeException {
 
-    private static final String message = ResponseMessageType.POLICY_NOT_FOUND.message();
+    private static final String message = ResponseMessageType.PERSIST_WAREHOUSE.message();
 
-    public NotFoundPolicyException(String input) {
+    public PersistWarehouseException(String input) {
         super(message, input);
     }
 
-    public NotFoundPolicyException(Throwable cause, String input) {
+    public PersistWarehouseException(Throwable cause, String input) {
         super(message, cause, input);
     }
 }
