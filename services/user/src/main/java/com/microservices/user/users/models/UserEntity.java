@@ -1,7 +1,7 @@
 package com.microservices.user.users.models;
 
-import com.microservices.user.passwords.model.PasswordEntity;
-import com.microservices.user.roles.model.RoleEntity;
+import com.microservices.user.passwords.models.PasswordEntity;
+import com.microservices.user.roles.models.RoleEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -9,7 +9,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.UUID;

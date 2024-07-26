@@ -3,7 +3,7 @@ package com.microservices.user.roles.services;
 import com.microservices.user.application.responses.ResponseMessageType;
 import com.microservices.user.roles.exceptions.NotFoundRoleException;
 import com.microservices.user.roles.exceptions.PersistRoleException;
-import com.microservices.user.roles.model.RoleEntity;
+import com.microservices.user.roles.models.RoleEntity;
 import com.microservices.user.roles.repositories.RoleRepository;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;

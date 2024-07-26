@@ -1,8 +1,8 @@
 package com.microservices.user.roles.services;
 
 import com.microservices.user.roles.mappers.RoleMapper;
-import com.microservices.user.roles.model.RoleEntity;
-import com.microservices.user.roles.model.UserAuthorityEnum;
+import com.microservices.user.roles.models.RoleEntity;
+import com.microservices.user.roles.models.UserAuthorityEnum;
 import com.microservices.user.roles.requests.NewRollRequest;
 import com.microservices.user.roles.requests.RoleRequest;
 import com.microservices.user.roles.responses.RoleResponse;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;

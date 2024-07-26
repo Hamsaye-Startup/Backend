@@ -1,4 +1,4 @@
-package com.microservices.user.passwords.controller;
+package com.microservices.user.passwords.controllers;
 
 import com.microservices.user.application.mapper.MessageMapper;
 import com.microservices.user.passwords.requests.PasswordRequest;

@@ -1,7 +1,7 @@
 package com.microservices.user.roles.requests;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.microservices.user.roles.model.UserAuthorityEnum;
+import com.microservices.user.roles.models.UserAuthorityEnum;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;

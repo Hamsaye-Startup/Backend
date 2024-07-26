@@ -4,7 +4,7 @@ import com.microservices.user.customers.models.CustomerEntity;
 import com.microservices.user.customers.requests.CustomerRequest;
 import com.microservices.user.customers.requests.NewCustomerRequest;
 import com.microservices.user.customers.responses.CustomerResponse;
-import com.microservices.user.users.mapper.UserMapper;
+import com.microservices.user.users.mappers.UserMapper;
 import com.microservices.user.users.models.UserEntity;
 import com.microservices.user.users.services.UserService;
 import lombok.RequiredArgsConstructor;

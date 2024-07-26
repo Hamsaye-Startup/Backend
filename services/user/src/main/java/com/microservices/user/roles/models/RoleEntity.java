@@ -1,4 +1,4 @@
-package com.microservices.user.roles.model;
+package com.microservices.user.roles.models;
 
 
 import jakarta.persistence.*;

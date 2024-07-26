@@ -1,0 +1,49 @@
+package com.microservices.warehouse.warehouses.models;
+
+import jakarta.persistence.*;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import java.time.LocalDateTime;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+@Entity
+@Table(name = "tb_storage_feature")
+@SequenceGenerator(
+        name = "tb_storage_feature_seq",
+        sequenceName = "tb_storage_feature_seq",
+        initialValue = 1001,
+        allocationSize = 3
+)
+public class FeatureEntity {
+
+    @Id
+    @GeneratedValue(
+            strategy = GenerationType.SEQUENCE,
+            generator = "tb_storage_feature_seq"
+    )
+    @Column(name = "feature_id", columnDefinition = "character varying", unique = true, nullable = false, updatable = false)
+    private Long id;
+
+    @Column(name = "code", columnDefinition = "character varying", length = 7, unique = true, nullable = false, updatable = false)
+    private String code;
+
+    @Column(name = "title", columnDefinition = "character varying", length = 127, nullable = false)
+    private String title;
+
+    @CreationTimestamp
+    @Column(name = "created_at", columnDefinition = "timestamp", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "modified_at", columnDefinition = "timestamp", insertable = false)
+    private LocalDateTime modifiedAt;
+
+    @Column(name = "description", columnDefinition = "character varying", length = 1023)
+    private String desc;
+}

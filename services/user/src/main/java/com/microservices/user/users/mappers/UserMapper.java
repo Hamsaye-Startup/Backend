@@ -1,4 +1,4 @@
-package com.microservices.user.users.mapper;
+package com.microservices.user.users.mappers;
 
 import com.microservices.user.users.models.UserEntity;
 import com.microservices.user.users.requests.RegistrationRequest;

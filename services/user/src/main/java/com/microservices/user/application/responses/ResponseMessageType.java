@@ -43,7 +43,7 @@ public class ResponseMessageType {
 
     public static final ResponseFormat PERSIST_ROLE = ResponseFormat.builder()
             .code(16051)
-            .message("user information cannot be registered")
+            .message("role information cannot be registered")
             .build();
 
     public static final ResponseFormat PERSIST_CUSTOMER = ResponseFormat.builder()

@@ -1,6 +1,6 @@
 package com.microservices.user.roles.mappers;
 
-import com.microservices.user.roles.model.RoleEntity;
+import com.microservices.user.roles.models.RoleEntity;
 import com.microservices.user.roles.requests.NewRollRequest;
 import com.microservices.user.roles.requests.RoleRequest;
 import com.microservices.user.roles.responses.RoleResponse;

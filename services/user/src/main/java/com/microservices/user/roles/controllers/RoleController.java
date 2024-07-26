@@ -1,6 +1,6 @@
 package com.microservices.user.roles.controllers;
 
-import com.microservices.user.roles.model.UserAuthorityEnum;
+import com.microservices.user.roles.models.UserAuthorityEnum;
 import com.microservices.user.roles.requests.NewRollRequest;
 import com.microservices.user.roles.requests.RoleRequest;
 import com.microservices.user.roles.responses.RoleResponse;
@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;

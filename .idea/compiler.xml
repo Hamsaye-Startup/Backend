@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="config-server" />
+        <module name="warehouse" />
         <module name="user" />
         <module name="discovery" />
       </profile>
@@ -23,6 +24,7 @@
       <module name="customer" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="user" options="-parameters" />
+      <module name="warehouse" options="-parameters" />
     </option>
   </component>
 </project>

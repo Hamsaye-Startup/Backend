@@ -1,13 +1,13 @@
 package com.microservices.user.users.services;
 
 import com.microservices.user.application.exceptions.NotFoundScopeException;
-import com.microservices.user.passwords.model.PasswordEntity;
-import com.microservices.user.roles.model.RoleEntity;
+import com.microservices.user.passwords.models.PasswordEntity;
+import com.microservices.user.roles.models.RoleEntity;
 import com.microservices.user.roles.services.RoleService;
 import com.microservices.user.application.scopes.RequestScopeEnum;
 import com.microservices.user.application.scopes.ScopeDetector;
 import com.microservices.user.users.exceptions.IllegalRequestException;
-import com.microservices.user.users.mapper.UserMapper;
+import com.microservices.user.users.mappers.UserMapper;
 import com.microservices.user.users.models.UserEntity;
 import com.microservices.user.users.requests.RegistrationRequest;
 import com.microservices.user.users.requests.UserRequest;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
