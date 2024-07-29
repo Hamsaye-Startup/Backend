@@ -10,7 +10,7 @@ import com.microservices.user.roles.exceptions.PersistRoleException;
 import com.microservices.user.users.exceptions.IllegalRequestException;
 import com.microservices.user.users.exceptions.NotFoundUserException;
 import com.microservices.user.users.exceptions.PersistUserException;
-import com.microservices.user.utils.log.CustomLogger;
+import com.microservices.user.application.utils.log.CustomLogger;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,12 +19,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-
-import java.util.List;
-import java.util.Set;
-import java.util.stream.StreamSupport;
-
-import static java.util.stream.Collectors.toList;
 
 @RestControllerAdvice
 @RequiredArgsConstructor

@@ -69,7 +69,15 @@ public class RoleServiceManagement {
         return mapper.toResponse(roleService.findRoleById(uid));
     }
 
-    public Set<UserAuthorityEnum> findAllAuthorities() {
-        return Set.of(UserAuthorityEnum.values());
+    public Set<String> findAllAuthorities() {
+        return Set.of(UserAuthorityEnum.values()).stream()
+                .map(UserAuthorityEnum::getPermissions)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<String> findAllAuthorities(UUID uid) {
+        return roleService.findRoleById(uid).getAuthorities().stream()
+                .map(UserAuthorityEnum::getPermissions)
+                .collect(Collectors.toSet());
     }
 }

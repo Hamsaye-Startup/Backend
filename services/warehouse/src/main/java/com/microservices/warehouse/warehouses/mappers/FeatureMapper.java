@@ -18,7 +18,7 @@ public class FeatureMapper {
 
     public FeatureEntity toFeatureEntity(FeatureRequest request, FeatureEntity feature) {
         return FeatureEntity.builder()
-                .code(request.code())
+                .code(feature.getCode())
                 .title(request.title() == null ? feature.getTitle() : request.title())
                 .desc(request.desc() == null ? feature.getDesc() : request.desc())
                 .build();

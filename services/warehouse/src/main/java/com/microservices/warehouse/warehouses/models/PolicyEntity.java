@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -17,7 +18,7 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "tb_storage_policy")
-public class PolicyEntity {
+public class PolicyEntity implements Serializable {
 
     @Id
     @Column(name = "policy_id", columnDefinition = "bigint", unique = true, nullable = false, updatable = false)
@@ -30,11 +31,11 @@ public class PolicyEntity {
     private String title;
 
     @CreationTimestamp
-    @Column(name = "created_at", columnDefinition = "timestamp", nullable = false, updatable = false)
+    @Column(name = "created_at", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "modified_at", columnDefinition = "timestamp", insertable = false)
+    @Column(name = "modified_at", columnDefinition = "timestamp without time zone", insertable = false)
     private LocalDateTime modifiedAt;
 
     @Column(name = "description", columnDefinition = "character varying", length = 1023)

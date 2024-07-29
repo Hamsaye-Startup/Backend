@@ -1,6 +1,5 @@
-package com.microservices.user.jwt;
+package com.microservices.user.application.jwt;
 
-import com.microservices.user.application.scopes.ScopeDetector;
 import com.microservices.user.users.models.UserEntity;
 import com.microservices.user.users.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +18,13 @@ public class TokenGenerator {
     public static final int REFRESH_DURATION = 24 * 60 * 60 * 1000;
 
     private final JwtService service;
-    private final ScopeDetector scopeDetector;
     private final UserService userService;
 
     private Map<String, Object> generateExtraClaims(UserDetails user, String scope) {
         Map<String, Object> claims = new HashMap<>();
-        if (scopeDetector.detected(scope, "role")) {
-            UserEntity userEntity = userService.findByUid(UUID.fromString(user.getUsername()));
-            claims.put("rid", userEntity.getRole().getId());
-        }
+        UserEntity userEntity = userService.findByUid(UUID.fromString(user.getUsername()));
 
+        claims.put("role", userEntity.getRole().getId());
         claims.put("scope", scope);
         return claims;
     }

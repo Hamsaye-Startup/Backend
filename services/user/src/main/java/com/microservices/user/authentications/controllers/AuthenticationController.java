@@ -30,8 +30,9 @@ public class AuthenticationController {
             HttpServletResponse response, HttpServletRequest request) {
 
         // check the authorization scope
-        if (scopeDetector.detected(request.getHeader("scope"), RequestScopeEnum.AUTHORIZATION.getScope())) {
-            AuthenticationResponse authenticate = management.authenticate(authenticationRequest, response);
+        String scope = request.getHeader("scope");
+        if (scopeDetector.detected(scope, RequestScopeEnum.AUTHORIZATION.getScope())) {
+            AuthenticationResponse authenticate = management.authenticate(authenticationRequest, response, scope);
             return ResponseEntity.ok(authenticate);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -43,8 +44,9 @@ public class AuthenticationController {
             HttpServletRequest request) {
 
         // check the authorization scope
-        if (scopeDetector.detected(request.getHeader("scope"), RequestScopeEnum.AUTHORIZATION.getScope())) {
-            AuthenticationResponse authenticate = management.refreshToken(token);
+        String scope = request.getHeader("scope");
+        if (scopeDetector.detected(scope, RequestScopeEnum.AUTHORIZATION.getScope())) {
+            AuthenticationResponse authenticate = management.refreshToken(token, scope);
             return ResponseEntity.ok(authenticate);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -21,14 +21,14 @@ public class PasswordController {
     private final PasswordServiceManagement management;
     private final MessageMapper mapper;
 
-    @PreAuthorize("hasAuthority('UPDATE_PASS')")
+    //@PreAuthorize("hasAuthority('UPDATE_PASS')")
     @PutMapping
     public ResponseEntity<?> update(@Valid @RequestBody PasswordRequest request, Principal principal) {
         management.update(request, principal);
         return new ResponseEntity<>(mapper.toResponse(), HttpStatus.OK);
     }
 
-    @PreAuthorize("hasAuthority('RESET_PASS')")
+    //@PreAuthorize("hasAuthority('RESET_PASS')")
     @PostMapping("/reset/id/{id}")
     public ResponseEntity<?> reset(@PathVariable("id") UUID uid) {
 

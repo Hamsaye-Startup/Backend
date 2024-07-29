@@ -1,4 +1,4 @@
-package com.microservices.user.utils.log;
+package com.microservices.warehouse.applications.utils.log;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

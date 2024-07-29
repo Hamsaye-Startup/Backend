@@ -22,13 +22,13 @@ public class WarehouseController {
     private final WarehouseServiceManagement management;
 
     @PostMapping
-    public ResponseEntity<?> add(NewWarehouseRequest warehouse) {
+    public ResponseEntity<?> add(@RequestBody NewWarehouseRequest warehouse) {
         WarehouseResponse response = management.add(warehouse);
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
     @PutMapping
-    public ResponseEntity<?> update(WarehouseRequest warehouse) {
+    public ResponseEntity<?> update(@RequestBody WarehouseRequest warehouse) {
         WarehouseResponse response = management.update(warehouse);
         return ResponseEntity.ok(mapper.toResponse(response));
     }

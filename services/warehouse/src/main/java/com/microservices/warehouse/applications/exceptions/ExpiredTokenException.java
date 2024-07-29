@@ -1,6 +1,6 @@
 package com.microservices.warehouse.applications.exceptions;
 
-import com.microservices.user.application.responses.ResponseMessageType;
+import com.microservices.warehouse.applications.responses.ResponseMessageType;
 
 public class ExpiredTokenException extends CustomRuntimeException {
 

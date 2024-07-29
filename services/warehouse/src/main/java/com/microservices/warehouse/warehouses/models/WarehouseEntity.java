@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "tb_storages")
 @SequenceGenerator(name = "tb_storages_seq", sequenceName = "tb_storages_seq", initialValue = 1001, allocationSize = 8)
-public class WarehouseEntity {
+public class WarehouseEntity implements Serializable {
 
     @Id
     @GeneratedValue(
@@ -38,25 +39,25 @@ public class WarehouseEntity {
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "in_feature_storage",
-            joinColumns = @JoinColumn(name = "fk_storage_id", columnDefinition = "id"),
-            inverseJoinColumns = @JoinColumn(name = "fk_feature_id", columnDefinition = "id")
+            joinColumns = @JoinColumn(name = "fk_storage_id", referencedColumnName = "storage_id"),
+            inverseJoinColumns = @JoinColumn(name = "fk_feature_id", referencedColumnName = "feature_id")
     )
     private Set<FeatureEntity> features;
 
     @OneToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "in_policy_storage",
-            joinColumns = @JoinColumn(name = "fk_policy_id", columnDefinition = "id"),
-            inverseJoinColumns = @JoinColumn(name = "fk_policy_id", columnDefinition = "id")
+            joinColumns = @JoinColumn(name = "fk_storage_id", referencedColumnName = "storage_id"),
+            inverseJoinColumns = @JoinColumn(name = "fk_policy_id", referencedColumnName = "policy_id")
     )
     private Set<PolicyEntity> policies;
 
     @CreationTimestamp
-    @Column(name = "created_at", columnDefinition = "timestamp", nullable = false, updatable = false)
+    @Column(name = "created_at", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "modified_at", columnDefinition = "timestamp", insertable = false)
+    @Column(name = "modified_at", columnDefinition = "timestamp without time zone", insertable = false)
     private LocalDateTime modifiedAt;
 
     @Column(name = "width", columnDefinition = "integer", nullable = false)

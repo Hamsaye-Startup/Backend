@@ -17,7 +17,7 @@ import java.security.SecureRandom;
 
 @Configuration
 @RequiredArgsConstructor
-public class ApplicationConfiguration {
+public class CustomApplicationConfiguration {
 
     private static final String seed = "kLSBacrQaDL8CyVFonUC?ryw@rKI&39D";
 

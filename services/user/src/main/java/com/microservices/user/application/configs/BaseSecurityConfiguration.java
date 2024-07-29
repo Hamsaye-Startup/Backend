@@ -1,10 +1,11 @@
 package com.microservices.user.application.configs;
 
-import com.microservices.user.application.filters.JwtAuthenticationFilter;
+import com.microservices.user.application.filters.AuthorizationFilter;
 import com.microservices.user.users.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class BaseSecurityConfiguration {
 
     private final AuthenticationProvider authenticationProvider;
-    private final JwtAuthenticationFilter jwtAuthFilter;
+    private final AuthorizationFilter authorizationFilter;
     private final UserDetailsServiceImpl userDetailsService;
 
     @Bean
@@ -34,13 +35,16 @@ public class BaseSecurityConfiguration {
                         auth.requestMatchers(
                                 "api/v1/auth",
                                 "api/v1/auth/*",
-                                "api/v1/user/register"
+                                "api/v1/user/register",
+                                "api/v1/role/authorities/**"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.GET, "api/v1/user/details/*")
+                        .permitAll()
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider)
                 .userDetailsService(userDetailsService)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authorizationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(ex -> {
                     ex.accessDeniedHandler((request, response, authentication) -> {
                         SecurityContextHolder.clearContext();

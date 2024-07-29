@@ -20,13 +20,13 @@ public class FeatureController {
     private final FeatureServiceManagement management;
 
     @PostMapping
-    public ResponseEntity<?> add(FeatureRequest feature) {
+    public ResponseEntity<?> add(@RequestBody FeatureRequest feature) {
         FeatureResponse response = management.add(feature);
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
     @PutMapping
-    public ResponseEntity<?> update(FeatureRequest feature) {
+    public ResponseEntity<?> update(@RequestBody FeatureRequest feature) {
         FeatureResponse response = management.update(feature);
         return ResponseEntity.ok(mapper.toResponse(response));
     }

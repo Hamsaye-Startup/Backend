@@ -3,8 +3,8 @@ package com.microservices.user.authentications.services;
 import com.microservices.user.application.exceptions.ExpiredTokenException;
 import com.microservices.user.authentications.requests.AuthenticationRequest;
 import com.microservices.user.authentications.responses.AuthenticationResponse;
-import com.microservices.user.jwt.JwtService;
-import com.microservices.user.jwt.TokenGenerator;
+import com.microservices.user.application.jwt.JwtService;
+import com.microservices.user.application.jwt.TokenGenerator;
 import com.microservices.user.users.exceptions.IllegalRequestException;
 import com.microservices.user.users.models.UserEntity;
 import com.microservices.user.users.services.UserDetailsServiceImpl;
@@ -27,7 +27,7 @@ public class AuthenticationServiceManagement {
     private final UserDetailsServiceImpl userDetailsService;
 
     // authentication process:: username password authentication
-    public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response) throws RuntimeException {
+    public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response, String scope) throws RuntimeException {
         UserEntity user = userDetailsService.loadUserByPhone(request.username());
 
         // authenticate user
@@ -39,8 +39,8 @@ public class AuthenticationServiceManagement {
         );
 
         // generate access token and refresh token
-        String access = generator.generateAccessToken(user, "authorization");
-        String refresh = generator.generateRefreshToken(user, "authorization");
+        String access = generator.generateAccessToken(user, scope);
+        String refresh = generator.generateRefreshToken(user, scope);
 
         // return refresh token as cookie
         Cookie cookie = generateRefreshCookie(refresh, response);
@@ -50,12 +50,12 @@ public class AuthenticationServiceManagement {
                 .expiredIn(TokenGenerator.ACCESS_DURATION)
                 .refresh(cookie.getName())
                 .tokenType("Bearer")
-                .scope("authorization")
+                .scope(scope)
                 .build();
     }
 
     // refresh the access token with the refresh token
-    public AuthenticationResponse refreshToken(String token) {
+    public AuthenticationResponse refreshToken(String token, String scope) {
         String username = service.extractSubject(token);
 
         // check null pointer exception
@@ -82,13 +82,13 @@ public class AuthenticationServiceManagement {
         }
 
         // generate new access token
-        String access = generator.generateAccessToken(user, "authorization");
+        String access = generator.generateAccessToken(user, scope);
         return AuthenticationResponse.builder()
                 .accessToken(access)
                 .expiredIn(TokenGenerator.ACCESS_DURATION)
                 .refresh("HAMSAYE_TOKEN")
                 .tokenType("Bearer")
-                .scope("authorization")
+                .scope(scope)
                 .build();
     }
 

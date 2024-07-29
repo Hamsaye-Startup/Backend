@@ -1,4 +1,4 @@
-package com.microservices.user.jwt;
+package com.microservices.user.application.jwt;
 
 import com.microservices.user.users.models.UserEntity;
 import io.jsonwebtoken.Claims;
@@ -64,6 +64,12 @@ public class JwtService {
     public  <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
+    }
+
+    // extract specific claim based on the function
+    public  Object extractClaim(String token, String key) {
+        Claims claims = extractAllClaims(token);
+        return claims.get(key);
     }
 
     // extract all claims of user from token

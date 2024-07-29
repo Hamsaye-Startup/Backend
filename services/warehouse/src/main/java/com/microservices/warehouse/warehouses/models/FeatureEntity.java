@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
@@ -20,14 +21,14 @@ import java.time.LocalDateTime;
         initialValue = 1001,
         allocationSize = 3
 )
-public class FeatureEntity {
+public class FeatureEntity implements Serializable {
 
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
             generator = "tb_storage_feature_seq"
     )
-    @Column(name = "feature_id", columnDefinition = "character varying", unique = true, nullable = false, updatable = false)
+    @Column(name = "feature_id", columnDefinition = "bigint", unique = true, nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "code", columnDefinition = "character varying", length = 7, unique = true, nullable = false, updatable = false)
@@ -37,11 +38,11 @@ public class FeatureEntity {
     private String title;
 
     @CreationTimestamp
-    @Column(name = "created_at", columnDefinition = "timestamp", nullable = false, updatable = false)
+    @Column(name = "created_at", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "modified_at", columnDefinition = "timestamp", insertable = false)
+    @Column(name = "modified_at", columnDefinition = "timestamp without time zone", insertable = false)
     private LocalDateTime modifiedAt;
 
     @Column(name = "description", columnDefinition = "character varying", length = 1023)

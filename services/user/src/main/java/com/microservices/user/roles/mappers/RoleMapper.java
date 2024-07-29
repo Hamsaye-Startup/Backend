@@ -29,6 +29,7 @@ public class RoleMapper {
                 .id(role.getId())
                 .name(role.getName())
                 .createAt(role.getCreatedAt())
+                .authorities(role.getAuthorities())
                 .build();
     }
 }
