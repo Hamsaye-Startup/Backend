@@ -6,7 +6,9 @@ import com.microservices.warehouse.warehouses.requests.WarehouseRequest;
 import com.microservices.warehouse.warehouses.responses.LimitedWarehouseResponse;
 import com.microservices.warehouse.warehouses.responses.WarehouseResponse;
 import com.microservices.warehouse.warehouses.services.WarehouseServiceManagement;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +24,8 @@ public class WarehouseController {
     private final WarehouseServiceManagement management;
 
     @PostMapping
-    public ResponseEntity<?> add(@RequestBody NewWarehouseRequest warehouse) {
-        WarehouseResponse response = management.add(warehouse);
+    public ResponseEntity<?> add(@RequestBody NewWarehouseRequest warehouse, HttpServletRequest request) {
+        WarehouseResponse response = management.add(warehouse, request.getHeader(HttpHeaders.AUTHORIZATION));
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 

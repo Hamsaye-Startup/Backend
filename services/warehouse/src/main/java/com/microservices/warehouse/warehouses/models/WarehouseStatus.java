@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum WarehouseStatus {
 
-    TEST("test");
+    TEST("TEST");
 
     private final String value;
 

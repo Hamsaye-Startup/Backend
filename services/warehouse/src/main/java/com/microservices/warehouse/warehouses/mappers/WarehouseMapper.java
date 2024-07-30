@@ -1,5 +1,7 @@
 package com.microservices.warehouse.warehouses.mappers;
 
+import com.microservices.warehouse.applications.messages.ResponseMessage;
+import com.microservices.warehouse.customer.CustomerClient;
 import com.microservices.warehouse.warehouses.models.FeatureEntity;
 import com.microservices.warehouse.warehouses.models.PolicyEntity;
 import com.microservices.warehouse.warehouses.models.WarehouseEntity;
@@ -56,7 +58,14 @@ public class WarehouseMapper {
                 .collect(Collectors.toSet());
     }
 
-    public WarehouseEntity toWarehouseEntity(NewWarehouseRequest request) {
+    public WarehouseEntity toWarehouseEntity(NewWarehouseRequest request, String token) {
+
+        CustomerClient client = new CustomerClient();
+        ResponseMessage message = client.findCustomerById(request.owner(), token);
+
+        System.out.println("message: " + message);
+        System.out.println("result: " + message.result());
+
         return WarehouseEntity.builder()
                 .owner(request.owner())
                 .category(request.category())

@@ -36,6 +36,11 @@ public class ResponseMessageType {
             .message("warehouse not found")
             .build();
 
+    public static final ResponseFormat BOOKMARK_NOT_FOUND = ResponseFormat.builder()
+            .code(14008)
+            .message("bookmark not found")
+            .build();
+
     public static final ResponseFormat PERSIST_FEATURE = ResponseFormat.builder()
             .code(16053)
             .message("feature information cannot be registered")

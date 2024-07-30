@@ -23,13 +23,14 @@ public class WarehouseServiceManagement {
     private final WarehouseService warehouseService;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public WarehouseResponse add(NewWarehouseRequest warehouse) {
+    public WarehouseResponse add(NewWarehouseRequest warehouse, String token) {
         // generate a warehouse entity
-        WarehouseEntity warehouseEntity = warehouseMapper.toWarehouseEntity(warehouse);
+        WarehouseEntity warehouseEntity = warehouseMapper.toWarehouseEntity(warehouse, token);
 
         // TODO: check the warehouse privacy and policies
 
         // TODO: initial the warehouse status
+        warehouseEntity.setStatus("TEST");
 
         return warehouseMapper.toResponse(warehouseService.persist(warehouseEntity));
     }

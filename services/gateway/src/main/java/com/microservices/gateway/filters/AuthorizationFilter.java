@@ -22,7 +22,7 @@ import java.util.UUID;
 @RefreshScope
 @Component
 @RequiredArgsConstructor
-public class AuthenticationFilter implements GatewayFilter {
+public class AuthorizationFilter implements GatewayFilter {
 
     private final RouterValidator routerValidator;
     private final JwtService service;
