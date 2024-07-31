@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +22,7 @@ public class WarehouseServiceManagement {
 
     private final WarehouseMapper warehouseMapper;
     private final WarehouseService warehouseService;
+    private WarehouseStatusService statusService;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public WarehouseResponse add(NewWarehouseRequest warehouse, String token) {
@@ -57,6 +59,23 @@ public class WarehouseServiceManagement {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public List<LimitedWarehouseResponse> findAllWarehouses(LocalDateTime offset, Principal principal) {
+        // check the null pointer exception
+        List<WarehouseEntity> warehouses;
+        if (offset == null) {
+            warehouses = warehouseService.findAllWarehouses();
+        } else {
+            warehouses = warehouseService.findAllWarehouses(offset);
+        }
+        return warehouses.stream()
+                .map(warehouseEntity -> {
+                    return statusService.isMarked(warehouseEntity, principal);
+                })
+                .map(warehouseMapper::toLimitResponse)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public List<LimitedWarehouseResponse> findAllWarehouses(LocalDateTime offset) {
         // check the null pointer exception
         List<WarehouseEntity> warehouses;
@@ -68,6 +87,11 @@ public class WarehouseServiceManagement {
         return warehouses.stream()
                 .map(warehouseMapper::toLimitResponse)
                 .collect(Collectors.toList());
+    }
+
+    public WarehouseResponse findById(Long id, Principal principal) {
+        WarehouseEntity warehouse = warehouseService.findById(id);
+        return warehouseMapper.toResponse(statusService.isMarked(warehouse, principal));
     }
 
     public WarehouseResponse findById(Long id) {

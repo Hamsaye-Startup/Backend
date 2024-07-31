@@ -20,6 +20,8 @@ public record WarehouseResponse (
         Double amount,
         Double discountAmount,
         String desc,
-        List<WarehouseStatus> status
+        List<WarehouseStatus> status,
+        boolean marked,
+        boolean liked
 ) {
 }

@@ -18,6 +18,8 @@ public record LimitedWarehouseResponse(
         Integer height,
         Double amount,
         Double discountAmount,
-        List<WarehouseStatus> status
+        List<WarehouseStatus> status,
+        boolean marked,
+        boolean liked
 ) {
 }

@@ -107,6 +107,8 @@ public class WarehouseMapper {
                 .discountAmount(warehouse.getDiscountAmount())
                 .desc(warehouse.getDesc())
                 .status(warehouseStatusMapper.toList(warehouse.getStatus()))
+                .marked(warehouse.isMarked())
+                .liked(warehouse.isLiked())
                 .build();
     }
 
@@ -121,6 +123,8 @@ public class WarehouseMapper {
                 .amount(warehouse.getAmount())
                 .discountAmount(warehouse.getDiscountAmount())
                 .status(warehouseStatusMapper.toList(warehouse.getStatus()))
+                .marked(warehouse.isMarked())
+                .liked(warehouse.isLiked())
                 .build();
     }
 }

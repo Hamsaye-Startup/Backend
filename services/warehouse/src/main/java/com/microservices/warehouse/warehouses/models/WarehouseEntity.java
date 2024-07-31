@@ -77,4 +77,10 @@ public class WarehouseEntity implements Serializable {
 
     @Column(name = "status", columnDefinition = "character varying", length = 31, nullable = false)
     private String status;
+
+    @Transient
+    private boolean marked;
+
+    @Transient
+    private boolean liked;
 }

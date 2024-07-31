@@ -10,8 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,14 +44,27 @@ public class WarehouseController {
     }
 
     @GetMapping
-    public ResponseEntity<?> showAllWarehouses(@RequestParam(value = "offset", required = false) LocalDateTime offset) {
-        List<LimitedWarehouseResponse> responses = management.findAllWarehouses(offset);
+    public ResponseEntity<?> showAllWarehouses(
+            @RequestParam(value = "offset", required = false) LocalDateTime offset,
+            Authentication authentication, Principal principal
+    ) {
+        List<LimitedWarehouseResponse> responses;
+        if (authentication.isAuthenticated()) {
+            responses = management.findAllWarehouses(offset, principal);
+        } else {
+            responses = management.findAllWarehouses(offset);
+        }
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<?> showWarehouseById(@PathVariable("id") Long id) {
-        WarehouseResponse response = management.findById(id);
+    public ResponseEntity<?> showWarehouseById(@PathVariable("id") Long id, Authentication authentication, Principal principal) {
+        WarehouseResponse response;
+        if (authentication.isAuthenticated()) {
+            response = management.findById(id, principal);
+        } else {
+            response = management.findById(id);
+        }
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 }

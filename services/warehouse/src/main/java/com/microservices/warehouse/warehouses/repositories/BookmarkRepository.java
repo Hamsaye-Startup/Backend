@@ -21,4 +21,7 @@ public interface BookmarkRepository extends JpaRepository<BookmarkEntity, Bookma
 
     @Query("select b from BookmarkEntity b where b.id.uid = :uid and b.id.warehouse.id = :warehouseId")
     Optional<BookmarkEntity> findByIdAndWarehouseId(@Param("uid") UUID uid, @Param("warehouseId") Long warehouseId);
+
+    @Query(value = "select exists(select 1 from tb_storage_bookmark b where b.uid = :uid and b.warehouse_id = :warehouseId)", nativeQuery = true)
+    boolean existByIdAndWarehouseId(@Param("uid") UUID uid, @Param("warehouseId") Long warehouseId);
 }
