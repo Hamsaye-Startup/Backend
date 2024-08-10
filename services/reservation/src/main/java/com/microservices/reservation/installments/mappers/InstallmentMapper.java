@@ -12,6 +12,7 @@ public class InstallmentMapper {
 
     public InstallmentResponse toResponse(InstallmentEntity installment) {
         return InstallmentResponse.builder()
+                .uid(installment.getUid())
                 .creditor(installment.getCreditor())
                 .debtor(installment.getDebtor())
                 .paid(installment.isPaid())

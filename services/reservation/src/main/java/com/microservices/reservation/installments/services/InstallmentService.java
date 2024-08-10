@@ -1,7 +1,12 @@
 package com.microservices.reservation.installments.services;
 
 import com.microservices.reservation.installments.models.InstallmentEntity;
+import com.microservices.reservation.installments.repositories.InstallmentRepository;
+import com.microservices.reservation.installments.exceptions.NotFoundInstallmentException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,9 +16,12 @@ import java.util.Set;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class InstallmentService {
 
-    public InstallmentEntity persist(Double amount, UUID creditor, UUID debtor) {
+    private final InstallmentRepository repository;
+
+    public InstallmentEntity generate(Double amount, UUID creditor, UUID debtor) {
         return InstallmentEntity.builder()
                 .value(amount)
                 .debtor(debtor)
@@ -23,7 +31,7 @@ public class InstallmentService {
                 .build();
     }
 
-    public InstallmentEntity persist(Double amount, UUID creditor, UUID debtor, LocalDateTime due) {
+    public InstallmentEntity generate(Double amount, UUID creditor, UUID debtor, LocalDateTime due) {
         return InstallmentEntity.builder()
                 .value(amount)
                 .debtor(debtor)
@@ -43,7 +51,7 @@ public class InstallmentService {
         Set<InstallmentEntity> installments = new HashSet<>();
         for (int index = 0; index < months; index++) {
 
-            InstallmentEntity installment = persist(
+            InstallmentEntity installment = generate(
                     amount,
                     creditor,
                     debtor,
@@ -53,5 +61,16 @@ public class InstallmentService {
         }
 
         return installments;
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public InstallmentEntity findById(UUID uid) {
+        return repository.findById(uid)
+                .orElseThrow(() -> new NotFoundInstallmentException(uid.toString()));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public InstallmentEntity persist(InstallmentEntity installment) {
+        return repository.saveAndFlush(installment);
     }
 }

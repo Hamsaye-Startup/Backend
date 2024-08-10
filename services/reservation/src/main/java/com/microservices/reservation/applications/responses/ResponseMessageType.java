@@ -26,6 +26,16 @@ public class ResponseMessageType {
             .message("reservation not found")
             .build();
 
+    public static final ResponseFormat INSTALLMENT_NOT_FOUND = ResponseFormat.builder()
+            .code(14010)
+            .message("installment not found")
+            .build();
+
+    public static final ResponseFormat TRANSACTION_NOT_FOUND = ResponseFormat.builder()
+            .code(14011)
+            .message("transaction not found")
+            .build();
+
     public static final ResponseFormat PERSIST_WAREHOUSE = ResponseFormat.builder()
             .code(16054)
             .message("warehouse information cannot be registered")

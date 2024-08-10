@@ -6,6 +6,7 @@ import java.util.UUID;
 
 @Builder
 public record InstallmentResponse(
+        UUID uid,
         Double value,
         LocalDateTime paymentDue,
         boolean paid,

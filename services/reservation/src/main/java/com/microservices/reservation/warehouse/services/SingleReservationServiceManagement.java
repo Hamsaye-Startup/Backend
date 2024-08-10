@@ -45,7 +45,7 @@ public class SingleReservationServiceManagement implements ReservationExecutor {
         SingleReservationEntity reservationEntity = mapper.toSingleReservationEntity(reservation);
 
         // persist the installment
-        InstallmentEntity installment = installmentService.persist(
+        InstallmentEntity installment = installmentService.generate(
                 reservation.totalAmount(),
                 warehouse.owner(),
                 null

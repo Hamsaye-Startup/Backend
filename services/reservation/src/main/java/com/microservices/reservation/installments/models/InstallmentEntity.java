@@ -14,6 +14,7 @@ import java.util.UUID;
 @Setter
 @Builder
 @Entity
+@Table(name = "tb_installment")
 public class InstallmentEntity {
 
     @Id
