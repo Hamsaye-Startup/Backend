@@ -12,6 +12,8 @@ import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 import static com.microservices.reservation.warehouse.services.ReservationServiceManagement.addReservationStrategy;
 
 @Service
@@ -51,5 +53,10 @@ public class SingleReservationServiceManagement implements ReservationExecutor {
         reservationEntity.setInstallment(installment);
 
         return mapper.toResponse(service.persist(reservationEntity));
+    }
+
+    @Override
+    public ReservationResponse findById(UUID uid) {
+        return mapper.toResponse(service.findById(uid));
     }
 }

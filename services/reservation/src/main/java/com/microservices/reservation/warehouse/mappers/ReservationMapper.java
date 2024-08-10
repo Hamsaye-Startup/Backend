@@ -1,7 +1,6 @@
 package com.microservices.reservation.warehouse.mappers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.microservices.reservation.warehouse.models.ReservationEntity;
 import com.microservices.reservation.warehouse.responses.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -10,9 +9,14 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReservationMapper {
 
-    private final ObjectMapper mapper;
-
-    public String toString(ReservationResponse response) throws JsonProcessingException {
-        return mapper.writeValueAsString(response);
+    public ReservationResponse toResponse(ReservationEntity reservation) {
+        return ReservationResponse.builder()
+                .id(reservation.getUid())
+                .reservedBy(reservation.getReservedBy())
+                .owner(reservation.getOwner())
+                .warehouse(reservation.getWarehouse())
+                .fromDate(reservation.getFromDate())
+                .toDate(reservation.getToDate())
+                .build();
     }
 }

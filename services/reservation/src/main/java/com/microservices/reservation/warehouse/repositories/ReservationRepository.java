@@ -1,6 +1,8 @@
 package com.microservices.reservation.warehouse.repositories;
 
 import com.microservices.reservation.warehouse.models.ReservationEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,11 +15,11 @@ import java.util.UUID;
 public interface ReservationRepository extends JpaRepository<ReservationEntity, UUID> {
 
     @Query("select r from ReservationEntity r where r.warehouse = :warehouseId")
-    List<ReservationEntity> findByWarehouse(@Param("warehouseId") Long id);
+    Page<ReservationEntity> findByWarehouse(@Param("warehouseId") Long id, Pageable pageable);
 
     @Query("select r from ReservationEntity r where r.owner = :ownerId")
-    List<ReservationEntity> findByOwnerId(@Param("ownerId") UUID uid);
+    Page<ReservationEntity> findByOwnerId(@Param("ownerId") UUID uid, Pageable pageable);
 
     @Query("select r from ReservationEntity r where r.reservedBy = :renterId")
-    List<ReservationEntity> findByRenterId(@Param("renterId") UUID uid);
+    Page<ReservationEntity> findByRenterId(@Param("renterId") UUID uid, Pageable pageable);
 }
