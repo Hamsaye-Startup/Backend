@@ -1,0 +1,55 @@
+package com.microservices.reservation.warehouse.services;
+
+import com.microservices.reservation.installments.models.InstallmentEntity;
+import com.microservices.reservation.installments.services.InstallmentService;
+import com.microservices.reservation.warehouse.mappers.SingleReservationMapper;
+import com.microservices.reservation.warehouse.models.SingleReservationEntity;
+import com.microservices.reservation.warehouse.requests.ReservationRequest;
+import com.microservices.reservation.warehouse.requests.ReservationStrategyMode;
+import com.microservices.reservation.warehouse.responses.ReservationResponse;
+import com.microservices.reservation.warehouse.responses.WarehouseResponse;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import static com.microservices.reservation.warehouse.services.ReservationServiceManagement.addReservationStrategy;
+
+@Service
+@RequiredArgsConstructor
+public class SingleReservationServiceManagement implements ReservationExecutor {
+
+    private final SingleReservationMapper mapper;
+    private final SingleReservationService service;
+
+    private final WarehouseService warehouseService;
+
+    private final InstallmentService installmentService;
+
+    @PostConstruct
+    @Override
+    public void register() {
+        addReservationStrategy(ReservationStrategyMode.single, this);
+    }
+
+    @Override
+    public ReservationResponse reserve(ReservationRequest reservation) {
+
+        // find the warehouse
+        WarehouseResponse warehouse = warehouseService.findWarehouseById(reservation.warehouse());
+
+        // find the authorized user
+
+        // map the reservation
+        SingleReservationEntity reservationEntity = mapper.toSingleReservationEntity(reservation);
+
+        // persist the installment
+        InstallmentEntity installment = installmentService.persist(
+                reservation.totalAmount(),
+                warehouse.owner(),
+                null
+        );
+        reservationEntity.setInstallment(installment);
+
+        return mapper.toResponse(service.persist(reservationEntity));
+    }
+}
