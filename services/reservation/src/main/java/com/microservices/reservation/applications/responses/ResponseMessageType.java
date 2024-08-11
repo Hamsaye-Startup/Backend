@@ -36,6 +36,16 @@ public class ResponseMessageType {
             .message("transaction not found")
             .build();
 
+    public static final ResponseFormat PRODUCT_NOT_FOUND = ResponseFormat.builder()
+            .code(14012)
+            .message("product not found")
+            .build();
+
+    public static final ResponseFormat PRODUCT_TYPE_NOT_FOUND = ResponseFormat.builder()
+            .code(14013)
+            .message("product type not found")
+            .build();
+
     public static final ResponseFormat PERSIST_WAREHOUSE = ResponseFormat.builder()
             .code(16054)
             .message("warehouse information cannot be registered")

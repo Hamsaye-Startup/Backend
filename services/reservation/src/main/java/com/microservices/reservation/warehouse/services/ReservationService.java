@@ -1,5 +1,6 @@
 package com.microservices.reservation.warehouse.services;
 
+import com.microservices.reservation.warehouse.exceptions.NotFoundReservationException;
 import com.microservices.reservation.warehouse.models.ReservationEntity;
 import com.microservices.reservation.warehouse.repositories.ReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,11 @@ public class ReservationService {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<ReservationEntity> findReservationByWarehouse(Long id, Pageable pageable) {
         return repository.findByWarehouse(id, pageable);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public ReservationEntity findReservationById(UUID uid) {
+        return repository.findById(uid)
+                .orElseThrow(() -> new NotFoundReservationException(uid.toString()));
     }
 }
