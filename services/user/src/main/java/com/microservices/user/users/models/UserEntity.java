@@ -50,7 +50,7 @@ public class UserEntity implements UserDetails {
     @Column(name = "modified_at", columnDefinition = "timestamp without time zone", insertable = false)
     private LocalDateTime modifiedAt;
 
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role", nullable = false)
     private RoleEntity role;
 

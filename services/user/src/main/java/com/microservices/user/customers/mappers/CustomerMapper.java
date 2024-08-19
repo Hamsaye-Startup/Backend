@@ -1,6 +1,8 @@
 package com.microservices.user.customers.mappers;
 
+import com.microservices.user.customers.models.CustomerDTO;
 import com.microservices.user.customers.models.CustomerEntity;
+import com.microservices.user.customers.models.GenderEnum;
 import com.microservices.user.customers.requests.CustomerRequest;
 import com.microservices.user.customers.requests.NewCustomerRequest;
 import com.microservices.user.customers.responses.CustomerResponse;
@@ -15,8 +17,6 @@ import org.springframework.stereotype.Service;
 public class CustomerMapper {
 
     private final UserService userService;
-
-    private final CustomerStatusMapper statusMapper;
     private final UserMapper userMapper;
 
     public CustomerEntity toCustomerEntity(NewCustomerRequest request) {
@@ -26,6 +26,7 @@ public class CustomerMapper {
                 .nid(request.nid())
                 .bio(request.bio())
                 .user(user)
+                .genderEnum(GenderEnum.valueOf(request.gender()))
                 .build();
     }
 
@@ -42,6 +43,8 @@ public class CustomerMapper {
                 .nid(request.nid() == null ? customer.getNid() : request.nid())
                 .bio(request.bio() == null ? customer.getBio() : request.bio())
                 .user(user)
+                .genderEnum(customer.getGenderEnum())
+                .loyaltyStatus(customer.getLoyaltyStatus())
                 .build();
     }
 
@@ -52,7 +55,14 @@ public class CustomerMapper {
                 .createdAt(customer.getCreatedAt())
                 .nid(customer.getNid())
                 .bio(customer.getBio())
-                .status(statusMapper.toList(customer.getStatus()))
+                .build();
+    }
+
+    public CustomerDTO toCustomerDTO(CustomerEntity customer) {
+        return CustomerDTO.builder()
+                .uid(customer.getUser().getUid())
+                .genderEnum(customer.getGenderEnum())
+                .loyaltyStatus(customer.getLoyaltyStatus())
                 .build();
     }
 }

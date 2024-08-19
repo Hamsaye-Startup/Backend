@@ -1,5 +1,6 @@
 package com.microservices.user.users.mappers;
 
+import com.microservices.user.users.models.UserDTO;
 import com.microservices.user.users.models.UserEntity;
 import com.microservices.user.users.requests.RegistrationRequest;
 import com.microservices.user.users.requests.UserRequest;
@@ -36,6 +37,16 @@ public class UserMapper {
                 .lastname(user.getLastname())
                 .rid(user.getRole().getId())
                 .createAt(user.getCreatedAt())
+                .build();
+    }
+
+    public UserDTO toUserDTO(UserEntity user) {
+        return UserDTO.builder()
+                .uid(user.getUid())
+                .firstname(user.getFirstname())
+                .lastname(user.getLastname())
+                .phone(user.getPhone())
+                .profilePictureId(null)
                 .build();
     }
 }

@@ -4,6 +4,7 @@ import com.microservices.user.application.responses.ResponseMessageType;
 import com.microservices.user.customers.exceptions.NotFoundCustomerException;
 import com.microservices.user.customers.exceptions.PersistCustomerException;
 import com.microservices.user.customers.models.CustomerEntity;
+import com.microservices.user.customers.models.UserLoyaltyStatus;
 import com.microservices.user.customers.repositories.CustomerRepository;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,17 @@ public class CustomerService {
     @Transactional(propagation = REQUIRED)
     public CustomerEntity persist(CustomerEntity customer) {
         try {
+            customer.setLoyaltyStatus(UserLoyaltyStatus.NEW_USER);
+            return repository.saveAndFlush(customer);
+        } catch (RuntimeException ex) {
+            throw new PersistCustomerException(ex.getCause(), customer.getNid());
+        }
+    }
+
+    @Transactional(propagation = REQUIRED)
+    public CustomerEntity update(CustomerEntity customer, UserLoyaltyStatus loyaltyStatus) {
+        try {
+            customer.setLoyaltyStatus(loyaltyStatus);
             return repository.saveAndFlush(customer);
         } catch (RuntimeException ex) {
             throw new PersistCustomerException(ex.getCause(), customer.getNid());

@@ -12,6 +12,7 @@ public record NewCustomerRequest(
         @NotNull(message = "national_code is required")
         String nid,
         String bio,
+        String gender,
         @JsonProperty("user_id")
         @NotNull(message = "user_id is required")
         UUID userId

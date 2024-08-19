@@ -1,0 +1,12 @@
+spring:
+  data:
+    mongodb:
+      username: pouria
+      password: hamsaye1g8S9QJsp61wD53L4nW9d5mou879cSQpD7e38BDB0LwLesB3Rog5eWzU1mp4BEY7
+      host: localhost
+      port: 27017
+      database: db_chat
+      authentication-database: admin
+
+server:
+  port: 8057

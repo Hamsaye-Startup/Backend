@@ -2,9 +2,13 @@ package com.microservices.user.customers.services;
 
 import com.microservices.user.customers.mappers.CustomerMapper;
 import com.microservices.user.customers.models.CustomerEntity;
+import com.microservices.user.customers.models.UserLoyaltyStatus;
+import com.microservices.user.customers.requests.CustomerNotifyRequest;
+import com.microservices.user.customers.requests.CustomerNotifyType;
 import com.microservices.user.customers.requests.CustomerRequest;
 import com.microservices.user.customers.requests.NewCustomerRequest;
 import com.microservices.user.customers.responses.CustomerResponse;
+import com.microservices.user.kafka.producers.CustomerProducerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,6 +26,8 @@ public class CustomerServiceManagement {
     private final CustomerMapper mapper;
     private final CustomerService service;
 
+    private final CustomerProducerService customerProducerService;
+
     /*
     * register new customer
     * */
@@ -29,10 +35,19 @@ public class CustomerServiceManagement {
         // generate a customer
         CustomerEntity customer = mapper.toCustomerEntity(request);
 
-        // todo set default the status
-        customer.setStatus("");
+        // persist the customer
+        CustomerEntity persistedCustomer = service.persist(customer);
 
-        return mapper.toResponse(service.persist(customer));
+        // send a notification
+        customerProducerService.send(
+                CustomerNotifyRequest.builder()
+                        .customerInfo(mapper.toCustomerDTO(persistedCustomer))
+                        .message(CustomerNotifyType.NEW_USER.getMessage())
+                        .type(CustomerNotifyType.NEW_USER)
+                        .build()
+        );
+
+        return mapper.toResponse(persistedCustomer);
     }
 
     /*
@@ -42,13 +57,39 @@ public class CustomerServiceManagement {
         // generate a customer
         CustomerEntity customer = service.findById(request.uid());
         CustomerEntity newCustomer = mapper.toCustomerEntity(request, customer);
-        return mapper.toResponse(service.persist(newCustomer));
+
+        // update the customer information
+        CustomerEntity updatedCustomer = service.update(newCustomer, newCustomer.getLoyaltyStatus());
+
+        // send a notification
+        customerProducerService.send(
+                CustomerNotifyRequest.builder()
+                        .customerInfo(mapper.toCustomerDTO(updatedCustomer))
+                        .message(CustomerNotifyType.NEW_USER.getMessage())
+                        .type(CustomerNotifyType.NEW_USER)
+                        .build()
+        );
+
+        return mapper.toResponse(updatedCustomer);
     }
 
     public CustomerResponse delete(UUID uid) {
         // fetch the customer by uid
         CustomerEntity customer = service.findById(uid);
-        return mapper.toResponse(service.delete(customer));
+
+        // delete the customer information
+        CustomerEntity deletedCustomer = service.delete(customer);
+
+        // send a notification
+        customerProducerService.send(
+                CustomerNotifyRequest.builder()
+                        .customerInfo(mapper.toCustomerDTO(deletedCustomer))
+                        .message(CustomerNotifyType.NEW_USER.getMessage())
+                        .type(CustomerNotifyType.NEW_USER)
+                        .build()
+        );
+
+        return mapper.toResponse(deletedCustomer);
     }
 
     /*

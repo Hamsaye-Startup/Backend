@@ -31,9 +31,6 @@ public class CustomerEntity implements Serializable {
     @JoinColumn(name = "user_id", columnDefinition = "uuid", unique = true, nullable = false, updatable = false)
     private UserEntity user;
 
-    @Column(name = "status", columnDefinition = "character varying", length = 31, nullable = false)
-    private String status;
-
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "timestamp without time zone", updatable = false, nullable = false)
     private LocalDateTime createdAt;
@@ -44,6 +41,14 @@ public class CustomerEntity implements Serializable {
 
     @Column(name = "bio", columnDefinition = "character varying", length = 255)
     private String bio;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", columnDefinition = "character varying", length = 32)
+    private GenderEnum genderEnum;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "loyalty_status", columnDefinition = "character varying", length = 32)
+    private UserLoyaltyStatus loyaltyStatus;
 
     // todo profile image --> AWS(s3)
 }

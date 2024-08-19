@@ -33,6 +33,6 @@ public class PasswordServiceManagement {
         password.setPassword(encoder.encode(request.password()));
 
         // persist the user and password
-        userService.persist(user);
+        userService.persist(user, user.getRole(), password);
     }
 }

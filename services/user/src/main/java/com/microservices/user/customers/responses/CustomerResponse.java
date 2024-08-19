@@ -1,7 +1,6 @@
 package com.microservices.user.customers.responses;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.microservices.user.customers.models.CustomerStatus;
 import com.microservices.user.users.responses.UserResponse;
 import lombok.Builder;
 
@@ -19,8 +18,7 @@ public record CustomerResponse(
         LocalDateTime createdAt,
         @JsonProperty("national_code")
         String nid,
-        String bio,
-        List<CustomerStatus> status
+        String bio
 
         // todo image
 ) {
