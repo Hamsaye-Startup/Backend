@@ -5,6 +5,7 @@ import com.hamsaye.chat.kafka.requests.CustomerNotifyRequest;
 import com.hamsaye.chat.kafka.requests.CustomerNotifyType;
 import com.hamsaye.chat.kafka.requests.UserNotifyRequest;
 import com.hamsaye.chat.kafka.requests.UserNotifyType;
+import com.hamsaye.chat.users.mappers.UserMapper;
 import com.hamsaye.chat.users.models.UserAttribute;
 import com.hamsaye.chat.users.models.UserContactInfo;
 import com.hamsaye.chat.users.models.UserEntity;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 public class CustomerConsumerService {
 
     private final UserService userService;
+    private final UserMapper userMapper;
 
     private final SimpMessagingTemplate messagingTemplate;
     private final ResponseMessageMapper mapper;
@@ -55,8 +57,8 @@ public class CustomerConsumerService {
 
             // update the websocket
             messagingTemplate.convertAndSend(
-                    "/topic/users",
-                    ResponseEntity.ok(mapper.toResponse(saved))
+                    "/user/public",
+                    ResponseEntity.ok(mapper.toResponse(userMapper.toResponse(saved)))
             );
 
         } else if (request.type().equals(UserNotifyType.UPDATE_USER)) {

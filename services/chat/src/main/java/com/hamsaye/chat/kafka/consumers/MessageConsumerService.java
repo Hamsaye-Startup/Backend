@@ -65,7 +65,7 @@ public class MessageConsumerService {
 
         // return by websocket
         messagingTemplate.convertAndSend(
-                sentMessage.getConversationId() + "/queue/messages",
+                "/conversation" + sentMessage.getConversationId() + "/queue/messages",
                 ResponseEntity.ok(mapper.toResponse(sentMessage))
         );
     }
@@ -77,7 +77,7 @@ public class MessageConsumerService {
 
         // return by websocket
         messagingTemplate.convertAndSend(
-                notification.conversationId() + "/queue/messages",
+                "/conversation" + notification.conversationId() + "/queue/messages",
                 ResponseEntity.ok(mapper.toResponse(message))
         );
     }

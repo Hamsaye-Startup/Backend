@@ -44,7 +44,12 @@ function onConnected() {
     // document.querySelector('#connected-user-fullname').textContent = firstname + " " + lastname;
     // findAndDisplayConnectedUsers().then();
 
-    console.log("on Connected log")
+    // const messages = await fetch(`/${conversationId}/messages`);
+    // let jsonMessages = await messages.json();
+    // console.log(jsonMessages);
+
+    // console.log("on Connected log");
+    // stompClient.subscribe(`/{conversationId}/queue/messages`, onMessageReceived);
 }
 
 async function findAndDisplayConnectedUsers() {
@@ -104,7 +109,6 @@ function userItemClick(event) {
     const nbrMsg = clickedUser.querySelector('.nbr-msg');
     nbrMsg.classList.add('hidden');
     nbrMsg.textContent = '0';
-
 }
 
 function displayMessage(senderId, content) {
@@ -154,19 +158,14 @@ function sendMessage(event) {
 }
 
 async function onMessageReceived(payload) {
-    await findAndDisplayConnectedUsers();
+    // await findAndDisplayConnectedUsers();
     console.log('Message received', payload);
     const message = JSON.parse(payload.body);
-    if (selectedUserId && selectedUserId === message.senderId) {
-        displayMessage(message.senderId, message.content);
-        chatArea.scrollTop = chatArea.scrollHeight;
-    }
 
-    if (selectedUserId) {
-        document.querySelector(`#${selectedUserId}`).classList.add('active');
-    } else {
-        messageForm.classList.add('hidden');
-    }
+    displayMessage(message.senderId, message.content);
+    chatArea.scrollTop = chatArea.scrollHeight;
+
+    document.querySelector(`#${selectedUserId}`).classList.add('active');
 
     const notifiedUser = document.querySelector(`#${message.senderId}`);
     if (notifiedUser && !notifiedUser.classList.contains('active')) {
