@@ -16,44 +16,34 @@ public class ResponseMessageType {
             .message("internal server error is occurred")
             .build();
 
+    public static final ResponseFormat USER_NOT_FOUND = ResponseFormat.builder()
+            .code(14002)
+            .message("user not found")
+            .build();
+
+    public static final ResponseFormat CHAT_MESSAGE_NOT_FOUND = ResponseFormat.builder()
+            .code(14050)
+            .message("chat message not found")
+            .build();
+
+    public static final ResponseFormat CHAT_CONVERSATION_NOT_FOUND = ResponseFormat.builder()
+            .code(14051)
+            .message("chat conversation not found")
+            .build();
+
+    public static final ResponseFormat CHAT_CONVERSATION_ALREADY_EXISTS = ResponseFormat.builder()
+            .code(14052)
+            .message("chat conversation already exists")
+            .build();
+
     public static final ResponseFormat SCOPE_NOT_FOUND = ResponseFormat.builder()
             .code(14001)
             .message("scope not found")
             .build();
 
-    public static final ResponseFormat RESERVATION_NOT_FOUND = ResponseFormat.builder()
-            .code(14009)
-            .message("reservation not found")
-            .build();
-
-    public static final ResponseFormat INSTALLMENT_NOT_FOUND = ResponseFormat.builder()
-            .code(14010)
-            .message("installment not found")
-            .build();
-
-    public static final ResponseFormat TRANSACTION_NOT_FOUND = ResponseFormat.builder()
-            .code(14011)
-            .message("transaction not found")
-            .build();
-
-    public static final ResponseFormat PRODUCT_NOT_FOUND = ResponseFormat.builder()
-            .code(14012)
-            .message("product not found")
-            .build();
-
-    public static final ResponseFormat PRODUCT_TYPE_NOT_FOUND = ResponseFormat.builder()
-            .code(14013)
-            .message("product type not found")
-            .build();
-
-    public static final ResponseFormat PERSIST_WAREHOUSE = ResponseFormat.builder()
-            .code(16054)
-            .message("warehouse information cannot be registered")
-            .build();
-
-    public static final ResponseFormat ILLEGAL_REQUEST = ResponseFormat.builder()
-            .code(-1)
-            .message("illegal request is detected")
+    public static final ResponseFormat PERSIST_USER = ResponseFormat.builder()
+            .code(16050)
+            .message("user information cannot be registered")
             .build();
 
     public static final ResponseFormat EXPIRED_TOKEN = ResponseFormat.builder()
@@ -61,9 +51,9 @@ public class ResponseMessageType {
             .message("token is expired")
             .build();
 
-    public static final ResponseFormat TOTAL_INSTALLMENT = ResponseFormat.builder()
-            .code(12006)
-            .message("total installments number is out of duration")
+    public static final ResponseFormat AUTHENTICATION_CREDENTIAL_NOT_FOUND = ResponseFormat.builder()
+            .code(10050)
+            .message("authentication credential not found")
             .build();
 
 }

@@ -2,6 +2,7 @@ package com.hamsaye.chat.users.services;
 
 import com.hamsaye.chat.configs.VersionControlConfig;
 import com.hamsaye.chat.users.exceptions.NotFoundUserException;
+import com.hamsaye.chat.users.exceptions.PersistUserException;
 import com.hamsaye.chat.users.models.*;
 import com.hamsaye.chat.users.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,21 +28,31 @@ public class UserService {
     }
 
     public UserEntity saveUser(UserEntity user) {
-        user.setVersionControl(VersionControl.builder()
-                .appVersion(versionControlConfig.appVersion())
-                .build());
+        try {
+            user.setVersionControl(VersionControl.builder()
+                    .appVersion(versionControlConfig.appVersion())
+                    .build());
 
-        user.setLoyaltyStatus(UserLoyaltyStatus.NEW_USER);
-        return userRepository.save(user);
+            user.setLoyaltyStatus(UserLoyaltyStatus.NEW_USER);
+            return userRepository.save(user);
+        }
+        catch (RuntimeException exception) {
+            throw new PersistUserException(exception.getCause(), user.getUid().toString());
+        }
     }
 
     public void updateUser(UserEntity user) {
-        user.setVersionControl(VersionControl.builder()
-                .appVersion(versionControlConfig.appVersion())
-                .build());
+        try {
+            user.setVersionControl(VersionControl.builder()
+                    .appVersion(versionControlConfig.appVersion())
+                    .build());
 
-        userRepository.deleteById(user.getUid());
-        userRepository.save(user);
+            userRepository.deleteById(user.getUid());
+            userRepository.save(user);
+        }
+        catch (RuntimeException exception) {
+            throw new PersistUserException(exception.getCause(), user.getUid().toString());
+        }
     }
 
     public void deleteUser(UserEntity user) {
@@ -49,12 +60,17 @@ public class UserService {
     }
 
     public UserEntity connectUser(UserEntity user, UserConnectionState connectionState) {
-        user.setConnectionState(connectionState);
-        return userRepository.save(user);
+        try {
+            user.setConnectionState(connectionState);
+            return userRepository.save(user);
+        }
+        catch (RuntimeException exception) {
+            throw new PersistUserException(exception.getCause(), user.getUid().toString());
+        }
     }
 
     public UserEntity findUserById(UUID uid) {
         return userRepository.findById(uid)
-                .orElseThrow(() -> new NotFoundUserException(uid.toString())); // TODO: implement the exception
+                .orElseThrow(() -> new NotFoundUserException(uid.toString()));
     }
 }

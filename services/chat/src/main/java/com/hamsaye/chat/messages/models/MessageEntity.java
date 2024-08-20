@@ -22,7 +22,7 @@ import java.util.UUID;
 public class MessageEntity {
 
     @Id
-    private Long id;
+    private String id;
 
     @Field("sender_id")
     private UUID senderId;

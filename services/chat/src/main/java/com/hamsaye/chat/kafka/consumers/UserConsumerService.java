@@ -1,5 +1,6 @@
 package com.hamsaye.chat.kafka.consumers;
 
+import com.hamsaye.chat.applications.mapper.ResponseMessageMapper;
 import com.hamsaye.chat.users.mappers.UserMapper;
 import com.hamsaye.chat.users.models.ConnectionStatus;
 import com.hamsaye.chat.users.models.UserConnectionState;
@@ -9,6 +10,7 @@ import com.hamsaye.chat.users.requests.UserNotifyType;
 import com.hamsaye.chat.users.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -26,6 +28,7 @@ public class UserConsumerService {
     private final UserMapper userMapper;
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final ResponseMessageMapper mapper;
 
     @KafkaListener(
             id = "chat-user-listener-id",
@@ -56,7 +59,7 @@ public class UserConsumerService {
         // update the user by websocket
         messagingTemplate.convertAndSend(
                 "/topic/users",
-                userMapper.toResponse(disconnectedUser)
+                ResponseEntity.ok(mapper.toResponse(userMapper.toResponse(disconnectedUser)))
         );
     }
 }

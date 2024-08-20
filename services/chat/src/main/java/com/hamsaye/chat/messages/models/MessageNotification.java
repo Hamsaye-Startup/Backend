@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Builder
 public record MessageNotification(
-        Long id,
+        String id,
         UUID senderId,
         UUID conversationId,
         String content,

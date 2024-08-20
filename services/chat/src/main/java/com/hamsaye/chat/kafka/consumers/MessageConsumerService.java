@@ -1,5 +1,6 @@
 package com.hamsaye.chat.kafka.consumers;
 
+import com.hamsaye.chat.applications.mapper.ResponseMessageMapper;
 import com.hamsaye.chat.messages.mappers.MessageMapper;
 import com.hamsaye.chat.messages.models.MessageEntity;
 import com.hamsaye.chat.messages.models.MessageNotification;
@@ -7,6 +8,7 @@ import com.hamsaye.chat.messages.models.MessageNotifyType;
 import com.hamsaye.chat.messages.services.MessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -22,6 +24,7 @@ public class MessageConsumerService {
     private final MessageMapper messageMapper;
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final ResponseMessageMapper mapper;
 
     @KafkaListener(
             id = "chat-message-listener-id",
@@ -63,7 +66,7 @@ public class MessageConsumerService {
         // return by websocket
         messagingTemplate.convertAndSend(
                 sentMessage.getConversationId() + "/queue/messages",
-                sentMessage
+                ResponseEntity.ok(mapper.toResponse(sentMessage))
         );
     }
 
@@ -75,7 +78,7 @@ public class MessageConsumerService {
         // return by websocket
         messagingTemplate.convertAndSend(
                 notification.conversationId() + "/queue/messages",
-                message
+                ResponseEntity.ok(mapper.toResponse(message))
         );
     }
 }

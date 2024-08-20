@@ -1,5 +1,6 @@
 package com.hamsaye.chat.kafka.consumers;
 
+import com.hamsaye.chat.applications.mapper.ResponseMessageMapper;
 import com.hamsaye.chat.kafka.requests.CustomerNotifyRequest;
 import com.hamsaye.chat.kafka.requests.CustomerNotifyType;
 import com.hamsaye.chat.kafka.requests.UserNotifyRequest;
@@ -12,6 +13,7 @@ import com.hamsaye.chat.users.models.UserLoyaltyStatus;
 import com.hamsaye.chat.users.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
@@ -26,6 +28,7 @@ public class CustomerConsumerService {
     private final UserService userService;
 
     private final SimpMessagingTemplate messagingTemplate;
+    private final ResponseMessageMapper mapper;
 
     @KafkaListener(
             id = "external-user-info-listener-id",
@@ -53,7 +56,7 @@ public class CustomerConsumerService {
             // update the websocket
             messagingTemplate.convertAndSend(
                     "/topic/users",
-                    saved.getUid().toString()
+                    ResponseEntity.ok(mapper.toResponse(saved))
             );
 
         } else if (request.type().equals(UserNotifyType.UPDATE_USER)) {

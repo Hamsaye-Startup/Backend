@@ -4,7 +4,7 @@ import lombok.Builder;
 
 @Builder
 public record MessageDTO(
-        Long id,
+        String id,
         String content
 ) {
 }

@@ -3,5 +3,3 @@ spring:
     import: optional:configserver:http://localhost:8888
   application:
     name: chat-service
-  kafka:
-    bootstrap-servers: localhost:29092

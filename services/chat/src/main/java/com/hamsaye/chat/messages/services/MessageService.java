@@ -3,6 +3,7 @@ package com.hamsaye.chat.messages.services;
 import com.hamsaye.chat.converstions.exceptions.NotFoundConversationException;
 import com.hamsaye.chat.converstions.models.*;
 import com.hamsaye.chat.converstions.repositories.ConversationRepository;
+import com.hamsaye.chat.messages.exceptions.ConversationAlreadyExistsException;
 import com.hamsaye.chat.messages.exceptions.NotFoundMessageException;
 import com.hamsaye.chat.messages.models.MessageDTO;
 import com.hamsaye.chat.messages.models.MessageEntity;
@@ -40,7 +41,13 @@ public class MessageService {
 
             // find the conversation
             conversation = conversationRepository.findById(message.getConversationId())
-                    .orElseThrow(() -> new NotFoundConversationException(message.getConversationId()));
+                    .orElseThrow(() -> new NotFoundConversationException(
+                            String.format(
+                                    "conversationId: '%s', senderId: '%s'",
+                                    message.getConversationId().toString(),
+                                    message.getSenderId().toString()
+                            )
+                    ));
         }
 
         message.setConversationId(conversation.getUid());
@@ -57,6 +64,13 @@ public class MessageService {
     }
 
     private ConversationEntity startConversation(UUID senderId, UUID recipientId) {
+
+        // check the duplicate conversation
+        ConversationEntity exists = conversationRepository.findByStarterAndContinuator(senderId, recipientId)
+                .orElse(null);
+        if (exists != null) {
+            throw new ConversationAlreadyExistsException(String.format("senderId: '%s', recipientId: '%s'", senderId, recipientId));
+        }
 
         // find the users
         UserEntity sender = userRepository.findById(senderId)
@@ -80,6 +94,7 @@ public class MessageService {
 
     private ConversationEntity generateConversation(UserEntity sender, UserEntity recipient) {
         return ConversationEntity.builder()
+                .uid(UUID.randomUUID())
                 .users(UserReferenceCollection.builder()
                         .starter(UserRef.builder()
                                 .uid(sender.getUid())
@@ -114,9 +129,9 @@ public class MessageService {
         conversationRepository.save(conversation);
     }
 
-    public MessageEntity findMessageById(Long id) {
+    public MessageEntity findMessageById(String id) {
         return messageRepository.findById(id)
-                .orElseThrow(() -> new NotFoundMessageException(id.toString())); // TODO: implement the exception
+                .orElseThrow(() -> new NotFoundMessageException(id));
     }
 
     public void deleteMessagesByConversationId(UUID uid) {

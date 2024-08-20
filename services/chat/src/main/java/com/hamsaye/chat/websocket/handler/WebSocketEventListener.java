@@ -5,6 +5,7 @@ import com.hamsaye.chat.users.models.UserConnectionState;
 import com.hamsaye.chat.users.models.UserEntity;
 import com.hamsaye.chat.users.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class WebSocketEventListener {
@@ -40,6 +42,8 @@ public class WebSocketEventListener {
 
             System.out.println("session is connected!!!");
         }
+
+        log.info("connect listener is working");
     }
 
     @EventListener
@@ -62,5 +66,7 @@ public class WebSocketEventListener {
 
             System.out.println("session is disconnected!!!");
         }
+
+        log.info("disconnect listener is working");
     }
 }

@@ -7,6 +7,8 @@ spring:
       port: 27017
       database: db_chat
       authentication-database: admin
-
+      uuid-representation: standard
+  kafka:
+    bootstrap-servers: localhost:29092
 server:
-  port: 8057
+  port: 8080

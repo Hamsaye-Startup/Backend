@@ -24,7 +24,7 @@ public class ConversationService {
 
     public ConversationEntity findConversationByUid(UUID uid) {
         return conversationRepository.findById(uid)
-                .orElseThrow(() -> new NotFoundConversationException(uid)); // TODO: implement exception
+                .orElseThrow(() -> new NotFoundConversationException(uid.toString()));
     }
 
     public List<ConversationEntity> findAllConversationsByUserUid(UUID uid) {
