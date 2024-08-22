@@ -41,6 +41,16 @@ public class ResponseMessageType {
             .message("bookmark not found")
             .build();
 
+    public static final ResponseFormat RESERVATION_NOT_FOUND = ResponseFormat.builder()
+            .code(14014)
+            .message("reservation not found")
+            .build();
+
+    public static final ResponseFormat REVIEW_NOT_FOUND = ResponseFormat.builder()
+            .code(14015)
+            .message("review not found")
+            .build();
+
     public static final ResponseFormat PERSIST_FEATURE = ResponseFormat.builder()
             .code(16053)
             .message("feature information cannot be registered")

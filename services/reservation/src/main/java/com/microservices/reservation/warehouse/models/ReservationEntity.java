@@ -38,22 +38,10 @@ public class ReservationEntity {
 
     @Column(name = "to_date", columnDefinition = "date", nullable = false)
     private LocalDate toDate;
-/*
-    @Column(name = "total_fees", columnDefinition = "numeric", nullable = false)
-    private Double totalFees;*/
 
-/*    @Column(name = "paid_amount", columnDefinition = "numeric", nullable = false)
-    private Double AmountPaid;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name = "for_each_date", columnDefinition = "character varying", length = 63, nullable = false)
-    private ForEachDateEnum perDate;*/
-
-/*    @Column(name = "total_installments_num", columnDefinition = "integer", nullable = false)
-    private Integer totalInstallmentsNum;
-
-    @Column(name = "paid_installments_num", columnDefinition = "integer", nullable = false)
-    private Integer InstallmentsPaidNum;*/
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
+    @JoinColumn(name = "stats", columnDefinition = "bigint", nullable = false, unique = true)
+    private ReservationStats stats;
 
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)

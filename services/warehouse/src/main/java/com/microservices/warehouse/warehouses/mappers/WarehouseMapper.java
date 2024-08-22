@@ -25,7 +25,6 @@ public class WarehouseMapper {
 
     private final FeatureMapper featureMapper;
     private final PolicyMapper policyMapper;
-    private final WarehouseStatusMapper warehouseStatusMapper;
 
     private final FeatureService featureService;
     private final PolicyService policyService;
@@ -106,7 +105,6 @@ public class WarehouseMapper {
                 .amount(warehouse.getAmount())
                 .discountAmount(warehouse.getDiscountAmount())
                 .desc(warehouse.getDesc())
-                .status(warehouseStatusMapper.toList(warehouse.getStatus()))
                 .marked(warehouse.isMarked())
                 .liked(warehouse.isLiked())
                 .build();
@@ -122,7 +120,6 @@ public class WarehouseMapper {
                 .height(warehouse.getHeight())
                 .amount(warehouse.getAmount())
                 .discountAmount(warehouse.getDiscountAmount())
-                .status(warehouseStatusMapper.toList(warehouse.getStatus()))
                 .marked(warehouse.isMarked())
                 .liked(warehouse.isLiked())
                 .build();

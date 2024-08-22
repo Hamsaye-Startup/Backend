@@ -38,13 +38,13 @@ public class BookmarkController {
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    @GetMapping("/user/id/{id}")
+    @GetMapping("/storage/user/id/{id}")
     public ResponseEntity<?> showBookmarkById(@PathVariable("id") UUID uid, Pageable pageable) {
         Page<BookmarkEntity> responses = management.findById(uid, pageable);
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 
-    @GetMapping("/user")
+    @GetMapping("/storage/user")
     public ResponseEntity<?> showBookmarkById(Authentication authentication, Pageable pageable) {
         if (authentication.getPrincipal() == null) {
             throw new RuntimeException();

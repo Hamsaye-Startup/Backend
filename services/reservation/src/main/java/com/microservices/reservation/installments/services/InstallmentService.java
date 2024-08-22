@@ -1,5 +1,6 @@
 package com.microservices.reservation.installments.services;
 
+import com.microservices.reservation.installments.exceptions.PersistInstallmentException;
 import com.microservices.reservation.installments.models.InstallmentEntity;
 import com.microservices.reservation.installments.repositories.InstallmentRepository;
 import com.microservices.reservation.installments.exceptions.NotFoundInstallmentException;
@@ -71,6 +72,10 @@ public class InstallmentService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public InstallmentEntity persist(InstallmentEntity installment) {
-        return repository.saveAndFlush(installment);
+        try {
+            return repository.saveAndFlush(installment);
+        } catch (RuntimeException ex) {
+            throw new PersistInstallmentException(ex.getCause(), installment.getDebtor().toString());
+        }
     }
 }

@@ -45,15 +45,24 @@ public class ResponseMessageType {
             .code(14013)
             .message("product type not found")
             .build();
-
-    public static final ResponseFormat PERSIST_WAREHOUSE = ResponseFormat.builder()
-            .code(16054)
-            .message("warehouse information cannot be registered")
+    public static final ResponseFormat PERSIST_RESERVATION = ResponseFormat.builder()
+            .code(16055)
+            .message("reservation cannot be inserted")
             .build();
 
-    public static final ResponseFormat ILLEGAL_REQUEST = ResponseFormat.builder()
-            .code(-1)
-            .message("illegal request is detected")
+    public static final ResponseFormat PERSIST_TRANSACTION = ResponseFormat.builder()
+            .code(16056)
+            .message("transaction cannot be inserted")
+            .build();
+
+    public static final ResponseFormat PERSIST_PRODUCT = ResponseFormat.builder()
+            .code(16057)
+            .message("product cannot be inserted")
+            .build();
+
+    public static final ResponseFormat PERSIST_INSTALLMENT = ResponseFormat.builder()
+            .code(16058)
+            .message("installment cannot be inserted")
             .build();
 
     public static final ResponseFormat EXPIRED_TOKEN = ResponseFormat.builder()

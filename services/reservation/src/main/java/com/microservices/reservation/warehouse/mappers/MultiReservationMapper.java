@@ -31,11 +31,12 @@ public class MultiReservationMapper {
                 .warehouse(reservation.getWarehouse())
                 .fromDate(reservation.getFromDate())
                 .toDate(reservation.getToDate())
-                .factor(mapper.toFactor(
-                        reservation.getInstallments().stream()
-                                .map(mapper::toResponse)
-                                .collect(Collectors.toSet())
+                .factor(mapper.toFactor(reservation.getInstallments()
+                        .stream()
+                        .map(mapper::toResponse)
+                        .collect(Collectors.toSet())
                 ))
+                .stats(reservation.getStats())
                 .build();
     }
 }

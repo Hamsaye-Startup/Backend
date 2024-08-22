@@ -1,10 +1,8 @@
 package com.microservices.warehouse.warehouses.responses;
 
 import com.microservices.warehouse.warehouses.models.CategoryEnum;
-import com.microservices.warehouse.warehouses.models.WarehouseStatus;
 import lombok.Builder;
 
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,7 +18,6 @@ public record WarehouseResponse (
         Double amount,
         Double discountAmount,
         String desc,
-        List<WarehouseStatus> status,
         boolean marked,
         boolean liked
 ) {

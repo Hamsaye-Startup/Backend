@@ -30,6 +30,7 @@ public class SingleReservationMapper {
                 .fromDate(reservation.getFromDate())
                 .toDate(reservation.getToDate())
                 .factor(mapper.toFactor(mapper.toResponse(reservation.getInstallment())))
+                .stats(reservation.getStats())
                 .build();
     }
 }

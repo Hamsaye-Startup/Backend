@@ -3,6 +3,8 @@ package com.microservices.reservation.warehouse.services;
 import com.microservices.reservation.installments.models.InstallmentEntity;
 import com.microservices.reservation.installments.services.InstallmentService;
 import com.microservices.reservation.warehouse.mappers.SingleReservationMapper;
+import com.microservices.reservation.warehouse.models.ConfirmReserveEnum;
+import com.microservices.reservation.warehouse.models.ReservationStats;
 import com.microservices.reservation.warehouse.models.SingleReservationEntity;
 import com.microservices.reservation.warehouse.requests.ReservationRequest;
 import com.microservices.reservation.warehouse.requests.ReservationStrategyMode;
@@ -51,6 +53,9 @@ public class SingleReservationServiceManagement implements ReservationExecutor {
                 null
         );
         reservationEntity.setInstallment(installment);
+        reservationEntity.setStats(ReservationStats.builder()
+                .confirmed(ConfirmReserveEnum.NOT_CONFIRMED)
+                .build());
 
         return mapper.toResponse(service.persist(reservationEntity));
     }

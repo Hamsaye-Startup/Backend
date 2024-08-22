@@ -3,7 +3,9 @@ package com.microservices.reservation.warehouse.services;
 import com.microservices.reservation.installments.models.InstallmentEntity;
 import com.microservices.reservation.installments.services.InstallmentService;
 import com.microservices.reservation.warehouse.mappers.MultiReservationMapper;
+import com.microservices.reservation.warehouse.models.ConfirmReserveEnum;
 import com.microservices.reservation.warehouse.models.MultiReservationEntity;
+import com.microservices.reservation.warehouse.models.ReservationStats;
 import com.microservices.reservation.warehouse.requests.ReservationRequest;
 import com.microservices.reservation.warehouse.requests.ReservationStrategyMode;
 import com.microservices.reservation.warehouse.responses.ReservationResponse;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.UUID;
 
 import static com.microservices.reservation.warehouse.services.ReservationServiceManagement.addReservationStrategy;
 
@@ -51,7 +54,15 @@ public class MultiReservationServiceManagement implements ReservationExecutor {
                 reservation.toDate()
         );
         reservationEntity.setInstallments(installments);
+        reservationEntity.setStats(ReservationStats.builder()
+                .confirmed(ConfirmReserveEnum.NOT_CONFIRMED)
+                .build());
 
         return mapper.toResponse(service.persist(reservationEntity));
+    }
+
+    @Override
+    public ReservationResponse findById(UUID uid) {
+        return mapper.toResponse(service.findById(uid));
     }
 }

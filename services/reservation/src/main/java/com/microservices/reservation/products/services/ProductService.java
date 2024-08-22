@@ -1,5 +1,6 @@
 package com.microservices.reservation.products.services;
 
+import com.microservices.reservation.products.exceptions.PersistProductException;
 import com.microservices.reservation.products.models.ProductEntity;
 import com.microservices.reservation.products.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,14 @@ public class ProductService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public ProductEntity persist(ProductEntity productEntity) {
-        return repository.saveAndFlush(productEntity);
+        try {
+            return repository.saveAndFlush(productEntity);
+        } catch (RuntimeException ex) {
+            throw new PersistProductException(
+                    ex.getCause(),
+                    productEntity.getReservation().getUid().toString()
+            );
+        }
     }
 
     public Page<ProductEntity> findProductsByReservation(UUID uid, Pageable pageable) {

@@ -17,6 +17,7 @@ public class ReservationMapper {
                 .warehouse(reservation.getWarehouse())
                 .fromDate(reservation.getFromDate())
                 .toDate(reservation.getToDate())
+                .stats(reservation.getStats())
                 .build();
     }
 }

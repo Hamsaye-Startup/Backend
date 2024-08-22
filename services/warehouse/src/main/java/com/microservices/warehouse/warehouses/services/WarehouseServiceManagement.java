@@ -31,9 +31,6 @@ public class WarehouseServiceManagement {
 
         // TODO: check the warehouse privacy and policies
 
-        // TODO: initial the warehouse status
-        warehouseEntity.setStatus("TEST");
-
         return warehouseMapper.toResponse(warehouseService.persist(warehouseEntity));
     }
 

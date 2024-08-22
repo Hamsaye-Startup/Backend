@@ -2,6 +2,7 @@ package com.microservices.reservation.warehouse.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.microservices.reservation.warehouse.mappers.ReservationMapper;
+import com.microservices.reservation.warehouse.models.ReservationEntity;
 import com.microservices.reservation.warehouse.requests.ReservationRequest;
 import com.microservices.reservation.warehouse.requests.ReservationStrategyMode;
 import com.microservices.reservation.warehouse.responses.ReservationResponse;
@@ -47,5 +48,19 @@ public class ReservationServiceManagement {
     public Page<ReservationResponse> showReservationByWarehouse(Long id, Pageable pageable) {
         return service.findReservationByWarehouse(id, pageable)
                 .map(mapper::toResponse);
+    }
+
+    public ReservationResponse acceptReservation(UUID uid) {
+
+        // find the reservation by id
+        ReservationEntity reservation = service.findReservationById(uid);
+        return mapper.toResponse(service.confirmReservation(reservation, true));
+    }
+
+    public ReservationResponse rejectReservation(UUID uid) {
+
+        // find the reservation by id
+        ReservationEntity reservation = service.findReservationById(uid);
+        return mapper.toResponse(service.confirmReservation(reservation, true));
     }
 }

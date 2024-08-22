@@ -1,6 +1,7 @@
 package com.microservices.reservation.warehouse.responses;
 
 import com.microservices.reservation.installments.responses.InstallmentFactor;
+import com.microservices.reservation.warehouse.models.ReservationStats;
 import lombok.Builder;
 
 import java.time.LocalDate;
@@ -14,6 +15,7 @@ public record ReservationResponse(
         UUID owner,
         LocalDate fromDate,
         LocalDate toDate,
-        InstallmentFactor factor
+        InstallmentFactor factor,
+        ReservationStats stats
 
 ) {}

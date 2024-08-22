@@ -19,25 +19,25 @@ public class FeatureController {
     private final MessageMapper mapper;
     private final FeatureServiceManagement management;
 
-    @PostMapping
+    @PostMapping("/storage")
     public ResponseEntity<?> add(@RequestBody FeatureRequest feature) {
         FeatureResponse response = management.add(feature);
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    @PutMapping
+    @PutMapping("/storage")
     public ResponseEntity<?> update(@RequestBody FeatureRequest feature) {
         FeatureResponse response = management.update(feature);
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    @DeleteMapping("/code/{code}")
+    @DeleteMapping("/storage/code/{code}")
     public ResponseEntity<?> delete(@PathVariable("code") String code) {
         FeatureResponse response = management.delete(code);
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    @GetMapping
+    @GetMapping("/storage")
     public ResponseEntity<?> showAllFeatures(Pageable pageable) {
         Page<FeatureResponse> responses = management.findAllFeatures(pageable);
         return ResponseEntity.ok(mapper.toResponse(responses));

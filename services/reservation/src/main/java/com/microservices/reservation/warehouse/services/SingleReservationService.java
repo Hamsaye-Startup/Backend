@@ -1,6 +1,7 @@
 package com.microservices.reservation.warehouse.services;
 
 import com.microservices.reservation.warehouse.exceptions.NotFoundReservationException;
+import com.microservices.reservation.warehouse.exceptions.PersistReservationException;
 import com.microservices.reservation.warehouse.models.SingleReservationEntity;
 import com.microservices.reservation.warehouse.repositories.SingleReservationRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,11 @@ public class SingleReservationService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public SingleReservationEntity persist(SingleReservationEntity reservationEntity) {
-        return repository.saveAndFlush(reservationEntity);
+        try {
+            return repository.saveAndFlush(reservationEntity);
+        } catch (RuntimeException ex) {
+            throw new PersistReservationException(ex.getCause(), reservationEntity.getReservedBy().toString());
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)

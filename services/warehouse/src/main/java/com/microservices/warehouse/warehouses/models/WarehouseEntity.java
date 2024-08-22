@@ -52,6 +52,10 @@ public class WarehouseEntity implements Serializable {
     )
     private Set<PolicyEntity> policies;
 
+    @OneToOne
+    @JoinColumn(name = "reserved_storage_id", columnDefinition = "bigint", unique = true)
+    private ReservedWarehouseEntity reserved;
+
     @CreationTimestamp
     @Column(name = "created_at", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -74,9 +78,6 @@ public class WarehouseEntity implements Serializable {
 
     @Column(name = "description", columnDefinition = "character varying", length = 1023)
     private String desc;
-
-    @Column(name = "status", columnDefinition = "character varying", length = 31, nullable = false)
-    private String status;
 
     @Transient
     private boolean marked;
