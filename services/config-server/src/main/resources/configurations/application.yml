@@ -1,10 +1,31 @@
+spring:
+  config:
+    activate:
+      on-profile: test
+  cloud:
+    config:
+      override-system-properties: false
+
 eureka:
   instance:
     hostname: localhost
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+---
+
 spring:
+  config:
+    activate:
+      on-profile: dev
   cloud:
     config:
       override-system-properties: false
+
+eureka:
+  instance:
+    hostname: discovery-service
+  client:
+    service-url:
+      defaultZone: http://discovery-service:8761/eureka

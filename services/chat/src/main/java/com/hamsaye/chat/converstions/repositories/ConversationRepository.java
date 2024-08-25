@@ -10,9 +10,17 @@ import java.util.UUID;
 
 public interface ConversationRepository extends MongoRepository<ConversationEntity, UUID> {
 
-    @Query("db.collection('col_conversation').find({ $or: [{ users.starter: ?0 }, { users.continuator: ?0 }] })")
+    @Query("{ $or: [" +
+            "{'users.starter.uid': ?0}, " +
+            "{'users.continuator.uid': ?0}" +
+            "] }")
     List<ConversationEntity> findAllByUsersUid(UUID uid);
 
-    @Query("db.collection('col_conversation').find({ $or: [{ users.starter: ?0, users.continuator: ?1 }, { users.continuator: ?0, users.starter: ?1 }] })")
+    @Query("{ $or: [" +
+            "{ $and: [{'users.starter.uid': ?0}, {'users.continuator.uid': ?1}] }, " +
+            "{ $and: [{'users.starter.uid': ?1}, {'users.continuator.uid': ?0}] }" +
+            "] }")
     Optional<ConversationEntity> findByStarterAndContinuator(UUID starterId, UUID continuatorId);
+
+
 }

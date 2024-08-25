@@ -58,7 +58,7 @@ public class UserConsumerService {
 
         // update the user by websocket
         messagingTemplate.convertAndSend(
-                "/user/public",
+                "/topic/users",
                 ResponseEntity.ok(mapper.toResponse(userMapper.toResponse(disconnectedUser)))
         );
     }

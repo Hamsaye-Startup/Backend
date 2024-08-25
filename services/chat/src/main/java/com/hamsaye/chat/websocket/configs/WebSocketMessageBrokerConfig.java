@@ -26,11 +26,6 @@ import static org.springframework.util.MimeTypeUtils.APPLICATION_JSON;
 @EnableWebSocketMessageBroker
 public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfigurer {
 
-    private static final String brokerHost = "localhost";
-    private static final Integer brokerPort = 29092;
-    private static final String brokerUser = "user";
-    private static final String brokerPass = "password";
-
     private final TaskScheduler taskScheduler;
 
     // authentication process by header
@@ -44,7 +39,8 @@ public class WebSocketMessageBrokerConfig implements WebSocketMessageBrokerConfi
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.setPreserveReceiveOrder(true);
-        registry.addEndpoint("/websocket-endpoint")
+        registry.addEndpoint("/ws")
+                .setAllowedOriginPatterns("*")
                 .withSockJS();
     }
 

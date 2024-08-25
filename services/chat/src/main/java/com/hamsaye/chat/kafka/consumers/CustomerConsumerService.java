@@ -57,7 +57,7 @@ public class CustomerConsumerService {
 
             // update the websocket
             messagingTemplate.convertAndSend(
-                    "/user/public",
+                    "/topic/users",
                     ResponseEntity.ok(mapper.toResponse(userMapper.toResponse(saved)))
             );
 

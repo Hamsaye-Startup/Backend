@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: test
   data:
     mongodb:
       username: pouria
@@ -10,5 +13,25 @@ spring:
       uuid-representation: standard
   kafka:
     bootstrap-servers: localhost:29092
+server:
+  port: 8057
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  data:
+    mongodb:
+      username: pouria
+      password: hamsaye1g8S9QJsp61wD53L4nW9d5mou879cSQpD7e38BDB0LwLesB3Rog5eWzU1mp4BEY7
+      host: mongodb
+      port: 27017
+      database: db_chat
+      authentication-database: admin
+      uuid-representation: standard
+  kafka:
+    bootstrap-servers: kafka:9092
 server:
   port: 8057

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/services/user/src/main/resources/db/migration/V1_init_database.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/services/user/src/main/resources/db/migration/data/V1.1__insert_role_data.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/services/user/src/main/resources/db/migration/structure/V1__init_database.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/services/warehouse/src/main/java/com/microservices/warehouse/warehouses/repositories/BookmarkRepository.java" dialect="PostgreSQL" />
   </component>
 </project>

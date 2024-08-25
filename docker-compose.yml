@@ -1,4 +1,68 @@
 services:
+  config-server:
+    build:
+      context: ./services/config-server
+      dockerfile: Dockerfile  # Ensure you point to the correct Dockerfile
+    image: hamsaye/config-server:latest
+    container_name: hm_config-server
+    ports:
+      - 8888:8888
+    networks:
+      - hamsaye-network
+    volumes:
+      - ./config-server/src/main/resources/configurations:/app/configurations
+    environment:
+      - SPRING_PROFILES_ACTIVE=native
+
+  discovery-service:
+    build:
+      context: ./services/discovery
+      dockerfile: Dockerfile  # Ensure you point to the correct Dockerfile
+    image: hamsaye/discovery-service:latest
+    container_name: hm_discovery-service
+    ports:
+      - 8761:8761
+    networks:
+      - hamsaye-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - config-server
+
+  chat-service:
+    build:
+      context: ./services/chat
+      dockerfile: Dockerfile  # Ensure you point to the correct Dockerfile
+    image: hamsaye/chat-service:latest
+    container_name: hm_chat-service
+    ports:
+      - 8057:8057
+    networks:
+      - hamsaye-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - discovery-service
+      - mongodb
+      - kafka
+
+  user-service:
+    build:
+      context: ./services/user
+      dockerfile: Dockerfile  # Ensure you point to the correct Dockerfile
+    image: hamsaye/user-service:latest
+    container_name: hm_user-service
+    ports:
+      - 8056:8056
+    networks:
+      - hamsaye-network
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+    depends_on:
+      - discovery-service
+      - postgres
+      - kafka
+
   postgres:
     container_name: hm_pg_sql
     image: postgres
@@ -11,7 +75,7 @@ services:
     ports:
       - 5433:5432
     networks:
-      - hamsaye-net
+      - hamsaye-network
     restart: unless-stopped
 
   pgadmin:
@@ -26,7 +90,7 @@ services:
     ports:
       - 5050:80
     networks:
-      - hamsaye-net
+      - hamsaye-network
     depends_on:
       postgres:
         condition: service_started
@@ -43,7 +107,7 @@ services:
     ports:
       - 27017:27017
     networks:
-      - hamsaye-net
+      - hamsaye-network
     restart: unless-stopped
 
   mongo-express:
@@ -56,7 +120,7 @@ services:
     ports:
       - 8081:8081
     networks:
-      - hamsaye-net
+      - hamsaye-network
     depends_on:
       mongodb:
         condition: service_started
@@ -73,7 +137,7 @@ services:
     ports:
       - 22181:2181
     networks:
-      - hamsaye-net
+      - hamsaye-network
     restart: unless-stopped
 
   kafka:
@@ -96,14 +160,14 @@ services:
       KAFKA_CONTROLLER_USER: user
       KAFKA_CONTROLLER_PASSWORD: password
     networks:
-      - hamsaye-net
+      - hamsaye-network
     depends_on:
       zookeeper:
         condition: service_started
     restart: unless-stopped
 
 networks:
-  hamsaye-net:
+  hamsaye-network:
     driver: bridge
 
 volumes:
