@@ -238,7 +238,7 @@ user connection stats.
 
 User's changes update parallelism via web socket protocol.
 ```http request
-[SUBSCRIBE] http://localhost:8057/user/public
+[SUBSCRIBE] http://localhost:8057/topic/users
 ```
 * **Responses:**
   * `200`: successful
