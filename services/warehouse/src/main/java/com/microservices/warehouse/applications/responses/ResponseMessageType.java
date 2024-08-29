@@ -66,6 +66,11 @@ public class ResponseMessageType {
             .message("address cannot be persisted")
             .build();
 
+    public static final ResponseFormat PERSIST_BOOKMARK = ResponseFormat.builder()
+            .code(16060)
+            .message("bookmark cannot be persisted")
+            .build();
+
     public static final ResponseFormat ILLEGAL_REQUEST = ResponseFormat.builder()
             .code(-1)
             .message("illegal request is detected")

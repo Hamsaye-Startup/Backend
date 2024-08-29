@@ -52,8 +52,8 @@ public class FeatureEntity implements Serializable {
     @ManyToMany
     @JoinTable(
             name = "in_storage_feature",
-            joinColumns = @JoinColumn(name = "fk_storage_id", referencedColumnName = "storage_id"),
-            inverseJoinColumns = @JoinColumn(name = "fk_feature_id", referencedColumnName = "feature_id")
+            inverseJoinColumns = @JoinColumn(name = "fk_storage_id", referencedColumnName = "storage_id"),
+            joinColumns = @JoinColumn(name = "fk_feature_id", referencedColumnName = "feature_id")
     )
     private Set<StorageEntity> storages;
 }

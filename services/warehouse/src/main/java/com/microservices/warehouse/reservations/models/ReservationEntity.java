@@ -2,10 +2,7 @@ package com.microservices.warehouse.reservations.models;
 
 import com.microservices.warehouse.storages.models.StorageCategoryEnum;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -16,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 @Entity
 @Table(name = "tb_reservations")
 public class ReservationEntity implements Serializable {
@@ -39,8 +37,8 @@ public class ReservationEntity implements Serializable {
     @ManyToOne
     @JoinTable(
             name = "in_reserved_storage",
-            inverseJoinColumns = @JoinColumn(name = "fk_reservation_id", referencedColumnName = "reservation_id"),
-            joinColumns = @JoinColumn(name = "fk_reserved_storage_id", referencedColumnName = "reserved_storage_id")
+            joinColumns = @JoinColumn(name = "fk_reservation_id", referencedColumnName = "reservation_id"),
+            inverseJoinColumns = @JoinColumn(name = "fk_reserved_storage_id", referencedColumnName = "reserved_storage_id")
     )
     private ReservedStorageEntity reservedStorage;
 }

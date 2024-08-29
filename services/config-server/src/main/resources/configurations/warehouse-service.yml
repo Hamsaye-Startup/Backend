@@ -1,9 +1,17 @@
 spring:
+  config:
+    activate:
+      on-profile: test
   datasource:
     url: jdbc:postgresql://localhost:5433/db_warehouses
     username: pouria
     password: hamsaye1g8S9QJsp61wD53L4nW9d5mou879cSQpD7e38BDB0LwLesB3Rog5eWzU1mp4BEY7
     driver-class-name: org.postgresql.Driver
+    hikari:
+      jdbc-url: jdbc:postgresql://localhost:5433/db_warehouses
+      driver-class-name: org.postgresql.Driver
+      username: pouria
+      password: hamsaye1g8S9QJsp61wD53L4nW9d5mou879cSQpD7e38BDB0LwLesB3Rog5eWzU1mp4BEY7
   jpa:
     hibernate:
       ddl-auto: create-drop
@@ -11,6 +19,8 @@ spring:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
   flyway:
+    url: jdbc:postgresql://localhost:5433/db_warehouses
+    driver-class-name: org.postgresql.Driver
     baseline-on-migrate: true
     enabled: true
     baseline-description: "init"

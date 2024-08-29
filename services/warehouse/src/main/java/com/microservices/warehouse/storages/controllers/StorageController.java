@@ -8,6 +8,7 @@ import com.microservices.warehouse.storages.requests.StorageRequest;
 import com.microservices.warehouse.storages.responses.StorageResponse;
 import com.microservices.warehouse.storages.services.StorageServiceManagement;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +36,7 @@ public class StorageController {
 
     @PostMapping
     public ResponseEntity<?> addStorage(
-            @RequestBody StorageRequest storageRequest,
+            @RequestBody @Valid StorageRequest storageRequest,
             HttpServletRequest request
     ) {
         StorageResponse response = storageServiceManagement.insertStorage(
@@ -48,7 +49,7 @@ public class StorageController {
     @PutMapping("/id/{storageId}/address")
     public ResponseEntity<?> updateStorageAddress(
             @PathVariable("storageId") Long id,
-            @RequestBody AddressRequests addressRequests
+            @RequestBody @Valid AddressRequests addressRequests
     ) {
         StorageResponse response = storageServiceManagement.updateStorageAddress(
                 id,
@@ -60,7 +61,7 @@ public class StorageController {
     @PutMapping("/id/{storageId}/details")
     public ResponseEntity<?> updateStorageDetails(
             @PathVariable("storageId") Long id,
-            @RequestBody StorageRequest storageRequest
+            @RequestBody @Valid StorageRequest storageRequest
     ) {
         StorageResponse response = storageServiceManagement.updateStorageDetails(
                 id,

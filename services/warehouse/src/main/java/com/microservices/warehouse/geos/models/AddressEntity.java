@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -15,11 +16,12 @@ import java.util.UUID;
 @ToString
 @Builder
 @Entity
-@Table(name = "tb_address")
-public class AddressEntity {
+@Table(name = "tbl_address")
+public class AddressEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "address_id", columnDefinition = "uuid", unique = true, nullable = false)
     private UUID uid;
 
     @Column(name = "address", columnDefinition = "character varying", nullable = false)
@@ -40,5 +42,6 @@ public class AddressEntity {
     private LocalDateTime modifiedAt;
 
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @JoinColumn(name = "details", referencedColumnName = "postal_code", columnDefinition = "character varying")
     private AddressDetailsEntity details;
 }

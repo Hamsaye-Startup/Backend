@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Getter
 @Setter
+@ToString
 @Builder
 @Entity
 @Table(name = "tb_storage_bookmark")

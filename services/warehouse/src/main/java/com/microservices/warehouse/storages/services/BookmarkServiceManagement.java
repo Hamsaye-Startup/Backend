@@ -17,7 +17,7 @@ public class BookmarkServiceManagement {
     private final BookmarkService service;
     private final StorageService storageService;
 
-    public BookmarkEntity add(Long storageId, UUID userId) {
+    public BookmarkEntity addBookmark(Long storageId, UUID userId) {
 
         // find the storage
         StorageEntity storage = storageService.findStorageById(storageId);
@@ -28,14 +28,14 @@ public class BookmarkServiceManagement {
         return service.persist(bookmark);
     }
 
-    public BookmarkEntity delete(Long storageId, UUID userId) {
+    public BookmarkEntity deleteBookmarkByStorageIdAndUserId(Long storageId, UUID userId) {
 
         // find the bookmark with storage and user
         BookmarkEntity bookmark = service.findByIdAndStorageId(userId, storageId);
         return service.delete(bookmark);
     }
 
-    public Page<BookmarkEntity> findById(UUID userId, Pageable pageable) {
+    public Page<BookmarkEntity> findBookmarkByUserId(UUID userId, Pageable pageable) {
         return service.findByUserId(userId, pageable);
     }
 }

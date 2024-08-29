@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Entity
 @Table(name = "tb_reserved_storage")
 @SequenceGenerator(name = "tb_reserved_storage_seq", sequenceName = "tb_reserved_storage_seq", initialValue = 1001, allocationSize = 8)
-public class ReservedStorageEntity {
+public class ReservedStorageEntity implements Serializable {
 
     @Id
     @GeneratedValue(
@@ -33,8 +34,8 @@ public class ReservedStorageEntity {
     @OneToMany
     @JoinTable(
             name = "in_reserved_storage",
-            joinColumns = @JoinColumn(name = "fk_reservation_id", referencedColumnName = "reservation_id"),
-            inverseJoinColumns = @JoinColumn(name = "fk_reserved_storage_id", referencedColumnName = "reserved_storage_id")
+            inverseJoinColumns = @JoinColumn(name = "fk_reservation_id", referencedColumnName = "reservation_id"),
+            joinColumns = @JoinColumn(name = "fk_reserved_storage_id", referencedColumnName = "reserved_storage_id")
     )
     private List<ReservationEntity> reservations;
 

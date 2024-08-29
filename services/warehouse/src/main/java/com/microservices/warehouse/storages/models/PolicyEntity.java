@@ -45,8 +45,8 @@ public class PolicyEntity implements Serializable {
     @ManyToMany
     @JoinTable(
             name = "in_storage_policy",
-            joinColumns = @JoinColumn(name = "fk_storage_id", referencedColumnName = "storage_id"),
-            inverseJoinColumns = @JoinColumn(name = "fk_policy_id", referencedColumnName = "policy_id")
+            inverseJoinColumns = @JoinColumn(name = "fk_storage_id", referencedColumnName = "storage_id"),
+            joinColumns = @JoinColumn(name = "fk_policy_id", referencedColumnName = "policy_id")
     )
     private Set<StorageEntity> storages;
 }

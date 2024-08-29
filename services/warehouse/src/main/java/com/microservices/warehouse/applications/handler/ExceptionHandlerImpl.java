@@ -5,7 +5,7 @@ import com.microservices.warehouse.applications.mapper.MessageMapper;
 import com.microservices.warehouse.applications.messages.ExceptionMessage;
 import com.microservices.warehouse.applications.responses.ResponseMessageType;
 import com.microservices.warehouse.applications.utils.log.CustomLogger;
-import com.microservices.warehouse.warehouses.exceptions.*;
+import com.microservices.warehouse.storages.exceptions.*;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -41,13 +41,13 @@ public class ExceptionHandlerImpl {
         return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler({NotFoundWarehouseException.class})
-    public ResponseEntity<?> getNotFoundWarehouseException(NotFoundWarehouseException ex, WebRequest request) {
+    @ExceptionHandler({NotFoundStorageException.class})
+    public ResponseEntity<?> getNotFoundWarehouseException(NotFoundStorageException ex, WebRequest request) {
         // generate a log
         logger.warn(ex.getMessage());
 
         // generate exception message
-        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.WAREHOUSE_NOT_FOUND.code());
+        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.STORAGE_NOT_FOUND.code());
         return new ResponseEntity<>(exception, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
@@ -101,13 +101,13 @@ public class ExceptionHandlerImpl {
         return new ResponseEntity<>(exception, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    @ExceptionHandler({PersistWarehouseException.class})
-    public ResponseEntity<?> getPersistWarehouseException(PersistWarehouseException ex, WebRequest request) {
+    @ExceptionHandler({PersistStorageException.class})
+    public ResponseEntity<?> getPersistWarehouseException(PersistStorageException ex, WebRequest request) {
         // generate a log
         logger.warn(ex.getMessage());
 
         // generate exception message
-        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.PERSIST_WAREHOUSE.code());
+        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.PERSIST_STORAGE.code());
         return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
 

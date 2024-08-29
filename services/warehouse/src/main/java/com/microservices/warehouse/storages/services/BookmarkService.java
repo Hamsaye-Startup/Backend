@@ -1,6 +1,7 @@
 package com.microservices.warehouse.storages.services;
 
 import com.microservices.warehouse.storages.exceptions.NotFoundBookmarkException;
+import com.microservices.warehouse.storages.exceptions.PersistBookmarkException;
 import com.microservices.warehouse.storages.models.BookmarkEntity;
 import com.microservices.warehouse.storages.repositories.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,11 @@ public class BookmarkService {
 
     @Transactional(propagation = Propagation.REQUIRED)
     public BookmarkEntity persist(BookmarkEntity bookmark) {
-        return repository.saveAndFlush(bookmark);
+        try {
+            return repository.saveAndFlush(bookmark);
+        } catch (RuntimeException ex) {
+            throw new PersistBookmarkException(ex.getCause(), bookmark.getId().toString());
+        }
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

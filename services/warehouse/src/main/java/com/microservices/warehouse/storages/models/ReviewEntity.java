@@ -28,6 +28,10 @@ public class ReviewEntity {
     private StorageEntity storage;
 
     @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    @JoinTable(name = "in_comment_reviews")
+    @JoinTable(
+            name = "in_comment_reviews",
+            joinColumns = @JoinColumn(name = "fk_review_id", referencedColumnName = "review_id"),
+            inverseJoinColumns = @JoinColumn(name = "fk_comment_id", referencedColumnName = "comment_id")
+    )
     private List<CommentEntity> comments;
 }
