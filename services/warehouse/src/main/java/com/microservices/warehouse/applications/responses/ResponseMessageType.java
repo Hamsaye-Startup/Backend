@@ -31,9 +31,9 @@ public class ResponseMessageType {
             .message("policy not found")
             .build();
 
-    public static final ResponseFormat WAREHOUSE_NOT_FOUND = ResponseFormat.builder()
+    public static final ResponseFormat STORAGE_NOT_FOUND = ResponseFormat.builder()
             .code(14007)
-            .message("warehouse not found")
+            .message("storage not found")
             .build();
 
     public static final ResponseFormat BOOKMARK_NOT_FOUND = ResponseFormat.builder()
@@ -53,12 +53,17 @@ public class ResponseMessageType {
 
     public static final ResponseFormat PERSIST_FEATURE = ResponseFormat.builder()
             .code(16053)
-            .message("feature information cannot be registered")
+            .message("feature cannot be persisted")
             .build();
 
-    public static final ResponseFormat PERSIST_WAREHOUSE = ResponseFormat.builder()
+    public static final ResponseFormat PERSIST_STORAGE = ResponseFormat.builder()
             .code(16054)
-            .message("warehouse information cannot be registered")
+            .message("storage cannot be persisted")
+            .build();
+
+    public static final ResponseFormat PERSIST_ADDRESS = ResponseFormat.builder()
+            .code(16059)
+            .message("address cannot be persisted")
             .build();
 
     public static final ResponseFormat ILLEGAL_REQUEST = ResponseFormat.builder()
@@ -69,6 +74,16 @@ public class ResponseMessageType {
     public static final ResponseFormat EXPIRED_TOKEN = ResponseFormat.builder()
             .code(10020)
             .message("token is expired")
+            .build();
+
+    public static final ResponseFormat AUTHENTICATION_CREDENTIAL_NOT_FOUND = ResponseFormat.builder()
+            .code(10050)
+            .message("authentication credential not found")
+            .build();
+
+    public static final ResponseFormat NOT_REMOVABLE_STORAGE = ResponseFormat.builder()
+            .code(10051)
+            .message("storage is not removable")
             .build();
 
 }
