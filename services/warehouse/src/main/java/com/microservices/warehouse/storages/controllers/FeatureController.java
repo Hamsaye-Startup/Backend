@@ -50,12 +50,12 @@ public class FeatureController {
     @PutMapping("/storage/id/{storageId}")
     public ResponseEntity<?> updateStorageFeatures(
             @PathVariable("storageId") Long storageId,
-            @RequestBody List<String> featuresCodes,
+            @RequestBody List<String> featureCodes,
             HttpServletRequest request
     ) {
         StorageResponse response = featureServiceManagement.updateStorageFeatureByCodes(
                 storageId,
-                featuresCodes,
+                featureCodes,
                 findUserByHeader(request)
         );
         return ResponseEntity.ok(mapper.toResponse(response));

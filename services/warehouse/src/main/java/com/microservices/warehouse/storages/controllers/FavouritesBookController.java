@@ -2,8 +2,8 @@ package com.microservices.warehouse.storages.controllers;
 
 import com.microservices.warehouse.applications.mapper.MessageMapper;
 import com.microservices.warehouse.storages.exceptions.AuthenticationCredentialNotFoundException;
-import com.microservices.warehouse.storages.models.BookmarkEntity;
-import com.microservices.warehouse.storages.services.BookmarkServiceManagement;
+import com.microservices.warehouse.storages.models.FavouritesBookEntity;
+import com.microservices.warehouse.storages.services.FavouritesBookServiceManagement;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("api/v1/storage/bookmark")
+@RequestMapping("api/v1/storage/favourite")
 @RequiredArgsConstructor
-public class BookmarkController {
+public class FavouritesBookController {
 
-    private final BookmarkServiceManagement management;
+    private final FavouritesBookServiceManagement management;
     private final MessageMapper mapper;
 
     private UUID findUserByHeader(HttpServletRequest request) {
@@ -30,44 +30,47 @@ public class BookmarkController {
     }
 
     @PutMapping("storage/id/{id}")
-    public ResponseEntity<?> addBookmark(
-            @PathVariable("id") Long id,
+    public ResponseEntity<?> addFavouritesBook(
+            @PathVariable("id") Long id, 
             HttpServletRequest request
     ) {
-        BookmarkEntity response = management.addBookmark(
-                id,
+        FavouritesBookEntity response = management.addFavouritesBook(
+                id, 
                 findUserByHeader(request)
         );
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
     @DeleteMapping("storage/id/{id}")
-    public ResponseEntity<?> deleteBookmark(
-            @PathVariable("id") Long id,
+    public ResponseEntity<?> deleteFavouritesBook(
+            @PathVariable("id") Long id, 
             HttpServletRequest request
     ) {
-        BookmarkEntity response = management.deleteBookmarkByStorageIdAndUserId(
-                id,
+        FavouritesBookEntity response = management.deleteFavouritesBookByStorageIdAndUserId(
+                id, 
                 findUserByHeader(request)
         );
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
     @GetMapping("/user/id/{id}")
-    public ResponseEntity<?> findBookmarkById(
+    public ResponseEntity<?> findFavouritesBookById(
             @PathVariable("id") UUID uid,
             Pageable pageable
     ) {
-        Page<BookmarkEntity> responses = management.findBookmarkByUserId(uid, pageable);
+        Page<FavouritesBookEntity> responses = management.findFavouritesBookByUserId(
+                uid,
+                pageable
+        );
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> findBookmarkById(
+    public ResponseEntity<?> findFavouritesBookById(
             HttpServletRequest request,
             Pageable pageable
     ) {
-        Page<BookmarkEntity> responses = management.findBookmarkByUserId(
+        Page<FavouritesBookEntity> responses = management.findFavouritesBookByUserId(
                 findUserByHeader(request),
                 pageable
         );

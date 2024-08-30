@@ -46,9 +46,9 @@ public class ResponseMessageType {
             .message("reservation not found")
             .build();
 
-    public static final ResponseFormat REVIEW_NOT_FOUND = ResponseFormat.builder()
+    public static final ResponseFormat COMMENT_NOT_FOUND = ResponseFormat.builder()
             .code(14015)
-            .message("review not found")
+            .message("comment not found")
             .build();
 
     public static final ResponseFormat PERSIST_FEATURE = ResponseFormat.builder()
@@ -71,6 +71,16 @@ public class ResponseMessageType {
             .message("bookmark cannot be persisted")
             .build();
 
+    public static final ResponseFormat PERSIST_COMMENT = ResponseFormat.builder()
+            .code(16061)
+            .message("comment cannot be persisted")
+            .build();
+
+    public static final ResponseFormat PERSIST_FAVOURITES_BOOK = ResponseFormat.builder()
+            .code(16062)
+            .message("favourite cannot be persisted")
+            .build();
+
     public static final ResponseFormat ILLEGAL_REQUEST = ResponseFormat.builder()
             .code(-1)
             .message("illegal request is detected")
@@ -89,6 +99,16 @@ public class ResponseMessageType {
     public static final ResponseFormat NOT_REMOVABLE_STORAGE = ResponseFormat.builder()
             .code(10051)
             .message("storage is not removable")
+            .build();
+
+    public static final ResponseFormat FAILED_UPLOAD_FILE = ResponseFormat.builder()
+            .code(10052)
+            .message("uploading file was failed")
+            .build();
+
+    public static final ResponseFormat EMPTY_FILE_UPLOADED = ResponseFormat.builder()
+            .code(10053)
+            .message("empty file doesn't upload")
             .build();
 
 }

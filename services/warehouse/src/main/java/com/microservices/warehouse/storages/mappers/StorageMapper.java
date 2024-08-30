@@ -61,7 +61,7 @@ public class StorageMapper {
                         .status(storage.getStatus())
                         .displayable(storage.isEnabled())
                         .marked(storage.isMarked())
-                        .liked(storage.isLiked())
+                        .favourite(storage.isFavourite())
                         .build())
                 .build();
     }

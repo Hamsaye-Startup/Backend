@@ -24,6 +24,10 @@ public class CommentEntity {
     @Column(name = "comment_id", columnDefinition = "bigint", unique = true, nullable = false, updatable = false)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "storage", unique = true, updatable = false, columnDefinition = "bigint", foreignKey = @ForeignKey(name = "fk_storage_comment"))
+    private StorageEntity storage;
+
     @Column(name = "comment_by", columnDefinition = "uuid", nullable = false, updatable = false)
     private UUID commentBy;
 
@@ -35,4 +39,7 @@ public class CommentEntity {
 
     @Column(name = "comment_at", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)
     private LocalDateTime commentAt;
+
+    @Column(name = "enabled", columnDefinition = "boolean", nullable = false)
+    private boolean enabled; // This feature is a control feature for displaying in website
 }

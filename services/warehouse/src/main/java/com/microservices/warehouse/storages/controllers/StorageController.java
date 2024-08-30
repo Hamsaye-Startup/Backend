@@ -82,7 +82,7 @@ public class StorageController {
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    @PostMapping("/id/{storageId}")
+    @PostMapping("/id/{storageId}/display")
     public ResponseEntity<?> showStorage(
             @PathVariable("storageId") Long id,
             @RequestParam(name = "displayable") boolean enabled

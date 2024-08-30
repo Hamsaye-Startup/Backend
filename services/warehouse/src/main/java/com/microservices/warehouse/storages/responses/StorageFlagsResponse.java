@@ -10,6 +10,6 @@ public record StorageFlagsResponse(
         StorageStatusEnum status,
         boolean displayable,
         boolean marked,
-        boolean liked
+        boolean favourite
 ) {
 }

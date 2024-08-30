@@ -5,7 +5,6 @@ import com.microservices.warehouse.geos.requests.AddressRequests;
 import com.microservices.warehouse.geos.services.AddressService;
 import com.microservices.warehouse.reservations.models.ReservationEntity;
 import com.microservices.warehouse.reservations.services.ReservationService;
-import com.microservices.warehouse.storages.exceptions.InternalErrorException;
 import com.microservices.warehouse.storages.exceptions.PersistStorageException;
 import com.microservices.warehouse.storages.mappers.StorageMapper;
 import com.microservices.warehouse.storages.models.*;
@@ -20,11 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +31,7 @@ public class StorageServiceManagement {
 
     private final AddressService addressService;
     private final BookmarkService bookmarkService;
+    private final FavouritesBookService favouritesBookService;
     private final ReservationService reservationService;
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -137,7 +133,9 @@ public class StorageServiceManagement {
         BookmarkEntity bookmark = bookmarkService.findByIdAndStorageId(userId, id);
         storage.setMarked(bookmark != null);
 
-        // TODO: implement liked logic
+        FavouritesBookEntity favouritesBook = favouritesBookService.findByIdAndStorageId(userId, id);
+        storage.setFavourite(favouritesBook != null);
+
         return storageMapper.toResponse(storage);
     }
 
@@ -148,18 +146,13 @@ public class StorageServiceManagement {
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<StorageResponse> findStoragesByUserId(UUID userId, Pageable pageable) {
 
-        // find the storages and bookmarks
+        // find the storages and bookmarks and favourites
         Page<StorageEntity> storages = storageService.findStoragesByOwner(userId, pageable);
         List<BookmarkEntity> bookmarks = bookmarkService.findByUserId(userId); // order by desc
+        List<FavouritesBookEntity> favourites = favouritesBookService.findByUserId(userId);
 
-        // set the mark value based on the current userId
-        List<StorageEntity> markedStorages = calcMarkedStorages(
-                mergeSort(storages.toList()), // sort the storages desc
-                bookmarks
-        );
-
-        // TODO: implement same logic for liked
-        return new PageImpl<>(markedStorages, pageable, storages.getTotalElements())
+        List<StorageEntity> checkedStorages = updateStoragesWithUserStatus(storages.getContent(), bookmarks, favourites);
+        return new PageImpl<>(checkedStorages, pageable, storages.getTotalElements())
                 .map(storageMapper::toResponse);
     }
 
@@ -186,27 +179,25 @@ public class StorageServiceManagement {
                 StorageStatusEnum.ON_BLOCK_STASH,
                 pageable
         );
-        Set<StorageEntity> reservedStorages = findReservedStoragesByCategoryAndReservedTime(
+
+        // find the reserved storages
+        Set<Long> reservedStorageIds = findReservedStorageIdsByCategoryAndReservedTime(
                 categoryEnum,
                 fromDate,
                 toDate
         );
 
         // find the filtered storages and bookmarks
-        List<StorageEntity> filteredStorages = filterReservedStorages(
-                mergeSort(storages.toList()),
-                reservedStorages.stream().toList()
-        );
+        List<StorageEntity> filteredStorages = storages.stream()
+                .filter(storage -> !reservedStorageIds.contains(storage.getId()))
+                .collect(Collectors.toList());
+
+        // // find bookmarks and favourites
         List<BookmarkEntity> bookmarks = bookmarkService.findByUserId(userId); // order by desc
+        List<FavouritesBookEntity> favourites = favouritesBookService.findByUserId(userId);
 
-        // set the mark value based on the current userId
-        List<StorageEntity> markedStorages = calcMarkedStorages(
-                filteredStorages,
-                bookmarks
-        );
-
-        // TODO: implement same logic for liked
-        return new PageImpl<>(markedStorages, pageable, storages.getTotalElements())
+        List<StorageEntity> checkedStorages = updateStoragesWithUserStatus(filteredStorages, bookmarks, favourites);
+        return new PageImpl<>(checkedStorages, pageable, storages.getTotalElements())
                 .map(storageMapper::toResponse);
     }
 
@@ -217,173 +208,35 @@ public class StorageServiceManagement {
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<StorageResponse> searchStorages(String value, Pageable pageable, UUID userId) {
 
-        // find the storages and bookmarks
+        // find the storages and bookmarks and favourites
         Page<StorageEntity> storages = storageService.searchStoragesByValue(value, true, pageable);
         List<BookmarkEntity> bookmarks = bookmarkService.findByUserId(userId);
+        List<FavouritesBookEntity> favourites = favouritesBookService.findByUserId(userId);
 
-        // set the mark value based on the current userId
-        List<StorageEntity> markedStorages = calcMarkedStorages(
-                mergeSort(storages.toList()), // sort the storages desc
-                bookmarks
-        );
-
-        // TODO: implement same logic for liked
-        return new PageImpl<>(markedStorages, pageable, storages.getTotalElements())
+        List<StorageEntity> checkedStorages = updateStoragesWithUserStatus(storages.getContent(), bookmarks, favourites);
+        return new PageImpl<>(checkedStorages, pageable, storages.getTotalElements())
                 .map(storageMapper::toResponse);
     }
 
     /*
     * find unique reserved storages for finding storages by category and from and to dates
     * */
-    private Set<StorageEntity> findReservedStoragesByCategoryAndReservedTime(
-            StorageCategoryEnum category,
-            LocalDate fromDate,
-            LocalDate toDate
-    ) {
-
-        // filter the reserved storages
-        List<ReservationEntity> reservations = reservationService.findAllReservationsByCategoryAndReservedTime(
-                category,
-                fromDate,
-                toDate
-        );
+    private Set<Long> findReservedStorageIdsByCategoryAndReservedTime(StorageCategoryEnum category, LocalDate fromDate, LocalDate toDate) {
+        List<ReservationEntity> reservations = reservationService.findAllReservationsByCategoryAndReservedTime(category, fromDate, toDate);
         return reservations.stream()
-                .map(reservationEntity -> reservationEntity.getReservedStorage().getStorage())
+                .map(reservation -> reservation.getReservedStorage().getStorage().getId())
                 .collect(Collectors.toSet());
     }
 
-    /*
-    * The storages need to filter when some of the reserved on particular time -> it is good for searching
-    * */
-    private List<StorageEntity> filterReservedStorages(List<StorageEntity> sortedStorages, List<StorageEntity> reservedStorages) {
+    private List<StorageEntity> updateStoragesWithUserStatus(List<StorageEntity> storages, List<BookmarkEntity> bookmarks, List<FavouritesBookEntity> favourites) {
+        Map<Long, Boolean> markedMap = bookmarks.stream()
+                .collect(Collectors.toMap(b -> b.getId().getStorage().getId(), b -> true));
+        Map<Long, Boolean> favouriteMap = favourites.stream()
+                .collect(Collectors.toMap(f -> f.getId().getStorage().getId(), f -> true));
 
-        // Pointers for reservedStorages and sortedStorages
-        int reservedPointer = 0, storagePointer = 0;
-
-        // Pointer for writing to array2
-        int writeIndex = 0;
-
-        while (storagePointer < sortedStorages.size()) {
-
-            if (reservedPointer >= reservedStorages.size() || !reservedStorages.get(reservedPointer)
-                    .getId().equals(sortedStorages.get(storagePointer).getId())) {
-                sortedStorages.set(writeIndex, sortedStorages.get(storagePointer));
-                writeIndex++;
-            }
-            storagePointer++;
-
-            if (reservedPointer < reservedStorages.size() &&
-                    storagePointer >= sortedStorages.size() || reservedStorages.get(reservedPointer)
-                    .getId().equals(sortedStorages.get(storagePointer).getId())
-            ) {
-                reservedPointer++;
-            }
-        }
-
-        // Resize array2 to remove trailing elements
-        while (sortedStorages.size() > writeIndex) {
-            sortedStorages.removeLast();
-        }
-        return sortedStorages;
-    }
-
-    /*
-    * The storages and bookmarks should sort before occurring this method
-    * */
-    private List<StorageEntity> calcMarkedStorages(List<StorageEntity> sortedStorages, List<BookmarkEntity> sortedBookmarks) {
-
-        // define the temp variables
-        int storagePointer = 0;
-        int bookmarkPointer = 0;
-
-        while (storagePointer < sortedStorages.size() && bookmarkPointer < sortedBookmarks.size()) {
-
-            // compare the storage bookmark createdAt is after than storage createdAt
-            if (sortedBookmarks.get(bookmarkPointer).getCreatedAt()
-                    .isAfter(sortedStorages.get(storagePointer).getCreatedAt())) {
-
-                sortedStorages.get(storagePointer).setMarked(false);
-                storagePointer += 1;
-            }
-            else {
-                // compare the sortedStorages exist in list and bookmarks
-                if (sortedBookmarks.get(bookmarkPointer).getId().getStorage()
-                        .equals(sortedStorages.get(storagePointer))) {
-
-                    sortedStorages.get(storagePointer).setMarked(true);
-                    bookmarkPointer += 1;
-                    storagePointer += 1;
-                }
-                else {
-                    bookmarkPointer += 1;
-                }
-            }
-        }
-
-        // The remaining warehouses are not marked
-        while (storagePointer < sortedStorages.size()) {
-            sortedStorages.get(storagePointer).setMarked(false);
-            storagePointer += 1;
-        }
-
-        return sortedStorages;
-    }
-
-    private <T> List<T> mergeSort(List<T> data) {
-
-        // check the size
-        if (data.size() <= 1) {
-            return data;
-        }
-
-        // split the list into two halves
-        int middle = data.size() / 2;
-        List<T> left = new ArrayList<>(data.subList(0, middle));
-        List<T> right = new ArrayList<>(data.subList(middle, data.size()));
-
-        // sort both halves
-        mergeSort(left);
-        mergeSort(right);
-
-        // merge the sorted halves back together
-        merge(data, left, right);
-
-        return data;
-    }
-
-    private <T> void merge(List<T> data, List<T> left, List<T> right) {
-
-        // define the indexes
-        int i = 0, j = 0, k = 0;
-
-        while (i < left.size() && j < right.size()) {
-            LocalDateTime leftCreatedAt = getCreatedAt(left.get(i));
-            LocalDateTime rightCreatedAt = getCreatedAt(right.get(j));
-
-            // compare the LocalDateTime values and sort in descending order
-            if (leftCreatedAt.isAfter(rightCreatedAt) || leftCreatedAt.equals(rightCreatedAt)) {
-                data.set(k++, left.get(i++));
-            } else {
-                data.set(k++, right.get(j++));
-            }
-        }
-
-        // copy remaining elements of left
-        while (i < left.size()) {
-            data.set(k++, left.get(i++));
-        }
-
-        // copy remaining elements of right
-        while (j < right.size()) {
-            data.set(k++, right.get(j++));
-        }
-    }
-
-    private <T> LocalDateTime getCreatedAt(T obj) {
-        try {
-            return (LocalDateTime) obj.getClass().getMethod("getCreatedAt").invoke(obj);
-        } catch (Exception ex) {
-            throw new InternalErrorException("method named getCreatedAt not found");
-        }
+        return storages.stream().peek(storage -> {
+            storage.setMarked(markedMap.getOrDefault(storage.getId(), false));
+            storage.setFavourite(favouriteMap.getOrDefault(storage.getId(), false));
+        }).collect(Collectors.toList());
     }
 }

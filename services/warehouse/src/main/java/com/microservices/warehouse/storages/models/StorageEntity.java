@@ -74,5 +74,5 @@ public class StorageEntity implements Serializable {
     private boolean marked;
 
     @Transient
-    private boolean liked;
+    private boolean favourite;
 }
