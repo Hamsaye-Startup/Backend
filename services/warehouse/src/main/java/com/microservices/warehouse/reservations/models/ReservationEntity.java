@@ -1,6 +1,7 @@
 package com.microservices.warehouse.reservations.models;
 
 import com.microservices.warehouse.storages.models.StorageCategoryEnum;
+import com.microservices.warehouse.storages.models.StorageEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,14 +32,7 @@ public class ReservationEntity implements Serializable {
     @Column(name = "to_date", columnDefinition = "date", nullable = false)
     private LocalDate toDate;
 
-    @Column(name = "created_at", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)
-    private LocalDateTime createdAt;
-
     @ManyToOne
-    @JoinTable(
-            name = "in_reserved_storage",
-            joinColumns = @JoinColumn(name = "fk_reservation_id", referencedColumnName = "reservation_id"),
-            inverseJoinColumns = @JoinColumn(name = "fk_reserved_storage_id", referencedColumnName = "reserved_storage_id")
-    )
-    private ReservedStorageEntity reservedStorage;
+    @JoinColumn(name = "reserved_storage", columnDefinition = "bigint", unique = true, updatable = false)
+    private StorageEntity storage;
 }

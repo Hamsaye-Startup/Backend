@@ -16,10 +16,10 @@ public interface ReservationRepository extends JpaRepository<ReservationEntity, 
 
     @Query("select r from ReservationEntity r " +
             "where ( " +
-            "r.reservedStorage.storage.category = :category and " +
+            "r.storage.category = :category and " +
             "r.fromDate <= :fromDate and " +
             "r.toDate >= :toDate " +
-            ") order by r.reservedStorage.createdAt desc"
+            ") order by r.storage.createdAt desc"
     )
     List<ReservationEntity> findAllByCategoryAndReservedTime(
             @Param("category") StorageCategoryEnum category,

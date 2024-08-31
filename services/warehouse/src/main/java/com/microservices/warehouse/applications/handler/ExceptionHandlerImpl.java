@@ -51,13 +51,13 @@ public class ExceptionHandlerImpl {
         return new ResponseEntity<>(exception, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 
-    @ExceptionHandler({NotFoundReviewException.class})
-    public ResponseEntity<?> getNotFoundReviewException(NotFoundReviewException ex, WebRequest request) {
+    @ExceptionHandler({NotFoundCommentException.class})
+    public ResponseEntity<?> getNotFoundReviewException(NotFoundCommentException ex, WebRequest request) {
         // generate a log
         logger.warn(ex.getMessage());
 
         // generate exception message
-        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.REVIEW_NOT_FOUND.code());
+        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.COMMENT_NOT_FOUND.code());
         return new ResponseEntity<>(exception, HttpStatus.UNPROCESSABLE_ENTITY);
     }
 

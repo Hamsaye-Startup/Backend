@@ -4,6 +4,7 @@ import com.microservices.warehouse.reservations.models.ReservationEntity;
 import com.microservices.warehouse.reservations.repositories.ReservationRepository;
 import com.microservices.warehouse.storages.exceptions.NotFoundReservationException;
 import com.microservices.warehouse.storages.models.StorageCategoryEnum;
+import com.microservices.warehouse.storages.models.StorageEntity;
 import com.microservices.warehouse.storages.models.StorageStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,5 +43,12 @@ public class ReservationService {
     public ReservationEntity findReservationById(UUID reservationId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new NotFoundReservationException(reservationId.toString()));
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public ReservationEntity insertReservedStorage(ReservationEntity reservation, StorageEntity storage) {
+
+        reservation.setStorage(storage);
+        return reservationRepository.save(reservation);
     }
 }

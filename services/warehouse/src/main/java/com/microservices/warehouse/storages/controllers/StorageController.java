@@ -26,10 +26,18 @@ public class StorageController {
     private final MessageMapper mapper;
     private final StorageServiceManagement storageServiceManagement;
 
-    private UUID findUserByHeader(HttpServletRequest request) {
+    private UUID findUserByHeaderOrThrow(HttpServletRequest request) {
         String userId = request.getHeader("X_USER_ID");
         if (userId == null) {
             throw new AuthenticationCredentialNotFoundException("user id header not found");
+        }
+        return UUID.fromString(userId);
+    }
+
+    private UUID findUserByHeaderOrNull(HttpServletRequest request) {
+        String userId = request.getHeader("X_USER_ID");
+        if (userId == null) {
+            return null;
         }
         return UUID.fromString(userId);
     }
@@ -41,7 +49,7 @@ public class StorageController {
     ) {
         StorageResponse response = storageServiceManagement.insertStorage(
                 storageRequest,
-                findUserByHeader(request)
+                findUserByHeaderOrThrow(request)
         );
         return ResponseEntity.ok(mapper.toResponse(response));
     }
@@ -96,10 +104,19 @@ public class StorageController {
             @PathVariable("storageId") Long id,
             HttpServletRequest request
     ) {
-        StorageResponse response = storageServiceManagement.findStorageById(
-                id,
-                findUserByHeader(request)
-        );
+
+        UUID userId = findUserByHeaderOrNull(request);
+        StorageResponse response;
+        if (userId != null) {
+            response = storageServiceManagement.findStorageById(
+                    id,
+                    userId
+            );
+        }
+        else {
+            response = storageServiceManagement.findStorageById(id);
+        }
+
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
@@ -120,13 +137,26 @@ public class StorageController {
             Pageable pageable,
             HttpServletRequest request
     ) {
-        Page<StorageResponse> responses = storageServiceManagement.findStorages(
-                category,
-                fromDate,
-                toDate,
-                pageable,
-                findUserByHeader(request)
-        );
+        UUID userId = findUserByHeaderOrNull(request);
+        Page<StorageResponse> responses;
+        if (userId != null) {
+            responses = storageServiceManagement.findStorages(
+                    category,
+                    fromDate,
+                    toDate,
+                    pageable,
+                    userId
+            );
+        }
+        else {
+            responses = storageServiceManagement.findStorages(
+                    category,
+                    fromDate,
+                    toDate,
+                    pageable
+            );
+        }
+
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 
@@ -136,11 +166,22 @@ public class StorageController {
             Pageable pageable,
             HttpServletRequest request
     ) {
-        Page<StorageResponse> responses = storageServiceManagement.searchStorages(
-                value,
-                pageable,
-                findUserByHeader(request)
-        );
+        UUID userId = findUserByHeaderOrNull(request);
+        Page<StorageResponse> responses;
+        if (userId != null) {
+            responses = storageServiceManagement.searchStorages(
+                    value,
+                    pageable,
+                    userId
+            );
+        }
+        else {
+            responses = storageServiceManagement.searchStorages(
+                    value,
+                    pageable
+            );
+        }
+
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 }

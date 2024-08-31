@@ -139,6 +139,16 @@ public class StorageServiceManagement {
         return storageMapper.toResponse(storage);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
+    public StorageResponse findStorageById(Long id) {
+        StorageEntity storage = storageService.findStorageById(
+                id,
+                true,
+                StorageStatusEnum.ON_BLOCK_STASH
+        );
+        return storageMapper.toResponse(storage);
+    }
+
     /*
     * find all storages by user id
     * This function checks the storages are marked or liked by current user
@@ -201,6 +211,40 @@ public class StorageServiceManagement {
                 .map(storageMapper::toResponse);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public Page<StorageResponse> findStorages(
+            String category,
+            LocalDate fromDate,
+            LocalDate toDate,
+            Pageable pageable
+    ) {
+        // convert the string to StorageCategoryEnum
+        StorageCategoryEnum categoryEnum = storageMapper.convertStorageCategory(category);
+
+        // find the storages by category
+        Page<StorageEntity> storages = storageService.findStoragesByCategory(
+                categoryEnum,
+                true,
+                StorageStatusEnum.ON_BLOCK_STASH,
+                pageable
+        );
+
+        // find the reserved storages
+        Set<Long> reservedStorageIds = findReservedStorageIdsByCategoryAndReservedTime(
+                categoryEnum,
+                fromDate,
+                toDate
+        );
+
+        // find the filtered storages and bookmarks
+        List<StorageEntity> filteredStorages = storages.stream()
+                .filter(storage -> !reservedStorageIds.contains(storage.getId()))
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(filteredStorages, pageable, storages.getTotalElements())
+                .map(storageMapper::toResponse);
+    }
+
     /*
     * find the legal storages by keyword
     * This function checks the storages are marked or liked by current user
@@ -218,13 +262,21 @@ public class StorageServiceManagement {
                 .map(storageMapper::toResponse);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
+    public Page<StorageResponse> searchStorages(String value, Pageable pageable) {
+
+        // find the storages and bookmarks and favourites
+        return storageService.searchStoragesByValue(value, true, pageable)
+                .map(storageMapper::toResponse);
+    }
+
     /*
     * find unique reserved storages for finding storages by category and from and to dates
     * */
     private Set<Long> findReservedStorageIdsByCategoryAndReservedTime(StorageCategoryEnum category, LocalDate fromDate, LocalDate toDate) {
         List<ReservationEntity> reservations = reservationService.findAllReservationsByCategoryAndReservedTime(category, fromDate, toDate);
         return reservations.stream()
-                .map(reservation -> reservation.getReservedStorage().getStorage().getId())
+                .map(reservation -> reservation.getStorage().getId())
                 .collect(Collectors.toSet());
     }
 

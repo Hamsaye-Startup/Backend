@@ -55,7 +55,8 @@ public class StorageMapper {
                 .height(storage.getHeight())
                 .amount(storage.getAmount())
                 .discountAmount(storage.getDiscountAmount())
-                .address(addressMapper.toResponse(storage.getAddress()))
+                .address(storage.getAddress() == null ? null :
+                        addressMapper.toResponse(storage.getAddress()))
                 .flags(StorageFlagsResponse.builder()
                         .verified(storage.getVerified())
                         .status(storage.getStatus())
