@@ -9,9 +9,6 @@ import java.util.UUID;
 
 @Builder
 public record UserRequest(
-        @JsonProperty("id")
-        @NotNull(message = "id is required")
-        UUID uid,
         @NotBlank(message = "phone is required")
         String phone,
         @NotBlank(message = "firstname is required")

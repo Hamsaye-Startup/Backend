@@ -1,7 +1,6 @@
 package com.microservices.user.customers.requests;
 
-import com.microservices.user.customers.models.CustomerDTO;
-import com.microservices.user.users.models.UserDTO;
+import com.microservices.user.customers.dto.CustomerDTO;
 import lombok.Builder;
 
 import java.io.Serializable;

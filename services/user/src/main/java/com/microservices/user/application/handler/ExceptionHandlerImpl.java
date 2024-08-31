@@ -1,7 +1,6 @@
 package com.microservices.user.application.handler;
 
 import com.microservices.user.application.exceptions.ExpiredTokenException;
-import com.microservices.user.application.exceptions.NotFoundScopeException;
 import com.microservices.user.application.mapper.MessageMapper;
 import com.microservices.user.application.messages.ExceptionMessage;
 import com.microservices.user.application.responses.ResponseMessageType;
@@ -45,16 +44,6 @@ public class ExceptionHandlerImpl {
         // generate exception message
         ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.EXPIRED_TOKEN.code());
         return new ResponseEntity<>(exception, HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler({NotFoundScopeException.class})
-    public ResponseEntity<?> getNotFoundScopeException(NotFoundScopeException ex, WebRequest request) {
-        // generate a log
-        logger.warn(ex.getMessage());
-
-        // generate exception message
-        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.SCOPE_NOT_FOUND.code());
-        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NotFoundUserException.class})

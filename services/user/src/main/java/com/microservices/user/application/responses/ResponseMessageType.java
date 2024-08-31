@@ -61,4 +61,9 @@ public class ResponseMessageType {
             .message("token is expired")
             .build();
 
+    public static final ResponseFormat AUTHENTICATION_CREDENTIAL_NOT_FOUND = ResponseFormat.builder()
+            .code(10050)
+            .message("authentication credential not found")
+            .build();
+
 }

@@ -20,48 +20,47 @@ public class TokenGenerator {
     private final JwtService service;
     private final UserService userService;
 
-    private Map<String, Object> generateExtraClaims(UserDetails user, String scope) {
+    private Map<String, Object> generateExtraClaims(UserDetails user) {
         Map<String, Object> claims = new HashMap<>();
         UserEntity userEntity = userService.findByUid(UUID.fromString(user.getUsername()));
 
         claims.put("role", userEntity.getRole().getId());
-        claims.put("scope", scope);
         return claims;
     }
 
-    private Map<String, Object> generateExtraClaims(UserDetails user, String scope, Map<String, Object> extraClaims) {
-        Map<String, Object> claims = generateExtraClaims(user, scope);
+    private Map<String, Object> generateExtraClaims(UserDetails user, Map<String, Object> extraClaims) {
+        Map<String, Object> claims = generateExtraClaims(user);
         claims.putAll(extraClaims);
         return claims;
     }
 
-    public String generateAccessToken(UserDetails user, String scope) {
+    public String generateAccessToken(UserDetails user) {
         return service.generateToken(
-                generateExtraClaims(user, scope),
+                generateExtraClaims(user),
                 user,
                 ACCESS_DURATION
         );
     }
 
-    public String generateAccessToken(UserDetails user, String scope, Map<String, Object> extraClaims) {
+    public String generateAccessToken(UserDetails user, Map<String, Object> extraClaims) {
         return service.generateToken(
-                generateExtraClaims(user, scope, extraClaims),
+                generateExtraClaims(user, extraClaims),
                 user,
                 ACCESS_DURATION
         );
     }
 
-    public String generateRefreshToken(UserDetails user, String scope) {
+    public String generateRefreshToken(UserDetails user) {
         return service.generateToken(
-                generateExtraClaims(user, scope),
+                generateExtraClaims(user),
                 user,
                 REFRESH_DURATION
         );
     }
 
-    public String generateRefreshToken(UserDetails user, String scope, Map<String, Object> extraClaims) {
+    public String generateRefreshToken(UserDetails user, Map<String, Object> extraClaims) {
         return service.generateToken(
-                generateExtraClaims(user, scope, extraClaims),
+                generateExtraClaims(user, extraClaims),
                 user,
                 REFRESH_DURATION
         );

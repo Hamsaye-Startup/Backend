@@ -7,11 +7,11 @@ import com.microservices.user.customers.responses.CustomerResponse;
 import com.microservices.user.customers.services.CustomerServiceManagement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -47,8 +47,8 @@ public class CustomerController {
     }
 
     @GetMapping
-    public ResponseEntity<?> findAll(@RequestParam(value = "offset", required = false) LocalDateTime offset) {
-        List<CustomerResponse> responses = service.findAllCustomers(offset);
+    public ResponseEntity<?> findAll(Pageable pageable) {
+        Page<CustomerResponse> responses = service.findAllCustomers(pageable);
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 }

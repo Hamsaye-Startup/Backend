@@ -11,9 +11,6 @@ import java.util.UUID;
 
 @Builder
 public record RoleRequest(
-        @JsonProperty("id")
-        @NotNull(message = "id is required")
-        UUID uid,
         @NotBlank(message = "name is required")
         String name,
         @NotNull(message = "set of authorities are required")

@@ -12,13 +12,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserMapper {
 
-    public UserEntity toUserEntity(UserRequest request) {
-        return UserEntity.builder()
-                .uid(request.uid())
-                .phone(request.phone())
-                .firstname(request.firstname())
-                .lastname(request.lastname())
-                .build();
+    public UserEntity toUserEntity(UserRequest request, UserEntity exist) {
+        exist.setPhone(request.phone());
+        exist.setFirstname(request.firstname());
+        exist.setLastname(request.lastname());
+        return exist;
     }
 
     public UserEntity toUserEntity(RegistrationRequest request) {

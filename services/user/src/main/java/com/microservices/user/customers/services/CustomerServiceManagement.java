@@ -2,7 +2,6 @@ package com.microservices.user.customers.services;
 
 import com.microservices.user.customers.mappers.CustomerMapper;
 import com.microservices.user.customers.models.CustomerEntity;
-import com.microservices.user.customers.models.UserLoyaltyStatus;
 import com.microservices.user.customers.requests.CustomerNotifyRequest;
 import com.microservices.user.customers.requests.CustomerNotifyType;
 import com.microservices.user.customers.requests.CustomerRequest;
@@ -10,14 +9,13 @@ import com.microservices.user.customers.requests.NewCustomerRequest;
 import com.microservices.user.customers.responses.CustomerResponse;
 import com.microservices.user.kafka.producers.CustomerProducerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,8 +63,8 @@ public class CustomerServiceManagement {
         customerProducerService.send(
                 CustomerNotifyRequest.builder()
                         .customerInfo(mapper.toCustomerDTO(updatedCustomer))
-                        .message(CustomerNotifyType.NEW_USER.getMessage())
-                        .type(CustomerNotifyType.NEW_USER)
+                        .message(CustomerNotifyType.UPDATE_USER_INFO.getMessage())
+                        .type(CustomerNotifyType.UPDATE_USER_INFO)
                         .build()
         );
 
@@ -84,8 +82,8 @@ public class CustomerServiceManagement {
         customerProducerService.send(
                 CustomerNotifyRequest.builder()
                         .customerInfo(mapper.toCustomerDTO(deletedCustomer))
-                        .message(CustomerNotifyType.NEW_USER.getMessage())
-                        .type(CustomerNotifyType.NEW_USER)
+                        .message(CustomerNotifyType.DELETE_USER_INFO.getMessage())
+                        .type(CustomerNotifyType.DELETE_USER_INFO)
                         .build()
         );
 
@@ -103,18 +101,8 @@ public class CustomerServiceManagement {
      * find the 20 of last customer based on the timestamp offset
      * */
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<CustomerResponse> findAllCustomers(LocalDateTime offset) {
-
-        // fetch the customers
-        List<CustomerEntity> customers;
-        if (offset == null) {
-            customers = service.findAllCustomers();
-        } else {
-            customers = service.findAllCustomers(offset);
-        }
-
-        return customers.stream()
-                .map(mapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<CustomerResponse> findAllCustomers(Pageable pageable) {
+        return service.findAllCustomers(pageable)
+                .map(mapper::toResponse);
     }
 }

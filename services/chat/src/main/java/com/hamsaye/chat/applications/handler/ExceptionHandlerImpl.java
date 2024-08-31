@@ -1,7 +1,6 @@
 package com.hamsaye.chat.applications.handler;
 
 import com.hamsaye.chat.applications.exceptions.ExpiredTokenException;
-import com.hamsaye.chat.applications.exceptions.NotFoundScopeException;
 import com.hamsaye.chat.applications.mapper.ResponseMessageMapper;
 import com.hamsaye.chat.applications.messages.ExceptionMessage;
 import com.hamsaye.chat.applications.responses.ResponseMessageType;
@@ -45,16 +44,6 @@ public class ExceptionHandlerImpl {
         // generate exception message
         ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.EXPIRED_TOKEN.code());
         return new ResponseEntity<>(exception, HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler({NotFoundScopeException.class})
-    public ResponseEntity<?> getNotFoundScopeException(NotFoundScopeException ex, WebRequest request) {
-        // generate a log
-        logger.warn(ex.getMessage());
-
-        // generate exception message
-        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.SCOPE_NOT_FOUND.code());
-        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NotFoundUserException.class})

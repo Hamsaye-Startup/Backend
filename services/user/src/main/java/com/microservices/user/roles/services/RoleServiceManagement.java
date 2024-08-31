@@ -3,10 +3,11 @@ package com.microservices.user.roles.services;
 import com.microservices.user.roles.mappers.RoleMapper;
 import com.microservices.user.roles.models.RoleEntity;
 import com.microservices.user.roles.models.UserAuthorityEnum;
-import com.microservices.user.roles.requests.NewRollRequest;
 import com.microservices.user.roles.requests.RoleRequest;
 import com.microservices.user.roles.responses.RoleResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,17 +25,17 @@ public class RoleServiceManagement {
     private final RoleService roleService;
     private final RoleMapper mapper;
 
-    public RoleResponse add(NewRollRequest request) {
+    public RoleResponse add(RoleRequest request) {
 
         // generate the role entity and persist
         RoleEntity role = mapper.toRoleEntity(request);
         return mapper.toResponse(roleService.persist(role));
     }
 
-    public RoleResponse update(RoleRequest request) {
+    public RoleResponse update(UUID roleId, RoleRequest request) {
 
         // check the role by uid
-        RoleEntity role = roleService.findRoleById(request.uid());
+        RoleEntity role = roleService.findRoleById(roleId);
 
         RoleEntity newRole = mapper.toRoleEntity(request, role);
         return mapper.toResponse(roleService.persist(newRole));
@@ -50,19 +51,9 @@ public class RoleServiceManagement {
     // find all roles based on timestamp
     // default value is the first 20 roles of list based on the creation date
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public List<RoleResponse> findAllRoles(LocalDateTime offset) {
-
-        // fetch the roles
-        List<RoleEntity> roles;
-        if (offset == null) {
-            roles = roleService.findAllRoles();
-        } else {
-            roles = roleService.findAllRoles(offset);
-        }
-
-        return roles.stream()
-                .map(mapper::toResponse)
-                .collect(Collectors.toList());
+    public Page<RoleResponse> findAllRoles(Pageable pageable) {
+        return roleService.findAllRoles(pageable)
+                .map(mapper::toResponse);
     }
 
     public RoleResponse findById(UUID uid) {

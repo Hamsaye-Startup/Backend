@@ -1,6 +1,5 @@
 package com.microservices.warehouse.applications.handler;
 
-import com.microservices.warehouse.applications.exceptions.NotFoundScopeException;
 import com.microservices.warehouse.applications.mapper.MessageMapper;
 import com.microservices.warehouse.applications.messages.ExceptionMessage;
 import com.microservices.warehouse.applications.responses.ResponseMessageType;
@@ -29,16 +28,6 @@ public class ExceptionHandlerImpl {
         // generate exception message
         ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.INTERNAL.code());
         return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler({NotFoundScopeException.class})
-    public ResponseEntity<?> getNotFoundScopeException(NotFoundScopeException ex, WebRequest request) {
-        // generate a log
-        logger.warn(ex.getMessage());
-
-        // generate exception message
-        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.SCOPE_NOT_FOUND.code());
-        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({NotFoundStorageException.class})

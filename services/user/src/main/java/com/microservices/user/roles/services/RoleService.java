@@ -7,6 +7,8 @@ import com.microservices.user.roles.models.RoleEntity;
 import com.microservices.user.roles.repositories.RoleRepository;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,20 +52,7 @@ public class RoleService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<RoleEntity> findAllRoles() {
-        try {
-            return new ArrayList<>(repository.findAllRoles());
-        } catch (RuntimeException ex) {
-            throw new InternalServerErrorException(ResponseMessageType.INTERNAL.message(), ex.getCause());
-        }
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<RoleEntity> findAllRoles(LocalDateTime offset) {
-        try {
-            return new ArrayList<>(repository.findAllRoles(offset));
-        } catch (RuntimeException ex) {
-            throw new InternalServerErrorException(ResponseMessageType.INTERNAL.message(), ex.getCause());
-        }
+    public Page<RoleEntity> findAllRoles(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 }

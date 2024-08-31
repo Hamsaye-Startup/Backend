@@ -1,6 +1,5 @@
 package com.microservices.user.application.configs;
 
-import com.microservices.user.application.scopes.ScopeDetector;
 import com.microservices.user.users.services.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -42,10 +41,5 @@ public class CustomApplicationConfiguration {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
-    }
-
-    @Bean
-    public ScopeDetector scopeDetector() {
-        return new ScopeDetector();
     }
 }

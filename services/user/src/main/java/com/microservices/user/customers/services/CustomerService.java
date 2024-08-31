@@ -8,6 +8,8 @@ import com.microservices.user.customers.models.UserLoyaltyStatus;
 import com.microservices.user.customers.repositories.CustomerRepository;
 import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,21 +52,8 @@ public class CustomerService {
     }
 
     @Transactional(readOnly = true, propagation = REQUIRED)
-    public List<CustomerEntity> findAllCustomers(LocalDateTime timestamp) {
-        try {
-            return repository.findAllCustomers(timestamp);
-        } catch (RuntimeException ex) {
-            throw new InternalServerErrorException(ResponseMessageType.INTERNAL.message(), ex.getCause());
-        }
-    }
-
-    @Transactional(readOnly = true, propagation = REQUIRED)
-    public List<CustomerEntity> findAllCustomers() {
-        try {
-            return repository.findAllCustomers();
-        } catch (RuntimeException ex) {
-            throw new InternalServerErrorException(ResponseMessageType.INTERNAL.message(), ex.getCause());
-        }
+    public Page<CustomerEntity> findAllCustomers(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Transactional(propagation = REQUIRED)

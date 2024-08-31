@@ -7,8 +7,7 @@ public record AuthenticationResponse(
         String accessToken,
         int expiredIn,
         String refresh,
-        String tokenType,
-        String scope
+        String tokenType
 
 ) {
 }

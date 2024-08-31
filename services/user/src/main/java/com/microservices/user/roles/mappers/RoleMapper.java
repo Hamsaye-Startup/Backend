@@ -1,7 +1,6 @@
 package com.microservices.user.roles.mappers;
 
 import com.microservices.user.roles.models.RoleEntity;
-import com.microservices.user.roles.requests.NewRollRequest;
 import com.microservices.user.roles.requests.RoleRequest;
 import com.microservices.user.roles.responses.RoleResponse;
 import org.springframework.stereotype.Service;
@@ -10,14 +9,12 @@ import org.springframework.stereotype.Service;
 public class RoleMapper {
 
     public RoleEntity toRoleEntity(RoleRequest request, RoleEntity role) {
-        return RoleEntity.builder()
-                .id(request.uid())
-                .name(request.name() == null ? role.getName() : request.name())
-                .authorities(request.authorities() == null ? role.getAuthorities() : request.authorities())
-                .build();
+        role.setName(request.name());
+        role.setAuthorities(request.authorities());
+        return role;
     }
 
-    public RoleEntity toRoleEntity(NewRollRequest request) {
+    public RoleEntity toRoleEntity(RoleRequest request) {
         return RoleEntity.builder()
                 .name(request.name())
                 .authorities(request.authorities())

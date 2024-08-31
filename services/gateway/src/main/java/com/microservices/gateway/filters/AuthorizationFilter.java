@@ -78,7 +78,7 @@ public class AuthorizationFilter implements GatewayFilter {
     // generate the X_USER_N X_ROLE_A header
     private void updateRequest(ServerWebExchange exchange, String username, Collection<String> authorities) {
         exchange.getRequest().mutate()
-                .header("X_USER_N", username)
+                .header("X_USER_ID", username)
                 .header("X_ROLE_A", Arrays.toString(authorities.toArray()))
                 .build();
     }

@@ -12,6 +12,8 @@ import jakarta.ws.rs.InternalServerErrorException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.JDBCException;
 import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,12 +52,10 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserEntity update(UserEntity user, RoleEntity role, boolean enabled) {
+    public UserEntity update(UserEntity user, RoleEntity role) {
 
         try {
-
             user.setRole(role);
-            user.setEnabled(enabled);
             return repository.saveAndFlush(user);
 
         } catch (RuntimeException ex) {
@@ -64,34 +64,18 @@ public class UserService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public UserEntity update(UserEntity user, boolean enabled) {
+    public UserEntity update(UserEntity user) {
 
         try {
-
-            user.setEnabled(enabled);
             return repository.saveAndFlush(user);
-
         } catch (RuntimeException ex) {
             throw new PersistUserException(ex.getCause(), user.getPhone());
         }
     }
 
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<UserEntity> findAllUsers() {
-        try {
-            return new ArrayList<>(repository.findAllUsers());
-        } catch (RuntimeException ex) {
-            throw new InternalServerErrorException(ResponseMessageType.INTERNAL.message(), ex.getCause());
-        }
-    }
-
-    @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
-    public List<UserEntity> findAllUsers(LocalDateTime offset) {
-        try {
-            return new ArrayList<>(repository.findAllUsers(offset));
-        } catch (RuntimeException ex) {
-            throw new InternalServerErrorException(ResponseMessageType.INTERNAL.message(), ex.getCause());
-        }
+    public Page<UserEntity> findAllUsers(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

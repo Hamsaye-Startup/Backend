@@ -1,7 +1,6 @@
 package com.microservices.reservation.applications.handler;
 
 import com.microservices.reservation.applications.exceptions.ExpiredTokenException;
-import com.microservices.reservation.applications.exceptions.NotFoundScopeException;
 import com.microservices.reservation.applications.mapper.MessageMapper;
 import com.microservices.reservation.applications.messages.ExceptionMessage;
 import com.microservices.reservation.applications.responses.ResponseMessageType;
@@ -48,16 +47,6 @@ public class ExceptionHandlerImpl {
         // generate exception message
         ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.EXPIRED_TOKEN.code());
         return new ResponseEntity<>(exception, HttpStatus.UNAUTHORIZED);
-    }
-
-    @ExceptionHandler({NotFoundScopeException.class})
-    public ResponseEntity<?> getNotFoundScopeException(NotFoundScopeException ex, WebRequest request) {
-        // generate a log
-        logger.warn(ex.getMessage());
-
-        // generate exception message
-        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.SCOPE_NOT_FOUND.code());
-        return new ResponseEntity<>(exception, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler({ImpossibleTotalInstallmentsException.class})

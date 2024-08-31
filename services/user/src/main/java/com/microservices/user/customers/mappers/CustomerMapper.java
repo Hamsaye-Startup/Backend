@@ -1,6 +1,6 @@
 package com.microservices.user.customers.mappers;
 
-import com.microservices.user.customers.models.CustomerDTO;
+import com.microservices.user.customers.dto.CustomerDTO;
 import com.microservices.user.customers.models.CustomerEntity;
 import com.microservices.user.customers.models.GenderEnum;
 import com.microservices.user.customers.requests.CustomerRequest;

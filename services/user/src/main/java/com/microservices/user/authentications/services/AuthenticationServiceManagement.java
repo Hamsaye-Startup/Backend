@@ -27,7 +27,11 @@ public class AuthenticationServiceManagement {
     private final UserDetailsServiceImpl userDetailsService;
 
     // authentication process:: username password authentication
-    public AuthenticationResponse authenticate(AuthenticationRequest request, HttpServletResponse response, String scope) throws RuntimeException {
+    public AuthenticationResponse authenticate(
+            AuthenticationRequest request,
+            HttpServletResponse response
+    ) {
+
         UserEntity user = userDetailsService.loadUserByPhone(request.username());
 
         // authenticate user
@@ -39,8 +43,8 @@ public class AuthenticationServiceManagement {
         );
 
         // generate access token and refresh token
-        String access = generator.generateAccessToken(user, scope);
-        String refresh = generator.generateRefreshToken(user, scope);
+        String access = generator.generateAccessToken(user);
+        String refresh = generator.generateRefreshToken(user);
 
         // return refresh token as cookie
         Cookie cookie = generateRefreshCookie(refresh, response);
@@ -50,12 +54,11 @@ public class AuthenticationServiceManagement {
                 .expiredIn(TokenGenerator.ACCESS_DURATION)
                 .refresh(cookie.getName())
                 .tokenType("Bearer")
-                .scope(scope)
                 .build();
     }
 
     // refresh the access token with the refresh token
-    public AuthenticationResponse refreshToken(String token, String scope) {
+    public AuthenticationResponse refreshToken(String token) {
         String username = service.extractSubject(token);
 
         // check null pointer exception
@@ -82,13 +85,12 @@ public class AuthenticationServiceManagement {
         }
 
         // generate new access token
-        String access = generator.generateAccessToken(user, scope);
+        String access = generator.generateAccessToken(user);
         return AuthenticationResponse.builder()
                 .accessToken(access)
                 .expiredIn(TokenGenerator.ACCESS_DURATION)
                 .refresh("HAMSAYE_TOKEN")
                 .tokenType("Bearer")
-                .scope(scope)
                 .build();
     }
 
