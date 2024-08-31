@@ -1,4 +1,7 @@
 spring:
+  config:
+    activate:
+      on-profile: test
   datasource:
     url: jdbc:postgresql://localhost:5433/db_reservation
     username: pouria
@@ -17,6 +20,8 @@ spring:
     baseline-version: 0
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
+  kafka:
+    bootstrap-servers: localhost:29092
 
 server:
   port: 3613

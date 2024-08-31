@@ -43,7 +43,4 @@ public class TransactionEntity implements Serializable {
 
     @Column(name = "transfer_on", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)
     private LocalDateTime transferOn;
-
-    @Column(name = "status", columnDefinition = "character varying", nullable = false, updatable = false)
-    private String status;
 }

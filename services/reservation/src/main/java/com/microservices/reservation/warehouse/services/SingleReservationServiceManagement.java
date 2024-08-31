@@ -9,7 +9,7 @@ import com.microservices.reservation.warehouse.models.SingleReservationEntity;
 import com.microservices.reservation.warehouse.requests.ReservationRequest;
 import com.microservices.reservation.warehouse.requests.ReservationStrategyMode;
 import com.microservices.reservation.warehouse.responses.ReservationResponse;
-import com.microservices.reservation.warehouse.responses.WarehouseResponse;
+import com.microservices.reservation.warehouse.responses.StorageResponse;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,8 +25,7 @@ public class SingleReservationServiceManagement implements ReservationExecutor {
     private final SingleReservationMapper mapper;
     private final SingleReservationService service;
 
-    private final WarehouseService warehouseService;
-
+    private final StorageService storageService;
     private final InstallmentService installmentService;
 
     @PostConstruct
@@ -39,7 +38,7 @@ public class SingleReservationServiceManagement implements ReservationExecutor {
     public ReservationResponse reserve(ReservationRequest reservation) {
 
         // find the warehouse
-        WarehouseResponse warehouse = warehouseService.findWarehouseById(reservation.warehouse());
+        StorageResponse warehouse = storageService.findWarehouseById(reservation.warehouse());
 
         // find the authorized user
 

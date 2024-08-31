@@ -11,13 +11,15 @@ import org.springframework.web.client.RestClient;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
 @Component
-public class WarehouseClient {
+public class StorageClient {
+
+    // TODO: implement secret
 
     @Value("${application.config.user-url:http://localhost:8222}")
     private static String url;
     private final RestClient client;
 
-    public WarehouseClient() {
+    public StorageClient() {
         client = RestClient.builder()
                 .requestFactory(new HttpComponentsClientHttpRequestFactory())
                 .baseUrl(url)
@@ -26,7 +28,7 @@ public class WarehouseClient {
 
     public ResponseMessage findWarehouseById(Long id, String token) {
         return client.get()
-                .uri("/api/v1/warehouse/id/", id.toString())
+                .uri("/api/v1/storage/id/", id.toString())
                 .accept(APPLICATION_JSON)
                 .header(HttpHeaders.AUTHORIZATION, token)
                 .retrieve()

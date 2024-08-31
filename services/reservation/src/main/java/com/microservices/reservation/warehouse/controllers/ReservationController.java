@@ -31,31 +31,41 @@ public class ReservationController {
     }
 
     @PutMapping("/id/{reservationId}/confirm/accept")
-    public ResponseEntity<?> acceptReservation(@PathVariable("reservationId") UUID uid) {
+    public ResponseEntity<?> acceptReservation(
+            @PathVariable("reservationId") UUID uid
+    ) {
         ReservationResponse response = management.acceptReservation(uid);
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
     @PutMapping("/id/{reservationId}/confirm/reject")
-    public ResponseEntity<?> rejectReservation(@PathVariable("reservationId") UUID uid) {
+    public ResponseEntity<?> rejectReservation(
+            @PathVariable("reservationId") UUID uid
+    ) {
         ReservationResponse response = management.rejectReservation(uid);
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
     @GetMapping("/warehouse/{id}")
-    public ResponseEntity<?> findReservationsByWarehouse(@PathVariable("id") Long id, Pageable pageable) {
+    public ResponseEntity<?> findReservationsByWarehouse(
+            @PathVariable("id") Long id, Pageable pageable
+    ) {
         Page<ReservationResponse> responses = management.showReservationByWarehouse(id, pageable);
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 
     @GetMapping("/warehouse/host/{id}")
-    public ResponseEntity<?> findReservationsByHost(@PathVariable("id") UUID uid, Pageable pageable) {
+    public ResponseEntity<?> findReservationsByHost(
+            @PathVariable("id") UUID uid, Pageable pageable
+    ) {
         Page<ReservationResponse> responses = management.showReservationByHost(uid, pageable);
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 
     @GetMapping("/warehouse/renter/{id}")
-    public ResponseEntity<?> findReservationsByRenter(@PathVariable("id") UUID uid, Pageable pageable) {
+    public ResponseEntity<?> findReservationsByRenter(
+            @PathVariable("id") UUID uid, Pageable pageable
+    ) {
         Page<ReservationResponse> responses = management.showReservationByRenter(uid, pageable);
         return ResponseEntity.ok(mapper.toResponse(responses));
     }

@@ -35,7 +35,6 @@ public class TransactionServiceManagement {
                 .siteFees(installment.getValue() * RentWarehousePolicy.siteFeePercent)
                 .discountAmount(0D) // TODO: generate the discount code api
                 .transferOn(LocalDateTime.now())
-                .status("STATUS") // TODO: generate the status for each transaction
                 .build();
 
         TransactionEntity persisted = service.persist(transaction);

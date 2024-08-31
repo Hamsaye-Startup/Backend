@@ -9,7 +9,7 @@ import com.microservices.reservation.warehouse.models.ReservationStats;
 import com.microservices.reservation.warehouse.requests.ReservationRequest;
 import com.microservices.reservation.warehouse.requests.ReservationStrategyMode;
 import com.microservices.reservation.warehouse.responses.ReservationResponse;
-import com.microservices.reservation.warehouse.responses.WarehouseResponse;
+import com.microservices.reservation.warehouse.responses.StorageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +25,9 @@ public class MultiReservationServiceManagement implements ReservationExecutor {
     private final MultiReservationMapper mapper;
     private final MultiReservationService service;
 
-    private final WarehouseService warehouseService;
-
+    private final StorageService storageService;
     private final InstallmentService installmentService;
+
 
     @Override
     public void register() {
@@ -38,7 +38,7 @@ public class MultiReservationServiceManagement implements ReservationExecutor {
     public ReservationResponse reserve(ReservationRequest reservation) {
 
         // find the warehouse
-        WarehouseResponse warehouse = warehouseService.findWarehouseById(reservation.warehouse());
+        StorageResponse warehouse = storageService.findWarehouseById(reservation.warehouse());
 
         // find the authorized user
 

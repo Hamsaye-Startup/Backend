@@ -1,6 +1,9 @@
 package com.microservices.reservation.warehouse.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.microservices.reservation.kafka.producers.StorageProducerService;
+import com.microservices.reservation.kafka.requests.ReservationNotifyRequest;
+import com.microservices.reservation.kafka.requests.ReservationNotifyType;
 import com.microservices.reservation.warehouse.mappers.ReservationMapper;
 import com.microservices.reservation.warehouse.models.ReservationEntity;
 import com.microservices.reservation.warehouse.requests.ReservationRequest;
@@ -20,6 +23,8 @@ public class ReservationServiceManagement {
 
     private final ReservationMapper mapper;
     private final ReservationService service;
+
+    private final StorageProducerService storageProducerService;
 
     private static HashMap<ReservationStrategyMode, ReservationExecutor> executor = new HashMap<>();
 
@@ -54,7 +59,20 @@ public class ReservationServiceManagement {
 
         // find the reservation by id
         ReservationEntity reservation = service.findReservationById(uid);
-        return mapper.toResponse(service.confirmReservation(reservation, true));
+        ReservationEntity confirmed = service.confirmReservation(reservation, true);
+
+        // generate notification
+        storageProducerService.send(ReservationNotifyRequest.builder()
+                .reservationId(confirmed.getUid())
+                .reservedBy(confirmed.getReservedBy())
+                .fromDate(confirmed.getFromDate())
+                .toDate(confirmed.getToDate())
+                .warehouseId(confirmed.getWarehouse())
+                .type(ReservationNotifyType.NEW_RESERVE)
+                .message(ReservationNotifyType.NEW_RESERVE.getMessage())
+                .build());
+
+        return mapper.toResponse(confirmed);
     }
 
     public ReservationResponse rejectReservation(UUID uid) {
