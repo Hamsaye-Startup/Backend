@@ -70,6 +70,8 @@ public class StorageEntity implements Serializable {
     @Enumerated(EnumType.STRING)
     private StorageVerifiedEnum verified;
 
+    private Score score; // This feature contains the average score of storage
+
     @Transient
     private boolean marked;
 

@@ -4,10 +4,7 @@ import com.microservices.warehouse.geos.exceptions.PersistAddressException;
 import com.microservices.warehouse.storages.exceptions.NotFoundStorageException;
 import com.microservices.warehouse.storages.exceptions.PersistStorageException;
 import com.microservices.warehouse.storages.exceptions.StorageIsNotRemovableException;
-import com.microservices.warehouse.storages.models.StorageCategoryEnum;
-import com.microservices.warehouse.storages.models.StorageEntity;
-import com.microservices.warehouse.storages.models.StorageStatusEnum;
-import com.microservices.warehouse.storages.models.StorageVerifiedEnum;
+import com.microservices.warehouse.storages.models.*;
 import com.microservices.warehouse.storages.repositories.StorageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,6 +30,12 @@ public class StorageService {
             storage.setEnabled(true);
             storage.setVerified(StorageVerifiedEnum.NOT_VERIFIED);
             storage.setStatus(StorageStatusEnum.COMPLETELY_SAFE);
+            storage.setScore(
+                    Score.builder()
+                            .score(0f)
+                            .votes(0)
+                            .build()
+            );
             return storageRepository.save(storage);
         }
         catch (RuntimeException ex) {

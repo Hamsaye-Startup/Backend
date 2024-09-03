@@ -64,6 +64,7 @@ public class StorageMapper {
                         .marked(storage.isMarked())
                         .favourite(storage.isFavourite())
                         .build())
+                .score(storage.getScore())
                 .build();
     }
 

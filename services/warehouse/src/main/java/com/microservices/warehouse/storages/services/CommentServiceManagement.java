@@ -1,8 +1,8 @@
 package com.microservices.warehouse.storages.services;
 
-import com.microservices.warehouse.reservations.services.ReservationService;
 import com.microservices.warehouse.storages.mappers.CommentMapper;
 import com.microservices.warehouse.storages.models.CommentEntity;
+import com.microservices.warehouse.storages.models.Score;
 import com.microservices.warehouse.storages.models.StorageEntity;
 import com.microservices.warehouse.storages.requests.CommentRequest;
 import com.microservices.warehouse.storages.responses.CommentResponse;
@@ -27,7 +27,13 @@ public class CommentServiceManagement {
 
         // convert the comment request to comment entity
         CommentEntity comment = commentMapper.toComment(commentRequest);
-        return commentMapper.toResponse(commentService.insertComment(comment, storage));
+
+        // update the score
+        CommentEntity inserted = commentService.insertComment(comment, storage);
+        incrementStorageScore(storage, inserted.getScore());
+        storageService.updateStorage(storage);
+
+        return commentMapper.toResponse(inserted);
     }
 
 
@@ -46,6 +52,12 @@ public class CommentServiceManagement {
         CommentEntity comment = commentService.findCommentById(id);
 
         commentService.deleteCommentById(comment);
+
+        // update the score
+        StorageEntity storage = comment.getStorage();
+        reduceStorageScore(storage, comment.getScore());
+        storageService.updateStorage(storage);
+
         return commentMapper.toResponse(comment);
     }
 
@@ -73,5 +85,27 @@ public class CommentServiceManagement {
 
         return commentService.findAllCommentsByStorage(storage, enabled, pageable)
                 .map(commentMapper::toResponse);
+    }
+
+    private void incrementStorageScore(StorageEntity storage, Float point) {
+        Score score = storage.getScore();
+        int votes = score.getVotes() + 1;
+        float average = (score.getScore() * score.getVotes() + point) / votes;
+
+        storage.setScore(Score.builder()
+                        .score(average)
+                        .votes(votes)
+                .build());
+    }
+
+    private void reduceStorageScore(StorageEntity storage, Float point) {
+        Score score = storage.getScore();
+        int votes = score.getVotes() - 1;
+        float average = (score.getScore() * score.getVotes() - point) / votes;
+
+        storage.setScore(Score.builder()
+                .score(average)
+                .votes(votes)
+                .build());
     }
 }

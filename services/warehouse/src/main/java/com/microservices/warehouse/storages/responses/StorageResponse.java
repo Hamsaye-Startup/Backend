@@ -1,6 +1,7 @@
 package com.microservices.warehouse.storages.responses;
 
 import com.microservices.warehouse.geos.responses.AddressResponse;
+import com.microservices.warehouse.storages.models.Score;
 import lombok.Builder;
 
 import java.util.UUID;
@@ -16,6 +17,7 @@ public record StorageResponse(
         Double amount,
         Double discountAmount,
         AddressResponse address,
-        StorageFlagsResponse flags
+        StorageFlagsResponse flags,
+        Score score
 ) {
 }
