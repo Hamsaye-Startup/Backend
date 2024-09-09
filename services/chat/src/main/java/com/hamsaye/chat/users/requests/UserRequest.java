@@ -1,11 +1,14 @@
 package com.hamsaye.chat.users.requests;
 
-import com.hamsaye.chat.users.models.ConnectionStatus;
 import lombok.Builder;
 
 import java.io.Serializable;
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Builder
 public record UserRequest(
 

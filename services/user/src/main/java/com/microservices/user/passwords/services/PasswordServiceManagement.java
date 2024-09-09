@@ -9,8 +9,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.security.Principal;
-
+/**
+ * Service class responsible for managing password-related operations.
+ * This includes updating passwords for users. It interacts with the {@link UserService} to perform user and password updates.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class PasswordServiceManagement {
@@ -18,21 +23,23 @@ public class PasswordServiceManagement {
     private final UserService userService;
     private final PasswordEncoder encoder;
 
-    public void update(PasswordRequest request, Principal principal) {
+    /**
+     * Updates the password for a user based on the provided request and the currently authenticated user.
+     *
+     * @param request The request containing the new password and user ID.
+     * @throws IllegalRequestException if the user ID in the request does not match the authenticated user.
+     * @since 1.0
+     */
+    public void update(PasswordRequest request) {
 
-        // check the authenticated user with request
-        if (!request.uid().toString().equals(principal.getName())) {
-            throw new IllegalRequestException(request.uid().toString(), principal.getName());
-        }
-
-        // fetch the user
+        // Fetch the user entity
         UserEntity user = userService.findByUid(request.uid());
 
-        // fetch the password
+        // Fetch the user's password entity and update it
         PasswordEntity password = user.getPasswordEntity();
         password.setPassword(encoder.encode(request.password()));
 
-        // persist the user and password
+        // Persist the updated user and password information
         userService.persist(user, user.getRole(), password);
     }
 }

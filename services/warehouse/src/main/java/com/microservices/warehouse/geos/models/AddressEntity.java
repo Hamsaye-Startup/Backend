@@ -9,6 +9,18 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Represents an address entity in the system.
+ * <p>
+ * This entity contains information about an address including its main address, a compatible
+ * address format, geographic coordinates, and timestamps for creation and modification. It also
+ * has a one-to-one relationship with {@link AddressDetailsEntity} that provides detailed address
+ * information unique by postal code.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -41,6 +53,12 @@ public class AddressEntity implements Serializable {
     @Column(name = "modified_at", columnDefinition = "timestamp without time zone", insertable = false)
     private LocalDateTime modifiedAt;
 
+    /**
+     * Detailed address information unique by postal code.
+     * <p>
+     * This is a one-to-one relationship with {@link AddressDetailsEntity}.
+     * </p>
+     */
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "details", referencedColumnName = "postal_code", columnDefinition = "character varying")
     private AddressDetailsEntity details;

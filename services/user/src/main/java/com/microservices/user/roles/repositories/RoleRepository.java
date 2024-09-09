@@ -11,6 +11,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, UUID> {
 

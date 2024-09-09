@@ -2,6 +2,10 @@ package com.microservices.reservation.applications.responses;
 
 import lombok.Builder;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Builder
 public record ResponseFormat(
         Integer code,

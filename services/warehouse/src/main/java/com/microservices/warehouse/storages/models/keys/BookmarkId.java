@@ -13,6 +13,15 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.UUID;
 
+/**
+ * Represents the composite key for the {@link com.microservices.warehouse.storages.models.BookmarkEntity} entity.
+ * <p>
+ * This class is used as an embedded ID to uniquely identify a bookmark entry associated with a specific user and storage entity.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

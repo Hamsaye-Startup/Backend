@@ -5,6 +5,10 @@ import lombok.Builder;
 import java.time.LocalDate;
 import java.util.UUID;
 
+/*
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Builder
 public record ReservationNotifyRequest(
 

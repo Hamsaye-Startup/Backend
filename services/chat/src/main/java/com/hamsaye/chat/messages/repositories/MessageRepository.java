@@ -7,6 +7,10 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public interface MessageRepository extends MongoRepository<MessageEntity, String> {
 
     Page<MessageEntity> findAllByConversationId(UUID conversationId, Pageable pageable);

@@ -4,6 +4,10 @@ package com.hamsaye.chat.users.exceptions;
 import com.hamsaye.chat.applications.exceptions.CustomRuntimeException;
 import com.hamsaye.chat.applications.responses.ResponseMessageType;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public class PersistUserException extends CustomRuntimeException {
 
     private static final String message = ResponseMessageType.PERSIST_USER.message();

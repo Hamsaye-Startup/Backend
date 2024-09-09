@@ -10,6 +10,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * This class represents an entity for a storage. It contains details about the storage including its dimensions, financial information, address, and status.
+ * It also tracks whether the storage is marked or liked by a user.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -55,26 +63,56 @@ public class StorageEntity implements Serializable {
     @Column(name = "discount_amt", columnDefinition = "double precision", nullable = false)
     private Double discountAmount;
 
+    /**
+     * This is entity class for storage's address.
+     * NOTE: Contains a list of geography information like coordinate, postal code end etc.
+     * See {@link com.microservices.warehouse.geos.models.AddressEntity}
+     * for more details, please.
+     */
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private AddressEntity address;
 
     @Column(name = "description", columnDefinition = "character varying", length = 1023)
     private String desc;
 
+    /**
+     * This flag is used for displaying comment.
+     */
     @Column(name = "enabled", nullable = false)
     private boolean enabled; // This feature issues permission to display on the site
 
+    /**
+     * This flag is used for displaying the status of storage
+     * See {@link com.microservices.warehouse.storages.models.StorageStatusEnum}
+     * for more details, please.
+     */
     @Enumerated(EnumType.STRING)
     private StorageStatusEnum status;
 
+    /**
+     * This flag is used for displaying safe storages
+     * See {@link com.microservices.warehouse.storages.models.StorageVerifiedEnum}
+     * for more details, please.
+     */
     @Enumerated(EnumType.STRING)
     private StorageVerifiedEnum verified;
 
-    private Score score; // This feature contains the average score of storage
+    /**
+     * This is the embedded class for the Storage's score
+     * See {@link com.microservices.warehouse.storages.models.Score}
+     * for more details, please.
+     */
+    private Score score;
 
+    /**
+     * This flag is used for marking the storage that user is marked
+     */
     @Transient
     private boolean marked;
 
+    /**
+     * This flag is used for marking the storage that user is liked
+     */
     @Transient
     private boolean favourite;
 }

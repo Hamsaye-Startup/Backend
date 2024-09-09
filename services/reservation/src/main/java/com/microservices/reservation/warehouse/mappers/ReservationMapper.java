@@ -5,10 +5,24 @@ import com.microservices.reservation.warehouse.responses.ReservationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+/**
+ * This service class provides mapping functionalities between the reservation entity
+ * and reservation response.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class ReservationMapper {
 
+    /**
+     * Converts a {@link ReservationEntity} to a {@link ReservationResponse}.
+     *
+     * @param reservation the reservation entity to convert
+     * @return the corresponding {@link ReservationResponse}
+     * @since 1.0
+     */
     public ReservationResponse toResponse(ReservationEntity reservation) {
         return ReservationResponse.builder()
                 .id(reservation.getUid())

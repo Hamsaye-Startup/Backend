@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Repository
 public interface FavouritesBookRepository extends JpaRepository<FavouritesBookEntity, BookmarkId> {
 
@@ -25,6 +29,4 @@ public interface FavouritesBookRepository extends JpaRepository<FavouritesBookEn
     @Query("select b from FavouritesBookEntity b where b.id.userId = :userId and b.id.storage.id = :storageId")
     Optional<FavouritesBookEntity> findByUserIdAndStorageId(@Param("userId") UUID userId, @Param("storageId") Long storageId);
 
-    @Query(value = "select exists(select 1 from tb_storage_favourites b where b.user_id = :userId and b.storage_id = :storageId)", nativeQuery = true)
-    boolean existByUserIdAndStorageId(@Param("userId") UUID userId, @Param("storageId") Long storageId);
 }

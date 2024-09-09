@@ -1,6 +1,5 @@
 package com.microservices.warehouse.storages.models;
 
-import com.microservices.warehouse.storages.models.keys.BookmarkId;
 import com.microservices.warehouse.storages.models.keys.FavouritesId;
 import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
@@ -12,6 +11,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * This class represents an entity for storing a user's favourite storage.
+ * It includes an embedded ID composed of the user ID and storage ID, and tracks when the favourite was created.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

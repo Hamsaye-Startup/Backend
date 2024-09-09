@@ -1,6 +1,5 @@
 package com.hamsaye.chat.applications.handler;
 
-import com.hamsaye.chat.applications.exceptions.ExpiredTokenException;
 import com.hamsaye.chat.applications.mapper.ResponseMessageMapper;
 import com.hamsaye.chat.applications.messages.ExceptionMessage;
 import com.hamsaye.chat.applications.responses.ResponseMessageType;
@@ -19,6 +18,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class ExceptionHandlerImpl {
@@ -34,16 +37,6 @@ public class ExceptionHandlerImpl {
         // generate exception message
         ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.INTERNAL.code());
         return new ResponseEntity<>(exception, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    @ExceptionHandler({ExpiredTokenException.class})
-    public ResponseEntity<?> getExpiredTokenException(ExpiredTokenException ex, WebRequest request) {
-        // generate a log
-        logger.info(ex.getMessage());
-
-        // generate exception message
-        ExceptionMessage exception = mapper.toException(ex, ResponseMessageType.EXPIRED_TOKEN.code());
-        return new ResponseEntity<>(exception, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({NotFoundUserException.class})

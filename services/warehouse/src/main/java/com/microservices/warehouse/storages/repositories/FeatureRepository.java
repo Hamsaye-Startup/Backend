@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Repository
 public interface FeatureRepository extends JpaRepository<FeatureEntity, Long> {
 

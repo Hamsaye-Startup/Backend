@@ -14,16 +14,49 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for consuming Kafka messages related to storage reservations.
+ * <p>
+ * This service listens for reservation notifications from Kafka topics and processes
+ * them to persist reservations in the storage system.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ReservationConsumerService {
 
+    /**
+     * See {@link com.microservices.warehouse.reservations.mappers.ReservationMapper} for more details.
+     */
     private final ReservationMapper reservationMapper;
+
+    /**
+     * See {@link com.microservices.warehouse.reservations.services.ReservationService} for more details.
+     */
     private final ReservationService reservationService;
 
+    /**
+     * See {@link com.microservices.warehouse.storages.services.StorageService} for more details.
+     */
     private final StorageService storageService;
 
+    /**
+     * Listener method for processing reservation notifications from Kafka.
+     *
+     * <p>
+     * This method listens to the "storage-reservation" topic and handles messages of type
+     * {@link ReservationNotifyType}. It maps the notification to a
+     * {@link ReservationEntity} and persists it in the storage system.
+     * </p>
+     *
+     * @param notification the reservation notification message
+     * @param key the Kafka message key, can be null
+     * @since 1.0
+     */
     @KafkaListener(
             id = "storage-reservation-listener-id",
             topics = "storage-reservation",

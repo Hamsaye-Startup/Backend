@@ -11,6 +11,16 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Represents an entity for storing bookmarks related to storage items.
+ * <p>
+ * This class maps to the "tb_storage_bookmark" table and contains an embedded ID composed of a user ID and a storage ID,
+ * along with a timestamp indicating when the bookmark was created.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

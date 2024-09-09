@@ -1,0 +1,5 @@
+com.microservices.gateway
+com.microservices.gateway.configurations
+com.microservices.gateway.filters
+com.microservices.gateway.jwt
+com.microservices.gateway.role

@@ -9,6 +9,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * This class represents a reservation entity in the warehouse system.
+ * It includes information about the reservation, such as the reserved item, the owner, and the reservation dates.
+ *
+ * <p>This class is mapped to the "tb_reservation_warehouse" table and uses the TABLE_PER_CLASS inheritance strategy.
+ * It contains fields for reservation ID, reservation details, reservation stats, and timestamps for creation and modification.</p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

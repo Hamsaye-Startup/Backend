@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.microservices.gateway"},{"l":"com.microservices.gateway.configurations"},{"l":"com.microservices.gateway.filters"},{"l":"com.microservices.gateway.jwt"},{"l":"com.microservices.gateway.role"}];updateSearchResults();

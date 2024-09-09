@@ -1,0 +1,88 @@
+erDiagram
+    tb_multi_reservation_warehouse {
+        UUID reservation_id PK
+        uuid reserved_by
+        bigint warehouse_id
+        uuid owner
+        date from_date
+        date to_date
+        bigint stats FK
+        timestamp created_at
+        timestamp modified_at
+    }
+
+    tb_reservation_warehouse {
+        UUID reservation_id PK
+        uuid reserved_by
+        bigint warehouse_id
+        uuid owner
+        date from_date
+        date to_date
+        bigint stats FK
+        timestamp created_at
+        timestamp modified_at
+    }
+
+    tb_reservation_stats {
+        bigint reservation_stats_id PK
+        ConfirmReserveEnum confirmed
+    }
+
+    tb_single_reservation_warehouse {
+        UUID reservation_id PK
+        uuid reserved_by
+        bigint warehouse_id
+        uuid owner
+        date from_date
+        date to_date
+        bigint stats FK
+        uuid installment FK
+        timestamp created_at
+        timestamp modified_at
+    }
+
+    tb_transaction {
+        bigint transaction_id PK
+        varchar type
+        varchar code
+        uuid installment FK
+        numeric site_fees
+        numeric discount_amt
+        timestamp transfer_on
+    }
+
+    tb_product {
+        bigint product_id PK
+        bigint product_type FK
+        numeric price
+        varchar description
+        uuid reservation FK
+        timestamp created_at
+    }
+
+    tb_product_type {
+        bigint product_type_id PK
+        varchar name
+        boolean active
+        bigint parent FK
+    }
+
+    tb_installment {
+        UUID installment_id PK
+        numeric value
+        timestamp payment_due
+        boolean paid
+        uuid debtor
+        uuid creditor
+        timestamp created_at
+        timestamp modified_at
+    }
+
+    %% Relationships
+    tb_multi_reservation_warehouse ||--o{ tb_installment : "installments"
+    tb_single_reservation_warehouse ||--o{ tb_installment : "installment"
+    tb_transaction ||--o| tb_installment : "installment"
+    tb_product ||--o| tb_product_type : "product_type"
+    tb_product ||--o| tb_reservation_warehouse : "reservation"
+    tb_product_type ||--|o tb_product_type : "parent"
+    tb_reservation_warehouse ||--o| tb_reservation_stats : "stats"

@@ -1,5 +1,9 @@
 package com.microservices.warehouse.applications.exceptions;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public class CustomRuntimeException extends RuntimeException {
 
     private final String message;

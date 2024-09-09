@@ -11,10 +11,21 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Handles HTTP requests related to role management.
+ * Provides endpoints for creating, updating, deleting, and retrieving roles.
+ * Also provides endpoints for retrieving role authorities.
+ *
+ * @see RoleRequest
+ * @see RoleResponse
+ * @see RoleServiceManagement
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("api/v1/role")
 @RequiredArgsConstructor
@@ -22,7 +33,13 @@ public class RoleController {
 
     private final RoleServiceManagement management;
 
-    //@PreAuthorize("hasAuthority('WRITE_ROLE')")
+    /**
+     * Creates a new role based on the provided {@link RoleRequest}.
+     *
+     * @param request The request containing details of the role to be created.
+     * @return A {@link ResponseEntity} containing the created {@link RoleResponse}.
+     * @since 1.0
+     */
     @PostMapping
     public ResponseEntity<?> add(
             @Valid @RequestBody RoleRequest request
@@ -31,7 +48,14 @@ public class RoleController {
         return ResponseEntity.ok(response);
     }
 
-    //@PreAuthorize("hasAuthority('WRITE_ROLE')")
+    /**
+     * Updates an existing role identified by {@code roleId} with the details provided in {@link RoleRequest}.
+     *
+     * @param roleId The ID of the role to be updated.
+     * @param request The request containing updated details of the role.
+     * @return A {@link ResponseEntity} containing the updated {@link RoleResponse}.
+     * @since 1.0
+     */
     @PutMapping("/id/{roleId}")
     public ResponseEntity<?> update(
             @PathVariable("roleId") UUID roleId,
@@ -41,7 +65,13 @@ public class RoleController {
         return ResponseEntity.ok(response);
     }
 
-    //@PreAuthorize("hasAuthority('DELETE_ROLE')")
+    /**
+     * Deletes the role identified by {@code id}.
+     *
+     * @param uid The ID of the role to be deleted.
+     * @return A {@link ResponseEntity} containing the deleted {@link RoleResponse}.
+     * @since 1.0
+     */
     @DeleteMapping("/id/{id}")
     public ResponseEntity<?> delete(
             @PathVariable("id") UUID uid
@@ -50,14 +80,26 @@ public class RoleController {
         return ResponseEntity.ok(response);
     }
 
-    //@PreAuthorize("hasAuthority('READ_ROLES')")
+    /**
+     * Retrieves all roles with pagination.
+     *
+     * @param pageable The pagination information.
+     * @return A {@link ResponseEntity} containing a {@link Page} of {@link RoleResponse}.
+     * @since 1.0
+     */
     @GetMapping
     public ResponseEntity<?> showAllRoles(Pageable pageable) {
         Page<RoleResponse> responses = management.findAllRoles(pageable);
         return ResponseEntity.ok(responses);
     }
 
-    //@PreAuthorize("hasAuthority('READ_ROLE')")
+    /**
+     * Retrieves the role identified by {@code id}.
+     *
+     * @param uid The ID of the role to be retrieved.
+     * @return A {@link ResponseEntity} containing the {@link RoleResponse} for the requested role.
+     * @since 1.0
+     */
     @GetMapping("/id/{id}")
     public ResponseEntity<?> showRoleById(
             @PathVariable("id") UUID uid
@@ -66,13 +108,25 @@ public class RoleController {
         return ResponseEntity.ok(response);
     }
 
-    //@PreAuthorize("hasAuthority('READ_ROLES')")
+    /**
+     * Retrieves all authorities.
+     *
+     * @return A {@link ResponseEntity} containing a {@link Set} of authorities.
+     * @since 1.0
+     */
     @GetMapping("/authorities")
     public ResponseEntity<?> showAllAuthorities() {
         Set<String> responses = management.findAllAuthorities();
         return ResponseEntity.ok(responses);
     }
 
+    /**
+     * Retrieves all authorities for the role identified by {@code id}.
+     *
+     * @param uid The ID of the role whose authorities are to be retrieved.
+     * @return A {@link ResponseEntity} containing a {@link Set} of authorities for the specified role.
+     * @since 1.0
+     */
     @GetMapping("/authorities/id/{id}")
     public ResponseEntity<?> showAllAuthorities(
             @PathVariable("id") UUID uid

@@ -1,0 +1,99 @@
+erDiagram
+    tb_storage_bookmark {
+        UUID user_id
+        bigint storage_id
+        timestamp created_at
+    }
+
+    tb_storage_comment {
+        bigint comment_id PK
+        bigint storage FK "fk_storage_comment"
+        uuid comment_by
+        double score
+        varchar content
+        timestamp comment_at
+        boolean enabled
+    }
+
+    tb_storage_favourites {
+        UUID user_id
+        bigint storage_id
+        timestamp created_at
+    }
+
+    tb_storage_feature {
+        bigint feature_id PK
+        varchar code
+        varchar title
+        timestamp created_at
+        timestamp modified_at
+        varchar description
+    }
+
+    tb_storage_policy {
+        bigint policy_id PK
+        varchar code
+        varchar title
+        timestamp created_at
+        timestamp modified_at
+        varchar description
+        varchar documentation
+    }
+
+    tb_storages {
+        bigint storage_id PK
+        uuid owner
+        varchar category
+        timestamp created_at
+        timestamp modified_at
+        integer width
+        integer height
+        numeric amount
+        double discount_amt
+        varchar description
+        boolean enabled
+        varchar status
+        varchar verified
+        double avg_score
+        integer vote_number
+    }
+
+    tb_reservations {
+        uuid reservation_id PK
+        uuid reserved_by
+        date from_date
+        date to_date
+        bigint reserved_storage FK
+    }
+
+    tbl_address {
+        uuid address_id PK
+        varchar address
+        varchar address_compat
+        varchar coordinate
+        timestamp created_at
+        timestamp modified_at
+        varchar postal_code FK
+    }
+
+    tbl_address_details {
+        varchar postal_code PK
+        varchar country
+        varchar province
+        varchar county
+        varchar city
+        varchar region
+        varchar neighborhood
+        varchar primary_road
+        varchar plaque
+    }
+
+    %% Relationships
+    tb_storage_bookmark ||--o{ tb_storages : "references"
+    tb_storage_comment ||--o{ tb_storages : "fk_storage_comment"
+    tb_storage_favourites ||--o{ tb_storages : "references"
+    tb_storage_feature ||--o{ tb_storages : "many-to-many"
+    tb_storage_policy ||--o{ tb_storages : "many-to-many"
+    tb_reservations ||--o{ tb_storages : "belongs to"
+    tbl_address ||--o{ tbl_address_details : "has"
+    tb_storages ||--o{ tbl_address : "has address"

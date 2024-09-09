@@ -1,15 +1,19 @@
 package com.microservices.warehouse.reservations.models;
 
-import com.microservices.warehouse.storages.models.StorageCategoryEnum;
 import com.microservices.warehouse.storages.models.StorageEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Represents a reservation made for a storage entity.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

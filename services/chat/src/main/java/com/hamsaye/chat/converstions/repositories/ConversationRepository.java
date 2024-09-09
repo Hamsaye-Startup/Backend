@@ -8,6 +8,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public interface ConversationRepository extends MongoRepository<ConversationEntity, UUID> {
 
     @Query("{ $or: [" +

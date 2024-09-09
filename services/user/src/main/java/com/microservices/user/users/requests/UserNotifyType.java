@@ -2,6 +2,10 @@ package com.microservices.user.users.requests;
 
 import lombok.Getter;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Getter
 public enum UserNotifyType {
     NEW_USER("new user is registered"),

@@ -3,6 +3,10 @@ package com.microservices.reservation.installments.exceptions;
 import com.microservices.reservation.applications.exceptions.CustomRuntimeException;
 import com.microservices.reservation.applications.responses.ResponseMessageType;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public class NotFoundInstallmentException extends CustomRuntimeException {
 
     private static final String message = ResponseMessageType.INSTALLMENT_NOT_FOUND.message();

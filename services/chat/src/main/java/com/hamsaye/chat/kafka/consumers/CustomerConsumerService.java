@@ -9,7 +9,7 @@ import com.hamsaye.chat.users.mappers.UserMapper;
 import com.hamsaye.chat.users.models.UserAttribute;
 import com.hamsaye.chat.users.models.UserContactInfo;
 import com.hamsaye.chat.users.models.UserEntity;
-import com.hamsaye.chat.users.models.UserGender;
+import com.hamsaye.chat.users.models.GenderEnum;
 import com.hamsaye.chat.users.models.UserLoyaltyStatus;
 import com.hamsaye.chat.users.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +21,58 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service class responsible for consuming Kafka messages related to user notifications.
+ * <p>
+ * This service listens to Kafka topics for user notifications and updates the user information
+ * in the system based on the type of notification received. It supports creating new users,
+ * updating existing user information, and deleting users.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class CustomerConsumerService {
 
+    /**
+     * Service for user-related operations.
+     * @see com.hamsaye.chat.users.services.UserService
+     */
     private final UserService userService;
+
+    /**
+     * Mapper for user-related transformations.
+     * @see com.hamsaye.chat.users.mappers.UserMapper
+     */
     private final UserMapper userMapper;
 
+    /**
+     * Template for sending WebSocket messages.
+     * @see org.springframework.messaging.simp.SimpMessagingTemplate
+     */
     private final SimpMessagingTemplate messagingTemplate;
+
+    /**
+     * Mapper for response message transformations.
+     * @see com.hamsaye.chat.applications.mapper.ResponseMessageMapper
+     */
     private final ResponseMessageMapper mapper;
 
+    /**
+     * Listens to Kafka messages related to general user notifications.
+     * <p>
+     * This method processes notifications for new users, updates to existing users, and
+     * deletions of users. It updates the user information in the system and sends
+     * updates via WebSocket.
+     * </p>
+     *
+     * @param request the {@link UserNotifyRequest} containing user notification details
+     * @param key the Kafka message key (optional)
+     * @since 1.0
+     */
     @KafkaListener(
             id = "external-user-info-listener-id",
             topics = "topic-general-customers",
@@ -79,6 +120,17 @@ public class CustomerConsumerService {
         }
     }
 
+    /**
+     * Listens to Kafka messages related to customer detail notifications.
+     * <p>
+     * This method processes notifications for new customer details and updates to existing customer
+     * details. It updates the user information in the system based on the notification received.
+     * </p>
+     *
+     * @param request the {@link CustomerNotifyRequest} containing customer notification details
+     * @param key the Kafka message key (optional)
+     * @since 1.0
+     */
     @KafkaListener(
             id = "external-user-detail-info-listener-id",
             topics = "topic-general-customer-details",
@@ -108,6 +160,16 @@ public class CustomerConsumerService {
         }
     }
 
+    /**
+     * Generates a {@link UserEntity} based on the user notification request.
+     * <p>
+     * This method creates a new {@link UserEntity} with the details provided in the user notification request.
+     * </p>
+     *
+     * @param request the {@link UserNotifyRequest} containing user information
+     * @return the generated {@link UserEntity}
+     * @since 1.0
+     */
     private UserEntity generateUserByUserNotification(UserNotifyRequest request) {
         return UserEntity.builder()
                 .uid(request.userInfo().uid())
@@ -120,6 +182,17 @@ public class CustomerConsumerService {
                 .build();
     }
 
+    /**
+     * Updates a {@link UserEntity} based on the user notification request.
+     * <p>
+     * This method updates the existing user entity with the details provided in the user notification request.
+     * </p>
+     *
+     * @param user the {@link UserEntity} to be updated
+     * @param request the {@link UserNotifyRequest} containing updated user information
+     * @return the updated {@link UserEntity}
+     * @since 1.0
+     */
     private UserEntity updateUserByUserNotification(UserEntity user, UserNotifyRequest request) {
         user.setFirstname(request.userInfo().firstname());
         user.setLastname(request.userInfo().lastname());
@@ -130,9 +203,21 @@ public class CustomerConsumerService {
         return user;
     }
 
+    /**
+     * Updates a {@link UserEntity} based on the customer notification request.
+     * <p>
+     * This method updates the existing user entity with customer-specific details provided in the customer
+     * notification request.
+     * </p>
+     *
+     * @param user the {@link UserEntity} to be updated
+     * @param request the {@link CustomerNotifyRequest} containing updated customer information
+     * @return the updated {@link UserEntity}
+     * @since 1.0
+     */
     private UserEntity updateUserByCustomerNotification(UserEntity user, CustomerNotifyRequest request) {
         user.setAttribute(UserAttribute.builder()
-                .gender(UserGender.valueOf(request.customerInfo().genderEnum().name()))
+                .gender(GenderEnum.valueOf(request.customerInfo().genderEnum().name()))
                 .build());
         user.setLoyaltyStatus(UserLoyaltyStatus.valueOf(request.customerInfo().loyaltyStatus().name()));
         return user;

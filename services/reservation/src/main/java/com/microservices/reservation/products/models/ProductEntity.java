@@ -7,6 +7,13 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a product stored in reserved storage.
+ * This class captures the details of a product including its type, price, description, and associated reservation.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -25,6 +32,10 @@ public class ProductEntity {
     @Column(name = "product_id", columnDefinition = "bigint", unique = true, nullable = false, updatable = false)
     private Long id;
 
+    /**
+     * The type of the product.
+     * This represents a one-to-one relationship with {@link ProductTypeEntity}.
+     */
     @OneToOne
     @JoinColumn(name = "product_type", nullable = false, foreignKey = @ForeignKey(name = "fk_type_product"))
     private ProductTypeEntity type;
@@ -32,9 +43,16 @@ public class ProductEntity {
     @Column(name = "price", columnDefinition = "numeric", nullable = false)
     private Double price;
 
+    /**
+     * Description of the product.
+     */
     @Column(name = "description", columnDefinition = "character varying", length = 511, nullable = false)
     private String desc;
 
+    /**
+     * The reservation associated with the product.
+     * This represents a many-to-one relationship with {@link ReservationEntity}.
+     */
     @ManyToOne
     @JoinColumn(name = "reservation", nullable = false, foreignKey = @ForeignKey(name = "fk_reservation_product"))
     private ReservationEntity reservation;

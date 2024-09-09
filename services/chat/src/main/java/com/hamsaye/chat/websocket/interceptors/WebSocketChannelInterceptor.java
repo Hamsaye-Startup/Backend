@@ -12,6 +12,17 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+/**
+ * Intercepts WebSocket messages to handle authentication and add additional headers.
+ * <p>
+ * This class implements {@link ChannelInterceptor} to process messages before they are sent.
+ * It handles WebSocket connection events by checking for the presence of necessary headers
+ * and performs authentication and logging. It sets a custom header for connection time.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Service
 @Slf4j
 public class WebSocketChannelInterceptor implements ChannelInterceptor {
@@ -20,10 +31,19 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
     // private static final String API_KEY_HEADER = "API_KEY";
     private static final String USER_ID_HEADER = "X_USER_ID";
 
-    /*
-    * process the message before sending
-    * */
-
+    /**
+     * Processes the message before sending it.
+     * <p>
+     * This method is invoked before a message is sent. It checks if the WebSocket command
+     * is CONNECT and retrieves the user ID from the headers. It also sets a custom header
+     * for the connection time and logs the connection event.
+     * </p>
+     *
+     * @param message the message to be processed
+     * @param channel the message channel
+     * @return the processed message
+     * @since 1.0
+     */
     @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
         final StompHeaderAccessor accessor = getAccessor(message);
@@ -67,6 +87,17 @@ public class WebSocketChannelInterceptor implements ChannelInterceptor {
         return id;
     }
 
+    /**
+     * Retrieves the {@link StompHeaderAccessor} from the message.
+     * <p>
+     * This method extracts the {@link StompHeaderAccessor} from the given message, which
+     * is used to access and manipulate WebSocket headers.
+     * </p>
+     *
+     * @param message the message from which to retrieve the accessor
+     * @return the {@link StompHeaderAccessor} instance
+     * @since 1.0
+     */
     public StompHeaderAccessor getAccessor(Message<?> message) {
         return MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
     }

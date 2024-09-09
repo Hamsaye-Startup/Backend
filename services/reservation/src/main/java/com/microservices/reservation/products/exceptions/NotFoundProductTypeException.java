@@ -3,6 +3,10 @@ package com.microservices.reservation.products.exceptions;
 import com.microservices.reservation.applications.exceptions.CustomRuntimeException;
 import com.microservices.reservation.applications.responses.ResponseMessageType;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public class NotFoundProductTypeException extends CustomRuntimeException {
 
     private static final String message = ResponseMessageType.PRODUCT_TYPE_NOT_FOUND.message();

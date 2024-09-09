@@ -10,6 +10,17 @@ import org.springframework.kafka.core.KafkaAdmin;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Configuration for Kafka Admin client.
+ *
+ * <p>
+ * This configuration class sets up the Kafka Admin client properties, which are used for
+ * administrative operations such as managing Kafka topics.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Configuration
 @EnableKafka
 public class KafkaConfig {
@@ -17,6 +28,12 @@ public class KafkaConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrap_server_config;
 
+    /**
+     * Configures the Kafka Admin client with the necessary properties.
+     *
+     * @return a {@link KafkaAdmin} instance configured with the properties
+     * @since 1.0
+     */
     @Bean
     public KafkaAdmin admin() {
         Map<String, Object> configs = new HashMap<>();

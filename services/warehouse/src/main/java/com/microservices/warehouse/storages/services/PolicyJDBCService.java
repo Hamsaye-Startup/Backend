@@ -12,12 +12,33 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service class that provides operations related to policies via JDBC.
+ * It handles CRUD operations and associations of policies with storage entities.
+ *
+ * <p>This service uses {@link JdbcTemplate} to interact with the database and perform SQL operations
+ * related to policies.</p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class PolicyJDBCService {
 
+    /**
+     * JdbcTemplate used for executing SQL queries.
+     */
     private final JdbcTemplate jdbcTemplate;
 
+    /**
+     * Finds a policy by its code.
+     *
+     * @param code The code of the policy to be found.
+     * @return The {@link PolicyEntity} corresponding to the policy code.
+     * @throws NotFoundPolicyException If no policy with the specified code is found.
+     * @since 1.0
+     */
     public PolicyEntity findPolicyByCode(String code) {
         String sql = """
                 SELECT policy_id, code, title, created_at, modified_at, description
@@ -29,6 +50,13 @@ public class PolicyJDBCService {
                 .orElseThrow(() -> new NotFoundPolicyException(code));
     }
 
+    /**
+     * Inserts a new policy into the database.
+     *
+     * @param policy The {@link PolicyEntity} to be inserted.
+     * @return The inserted {@link PolicyEntity}.
+     * @since 1.0
+     */
     public PolicyEntity insertPolicy(PolicyEntity policy) {
         String sql = """
                 INSERT INTO tb_storage_policy(code, title, description)
@@ -39,6 +67,14 @@ public class PolicyJDBCService {
         return policy;
     }
 
+    /**
+     * Updates an existing policy in the database.
+     *
+     * @param existed The existing {@link PolicyEntity} to be updated.
+     * @param policy The new {@link PolicyEntity} with updated information.
+     * @return The updated {@link PolicyEntity}.
+     * @since 1.0
+     */
     public PolicyEntity updatePolicy(PolicyEntity existed, PolicyEntity policy) {
         String sql = """
                 UPDATE tb_storage_policy
@@ -50,15 +86,28 @@ public class PolicyJDBCService {
         return policy;
     }
 
+    /**
+     * Updates the policies associated with a specific storage entity.
+     *
+     * @param codes The list of policy codes to be associated with the storage.
+     * @param storageId The ID of the storage entity.
+     * @since 1.0
+     */
     public void updateStoragePolicyByCode(List<String> codes, Long storageId) {
 
-        // delete all the policies that belongs to storage
+        // Delete all the policies that belong to the storage
         deleteStoragePoliciesByStorageId(storageId);
 
-        // insert new policies for storage
+        // Insert new policies for the storage
         insertStoragePolicies(codes, storageId);
     }
 
+    /**
+     * Deletes all policies associated with a specific storage entity.
+     *
+     * @param storageId The ID of the storage entity.
+     * @since 1.0
+     */
     private void deleteStoragePoliciesByStorageId(Long storageId) {
         String sql = """
                 DELETE FROM in_storage_policy
@@ -68,6 +117,13 @@ public class PolicyJDBCService {
         jdbcTemplate.update(sql, storageId);
     }
 
+    /**
+     * Inserts policies associated with a specific storage entity.
+     *
+     * @param codes The list of policy codes to be inserted.
+     * @param storageId The ID of the storage entity.
+     * @since 1.0
+     */
     private void insertStoragePolicies(List<String> codes, Long storageId) {
         String sql = """
                 INSERT INTO in_storage_policy(fk_storage_id, fk_policy_id)
@@ -79,12 +135,18 @@ public class PolicyJDBCService {
         jdbcTemplate.update(sql, storageId, codes);
     }
 
+    /**
+     * Deletes a policy by its code.
+     *
+     * @param code The code of the policy to be deleted.
+     * @since 1.0
+     */
     public void deletePolicyByCode(String code) {
 
-        // delete policies from child table
+        // Delete policies from child table
         deleteStoragePoliciesByCode(code);
 
-        // delete policies from parent table
+        // Delete policies from parent table
         String sql = """
                 DELETE FROM tb_storage_policy
                 WHERE code = ?
@@ -93,6 +155,12 @@ public class PolicyJDBCService {
         jdbcTemplate.update(sql, code);
     }
 
+    /**
+     * Deletes policies associated with a specific storage entity by policy code.
+     *
+     * @param code The code of the policy to be deleted from the storage.
+     * @since 1.0
+     */
     private void deleteStoragePoliciesByCode(String code) {
         String sql = """
                 DELETE FROM in_storage_policy
@@ -104,6 +172,13 @@ public class PolicyJDBCService {
         jdbcTemplate.update(sql, code);
     }
 
+    /**
+     * Retrieves all policies with pagination support.
+     *
+     * @param pageable The pagination information.
+     * @return A {@link Page} of {@link PolicyEntity}.
+     * @since 1.0
+     */
     public Page<PolicyEntity> findAllPolicies(Pageable pageable) {
         String sql = """
                 SELECT policy_id, code, title, created_at, modified_at, description
@@ -113,7 +188,7 @@ public class PolicyJDBCService {
                 OFFSET ?
                 """;
 
-        // get the limit and offset
+        // Get the limit and offset
         int offset = pageable.getPageNumber() * pageable.getPageSize();
         int limit = pageable.getPageSize();
 
@@ -130,6 +205,13 @@ public class PolicyJDBCService {
         return new PageImpl<>(policies, pageable, total == null ? 0L : total);
     }
 
+    /**
+     * Finds all policies associated with a specific storage entity.
+     *
+     * @param storageId The ID of the storage entity.
+     * @return A {@link List} of {@link PolicyEntity} associated with the specified storage.
+     * @since 1.0
+     */
     public List<PolicyEntity> findPoliciesByStorageId(Long storageId) {
         String sql = """
                 SELECT f.policy_id, f.code, f.title, f.created_at, f.modified_at, f.description

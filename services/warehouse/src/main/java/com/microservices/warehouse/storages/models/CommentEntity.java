@@ -6,6 +6,17 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * This class represents an entity for storing comments related to a storage.
+ * It includes information about the comment's author, content, score, and timestamp.
+ * <p>
+ * The comments are associated with a specific storage entity and can be enabled or disabled
+ * for display purposes. Only comments with the `enabled` flag set to `true` are visible to customers.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -40,6 +51,10 @@ public class CommentEntity {
     @Column(name = "comment_at", columnDefinition = "timestamp without time zone", nullable = false, updatable = false)
     private LocalDateTime commentAt;
 
+    /**
+     * This flag is used for displaying comment.
+     * Customers can only see the true values.
+     */
     @Column(name = "enabled", columnDefinition = "boolean", nullable = false)
-    private boolean enabled; // This feature is a control feature for displaying in website
+    private boolean enabled;
 }

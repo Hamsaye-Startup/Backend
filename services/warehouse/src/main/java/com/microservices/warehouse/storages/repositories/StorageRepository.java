@@ -14,11 +14,17 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Repository
 public interface StorageRepository extends JpaRepository<StorageEntity, Long> {
-
-    Optional<StorageEntity> findByIdAndStatusNot(Long id, StorageStatusEnum status);
-    Optional<StorageEntity> findByIdAndEnabledAndStatusNot(Long id, boolean enabled, StorageStatusEnum status);
+    Optional<StorageEntity> findByIdAndEnabledAndStatusNot(
+            Long id,
+            boolean enabled,
+            StorageStatusEnum status
+    );
     Page<StorageEntity> findAllByOwner(UUID owner, Pageable pageable);
 
     @Query("select s from StorageEntity s where " +

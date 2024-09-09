@@ -5,6 +5,10 @@ import com.microservices.warehouse.applications.responses.ResponseMessageType;
 
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public class NotFoundReservationException extends CustomRuntimeException {
     private static final String message = ResponseMessageType.RESERVATION_NOT_FOUND.message();
 

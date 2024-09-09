@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Repository
 public interface ReservationRepository extends JpaRepository<ReservationEntity, UUID> {
 

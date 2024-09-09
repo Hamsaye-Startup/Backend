@@ -16,6 +16,16 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Service for producing and sending Kafka messages related to user notifications.
+ * <p>
+ * This service handles sending {@link UserNotifyRequest} payloads to Kafka topics. It includes
+ * methods for configuring Kafka topics and for sending messages with the appropriate headers.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class UserProducerService {
@@ -24,6 +34,16 @@ public class UserProducerService {
 
     private final KafkaTemplate<String, byte[]> kafkaTemplate;
 
+    /**
+     * Sends a {@link UserNotifyRequest} payload to the default Kafka topic.
+     * <p>
+     * This method creates a Kafka message with appropriate headers and sends it to the configured
+     * Kafka topic using the {@link KafkaTemplate}.
+     * </p>
+     *
+     * @param payload the {@link UserNotifyRequest} payload to be sent
+     * @since 1.0
+     */
     public void send(@Payload UserNotifyRequest payload) {
 
         // generate the headers
@@ -45,6 +65,12 @@ public class UserProducerService {
         );
     }
 
+    /**
+     * Creates a new Kafka topic for user notifications.
+     *
+     * @return the {@link NewTopic} instance for the Kafka topic
+     * @since 1.0
+     */
     @Bean
     public NewTopic createUsersTopic() {
         return TopicBuilder.name(DEFAULT_USER_TOPIC)

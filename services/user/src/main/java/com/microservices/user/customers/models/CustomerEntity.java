@@ -10,6 +10,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+/**
+ * Entity representing a customer in the system.
+ * Each customer is associated with a unique user and has additional attributes such as
+ * a national ID (NID), biography, gender, and loyalty status.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -50,5 +58,5 @@ public class CustomerEntity implements Serializable {
     @Column(name = "loyalty_status", columnDefinition = "character varying", length = 32)
     private UserLoyaltyStatus loyaltyStatus;
 
-    // todo profile image --> AWS(s3)
+    // TODO: Add support for profile image storage (e.g., using AWS S3)
 }

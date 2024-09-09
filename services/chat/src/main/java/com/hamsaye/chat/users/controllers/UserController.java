@@ -15,13 +15,41 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.UUID;
 
+/**
+ * Controller for handling user-related requests and interactions via WebSocket and HTTP.
+ * <p>
+ * This controller provides endpoints for disconnecting users through WebSocket messages and
+ * retrieving user information via HTTP GET requests.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
+    /**
+     * @see com.hamsaye.chat.users.services.UserServiceManagement
+     */
     private final UserServiceManagement userServiceManagement;
+
+    /**
+     * @see com.hamsaye.chat.applications.mapper.ResponseMessageMapper
+     */
     private final ResponseMessageMapper mapper;
 
+    /**
+     * Handles WebSocket messages to disconnect a user based on their user ID.
+     * <p>
+     * This method listens for messages sent to the "/user.disconnectUser" endpoint and
+     * disconnects the specified user from the WebSocket session.
+     * </p>
+     *
+     * @param uid the UUID of the user to disconnect
+     * @param headerAccessor provides access to WebSocket message headers, including the session ID
+     * @return a {@link ResponseEntity} with the updated {@link UserResponse}
+     */
     @MessageMapping("/user.disconnectUser")
     public ResponseEntity<?> disconnectUser(
             @Payload UUID uid,
@@ -32,6 +60,16 @@ public class UserController {
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
+    /**
+     * Retrieves user information based on the provided user ID via an HTTP GET request.
+     * <p>
+     * This method handles requests to the "/user/id/{userId}" endpoint and returns the
+     * {@link UserResponse} of the specified user.
+     * </p>
+     *
+     * @param uid the UUID of the user to retrieve
+     * @return a {@link ResponseEntity} with the {@link UserResponse} of the specified user
+     */
     @GetMapping("/user/id/{userId}")
     public @ResponseBody ResponseEntity<?> showUserById(@PathVariable("userId") UUID uid) {
         UserResponse response = userServiceManagement.findUserById(uid);

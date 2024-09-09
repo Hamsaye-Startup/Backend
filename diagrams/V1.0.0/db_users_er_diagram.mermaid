@@ -1,0 +1,49 @@
+erDiagram
+    tb_users {
+        UUID user_id PK
+        varchar phone
+        varchar first_name
+        varchar last_name
+        boolean enabled
+        timestamp created_at
+        timestamp modified_at
+        uuid role FK
+        uuid password FK
+    }
+
+    tb_roles {
+        UUID role_id PK
+        varchar name
+        timestamp created_at
+        timestamp modified_at
+        varchar authority
+    }
+
+    tb_passwords {
+        bigint password_id PK
+        varchar password
+        timestamp created_at
+        timestamp expired_at
+    }
+
+    tb_customers {
+        UUID customer_id PK
+        varchar nid
+        uuid user_id FK
+        timestamp created_at
+        timestamp modified_at
+        varchar bio
+        varchar gender
+        varchar loyalty_status
+    }
+
+    tb_authorities {
+        uuid role_id FK
+        varchar authority
+    }
+
+    %% Relationships
+    tb_users ||--o{ tb_roles : "role"
+    tb_users ||--o{ tb_passwords : "password"
+    tb_customers ||--o{ tb_users : "user"
+    tb_roles ||--o{ tb_authorities : "has authorities"

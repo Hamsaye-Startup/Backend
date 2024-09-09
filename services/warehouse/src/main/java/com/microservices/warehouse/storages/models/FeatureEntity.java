@@ -9,6 +9,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+/**
+ * This class represents an entity for a storage feature. It includes details such as the feature's code, title, description,
+ * and timestamps for creation and modification. The feature can be associated with multiple storage entities.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -32,6 +40,9 @@ public class FeatureEntity implements Serializable {
     @Column(name = "feature_id", columnDefinition = "bigint", unique = true, nullable = false, updatable = false)
     private Long id;
 
+    /**
+     * This is key used for searching. It is an abbreviation of title.
+     */
     @Column(name = "code", columnDefinition = "character varying", length = 7, unique = true, nullable = false, updatable = false)
     private String code;
 

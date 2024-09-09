@@ -1,7 +1,6 @@
 package com.microservices.user.users.controllers;
 
 import com.microservices.user.application.mapper.MessageMapper;
-import com.microservices.user.users.exceptions.AuthenticationCredentialNotFoundException;
 import com.microservices.user.users.requests.RegistrationRequest;
 import com.microservices.user.users.requests.UserRequest;
 import com.microservices.user.users.responses.UserResponse;
@@ -13,17 +12,22 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+/**
+ * Rest controller for handling user-related requests in the application.
+ * It provides endpoints for registering, updating, deleting, and retrieving user data,
+ * as well as blocking and unblocking users.
+ *
+ * <p>This controller uses {@link UserServiceManagement} for business logic and {@link MessageMapper} for mapping
+ * responses. It also includes helper methods for checking user authorities.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
@@ -33,11 +37,26 @@ public class UserController {
     private final MessageMapper mapper;
     private final CustomLogger logger = CustomLogger.getInstance();
 
+    /**
+     * Helper method to check if a user has the required authority based on the request header.
+     *
+     * @param request The HTTP request containing the headers.
+     * @param admin The role or authority to check.
+     * @return True if the header contains the specified role, false otherwise.
+     * @since 1.0
+     */
     private boolean findAuthorityByHeader(HttpServletRequest request, String admin) {
         return Stream.of(request.getHeader("X_ROLE_A"))
                 .anyMatch(s -> s.equals(admin));
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param request The {@link RegistrationRequest} containing the registration data.
+     * @return A {@link ResponseEntity} containing the registered {@link UserResponse}.
+     * @since 1.0
+     */
     @PostMapping("/register")
     public ResponseEntity<?> register(
             @Valid @RequestBody RegistrationRequest request
@@ -46,7 +65,15 @@ public class UserController {
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    //@PreAuthorize("hasAuthority('UPDATE_USER')")
+    /**
+     * Updates a user by ID.
+     *
+     * @param userId The UUID of the user to update.
+     * @param userRequest The {@link UserRequest} containing the updated data.
+     * @param request The HTTP request used to check user authority.
+     * @return A {@link ResponseEntity} containing the updated {@link UserResponse}.
+     * @since 1.0
+     */
     @PutMapping("/id/{id}")
     public ResponseEntity<?> update(
             @PathVariable("id") UUID userId,
@@ -61,7 +88,13 @@ public class UserController {
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    //@PreAuthorize("hasAuthority('DELETE_USER')")
+    /**
+     * Deletes a user by ID.
+     *
+     * @param uid The UUID of the user to delete.
+     * @return A {@link ResponseEntity} containing the deleted {@link UserResponse}.
+     * @since 1.0
+     */
     @DeleteMapping("/id/{id}")
     public ResponseEntity<?> delete(
             @PathVariable("id") UUID uid
@@ -70,7 +103,13 @@ public class UserController {
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    //@PreAuthorize("hasAuthority('READ_USERS')")
+    /**
+     * Retrieves a paginated list of all users.
+     *
+     * @param pageable The pagination information.
+     * @return A {@link ResponseEntity} containing a paginated list of {@link UserResponse}.
+     * @since 1.0
+     */
     @GetMapping
     public ResponseEntity<?> showAllUsers(
             Pageable pageable
@@ -79,7 +118,13 @@ public class UserController {
         return ResponseEntity.ok(mapper.toResponse(responses));
     }
 
-    //@PreAuthorize("hasAuthority('READ_USER')")
+    /**
+     * Retrieves a user by their ID.
+     *
+     * @param userId The UUID of the user to retrieve.
+     * @return A {@link ResponseEntity} containing the {@link UserResponse}.
+     * @since 1.0
+     */
     @GetMapping("/id/{id}")
     public ResponseEntity<?> showUserById(
             @PathVariable("id") UUID userId
@@ -88,7 +133,13 @@ public class UserController {
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    //@PreAuthorize("hasAuthority('BLOCK_USER')")
+    /**
+     * Blocks a user by their ID.
+     *
+     * @param uid The UUID of the user to block.
+     * @return A {@link ResponseEntity} containing the blocked {@link UserResponse}.
+     * @since 1.0
+     */
     @PostMapping("/block/id/{id}")
     public ResponseEntity<?> blockUser(
             @PathVariable("id") UUID uid
@@ -97,7 +148,13 @@ public class UserController {
         return ResponseEntity.ok(mapper.toResponse(response));
     }
 
-    //@PreAuthorize("hasAuthority('BLOCK_USER')")
+    /**
+     * Unblocks a user by their ID.
+     *
+     * @param uid The UUID of the user to unblock.
+     * @return A {@link ResponseEntity} containing the unblocked {@link UserResponse}.
+     * @since 1.0
+     */
     @PostMapping("/unblock/id/{id}")
     public ResponseEntity<?> unblockUser(
             @PathVariable("id") UUID uid

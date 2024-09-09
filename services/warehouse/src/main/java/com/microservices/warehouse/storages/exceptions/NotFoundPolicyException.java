@@ -3,6 +3,10 @@ package com.microservices.warehouse.storages.exceptions;
 import com.microservices.warehouse.applications.exceptions.CustomRuntimeException;
 import com.microservices.warehouse.applications.responses.ResponseMessageType;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public class NotFoundPolicyException extends CustomRuntimeException {
 
     private static final String message = ResponseMessageType.POLICY_NOT_FOUND.message();

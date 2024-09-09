@@ -2,11 +2,8 @@ package com.hamsaye.chat.kafka.consumers;
 
 import com.hamsaye.chat.applications.mapper.ResponseMessageMapper;
 import com.hamsaye.chat.users.mappers.UserMapper;
-import com.hamsaye.chat.users.models.ConnectionStatus;
-import com.hamsaye.chat.users.models.UserConnectionState;
 import com.hamsaye.chat.users.models.UserEntity;
 import com.hamsaye.chat.users.requests.UserNotifyRequest;
-import com.hamsaye.chat.users.requests.UserNotifyType;
 import com.hamsaye.chat.users.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,19 +14,55 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
+/**
+ * Service class responsible for consuming Kafka messages related to user updates.
+ * <p>
+ * This service listens to Kafka topics for user notifications and updates user connection states
+ * based on the notifications received. It sends updated user information via WebSocket to subscribed clients.
+ * </p>
+ *
+ * @since 1.0
+ * @version 1.0
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserConsumerService {
 
+    /**
+     * Service for user-related operations.
+     * @see com.hamsaye.chat.users.services.UserService
+     */
     private final UserService userService;
+
+    /**
+     * Mapper for user-related transformations.
+     * @see com.hamsaye.chat.users.mappers.UserMapper
+     */
     private final UserMapper userMapper;
 
+    /**
+     * Template for sending WebSocket messages.
+     * @see org.springframework.messaging.simp.SimpMessagingTemplate
+     */
     private final SimpMessagingTemplate messagingTemplate;
+
+    /**
+     * Mapper for response message transformations.
+     * @see com.hamsaye.chat.applications.mapper.ResponseMessageMapper
+     */
     private final ResponseMessageMapper mapper;
 
+    /**
+     * Listens to Kafka messages related to user updates.
+     * <p>
+     * This method processes notifications for user connection state updates and sends the updated user
+     * information via WebSocket to subscribed clients.
+     * </p>
+     *
+     * @param request the {@link UserNotifyRequest} containing user notification details
+     * @param key the Kafka message key (optional)
+     */
     @KafkaListener(
             id = "chat-user-listener-id",
             topics = "topic-chat-users",
@@ -43,7 +76,7 @@ public class UserConsumerService {
 
         log.info("key[{}] message is received by {}: {}",
                 key == null ? "none" : key,
-                "external-user-info-listener-id",
+                "chat-user-listener-id",
                 request
         );
 
@@ -56,7 +89,7 @@ public class UserConsumerService {
                 user.getConnectionState()
         );
 
-        // update the user by websocket
+        // return by websocket
         messagingTemplate.convertAndSend(
                 "/topic/users",
                 ResponseEntity.ok(mapper.toResponse(userMapper.toResponse(disconnectedUser)))

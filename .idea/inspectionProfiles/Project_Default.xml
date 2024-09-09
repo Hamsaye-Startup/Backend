@@ -9,5 +9,8 @@
         <language minSize="58" name="Java" />
       </Languages>
     </inspection_tool>
+    <inspection_tool class="JavadocDeclaration" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ADDITIONAL_TAGS" value="todo" />
+    </inspection_tool>
   </profile>
 </component>

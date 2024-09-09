@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: test
   datasource:
-    url: jdbc:postgresql://localhost:5433/db_reservation
+    url: jdbc:postgresql://localhost:5433/db_reservations
     username: pouria
     password: hamsaye1g8S9QJsp61wD53L4nW9d5mou879cSQpD7e38BDB0LwLesB3Rog5eWzU1mp4BEY7
     driver-class-name: org.postgresql.Driver

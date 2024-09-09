@@ -3,6 +3,10 @@ package com.microservices.warehouse.storages.exceptions;
 import com.microservices.warehouse.applications.exceptions.CustomRuntimeException;
 import com.microservices.warehouse.applications.responses.ResponseMessageType;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public class PersistCommentException extends CustomRuntimeException {
     private static final String message = ResponseMessageType.PERSIST_COMMENT.message();
 

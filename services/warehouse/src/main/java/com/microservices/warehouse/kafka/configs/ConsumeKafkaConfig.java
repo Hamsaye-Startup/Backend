@@ -14,12 +14,29 @@ import org.springframework.kafka.support.converter.ByteArrayJsonMessageConverter
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Configuration for Kafka consumers.
+ *
+ * <p>
+ * This configuration class sets up Kafka consumer properties, including deserialization settings,
+ * and configures a Kafka listener container factory.
+ * </p>
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Configuration
 public class ConsumeKafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrap_server_config;
 
+    /**
+     * Creates a map of properties used for Kafka consumer configuration.
+     *
+     * @return a map containing Kafka consumer properties
+     * @since 1.0
+     */
     private Map<String, Object> consumeProps() {
         Map<String, Object> props = new HashMap<>();
 
@@ -36,11 +53,24 @@ public class ConsumeKafkaConfig {
         return props;
     }
 
+    /**
+     * Configures the Kafka consumer factory.
+     *
+     * @return a {@link ConsumerFactory} instance configured with the properties
+     * @since 1.0
+     */
     @Bean
     public ConsumerFactory<String, byte[]> consumerFactory() {
-        return new DefaultKafkaConsumerFactory<String, byte[]>(consumeProps());
+        return new DefaultKafkaConsumerFactory<>(consumeProps());
     }
 
+    /**
+     * Configures the Kafka listener container factory.
+     *
+     * @param consumerFactory the consumer factory to use
+     * @return a {@link ConcurrentKafkaListenerContainerFactory} instance
+     * @since 1.0
+     */
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, byte[]> concurrentKafkaListenerContainerFactory(
             ConsumerFactory<String, byte[]> consumerFactory

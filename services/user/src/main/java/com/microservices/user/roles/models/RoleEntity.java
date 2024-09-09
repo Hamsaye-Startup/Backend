@@ -1,6 +1,5 @@
 package com.microservices.user.roles.models;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,6 +10,16 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Represents a role entity within the system.
+ * This entity maps to the "tb_roles" table and holds information about roles assigned to users.
+ * A role can have multiple authorities associated with it, defined by the {@link UserAuthorityEnum}.
+ *
+ * @see UserAuthorityEnum
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -36,6 +45,9 @@ public class RoleEntity implements Serializable {
     @Column(name = "modified_at", columnDefinition = "timestamp without time zone", insertable = false)
     private LocalDateTime modifiedAt;
 
+    /**
+     * The set of authorities associated with this role.
+     */
     @ElementCollection(targetClass = UserAuthorityEnum.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "tb_authorities", joinColumns = @JoinColumn(name = "role_id"))
     @Enumerated(EnumType.STRING)

@@ -1,11 +1,18 @@
 package com.microservices.reservation.products.models;
 
-
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
 
+/**
+ * Entity representing a type of product that can be stored in reserved storage.
+ * This class is used to define and manage various product types, including hierarchical relationships
+ * between different types of products.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -27,9 +34,16 @@ public class ProductTypeEntity {
     @Column(name = "name", columnDefinition = "character varying", length = 127, nullable = false)
     private String name;
 
+    /**
+     * Indicates whether the product type is active.
+     */
     @Column(name = "active", columnDefinition = "boolean", nullable = false)
     private boolean active;
 
+    /**
+     * List of child product types associated with this product type.
+     * Represents a hierarchical relationship where this type can have subtypes.
+     */
     @OneToMany
     @JoinTable(
             name = "in_product_type",
@@ -38,6 +52,10 @@ public class ProductTypeEntity {
     )
     private List<ProductTypeEntity> children;
 
+    /**
+     * Parent product type of this product type.
+     * Represents a hierarchical relationship where this type is a subtype of another type.
+     */
     @ManyToOne
     @JoinColumn(name = "parent", foreignKey = @ForeignKey(name = "fk_parent_product_type"))
     private ProductTypeEntity parent;

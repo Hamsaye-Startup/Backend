@@ -10,6 +10,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
 

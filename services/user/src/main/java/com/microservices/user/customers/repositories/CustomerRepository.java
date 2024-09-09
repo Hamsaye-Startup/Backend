@@ -10,6 +10,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Repository
 public interface CustomerRepository extends JpaRepository<CustomerEntity, UUID> {
 

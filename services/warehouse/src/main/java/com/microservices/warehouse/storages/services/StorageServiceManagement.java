@@ -22,36 +22,79 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service class for managing storage operations. This class interacts with various services and performs operations related to storage management,
+ * such as inserting, updating, and removing storages. It also handles functionalities related to addresses, reservations, bookmarks, and favorites.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class StorageServiceManagement {
 
+    /**
+     * Mapper for converting between storage entities and DTOs.
+     * @see com.microservices.warehouse.storages.mappers.StorageMapper
+     */
     private final StorageMapper storageMapper;
+
+    /**
+     * Service for performing CRUD operations on storage entities.
+     * @see com.microservices.warehouse.storages.services.StorageService
+     */
     private final StorageService storageService;
 
+    /**
+     * Service for handling address operations.
+     * @see com.microservices.warehouse.geos.services.AddressService
+     */
     private final AddressService addressService;
+
+    /**
+     * Service for managing bookmarks.
+     * @see com.microservices.warehouse.storages.services.BookmarkService
+     */
     private final BookmarkService bookmarkService;
+
+    /**
+     * Service for managing favorites.
+     * @see com.microservices.warehouse.storages.services.FavouritesBookService
+     */
     private final FavouritesBookService favouritesBookService;
+
+    /**
+     * Service for handling reservations.
+     * @see com.microservices.warehouse.reservations.services.ReservationService
+     */
     private final ReservationService reservationService;
 
+    /**
+     * Adds a new storage entity.
+     * @param storageRequest the storage information provided by the client.
+     * @param ownerId the ID of the current authenticated user, who will be the owner of the storage.
+     * @return the response containing information about the newly added storage.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageResponse insertStorage(StorageRequest storageRequest, UUID ownerId) {
-
-        // convert the storage request to storage entity
         StorageEntity storage = storageMapper.toStorage(storageRequest, ownerId);
+
         return storageMapper.toResponse(storageService.persist(storage));
     }
 
+    /**
+     * Updates the address information of a storage entity.
+     * @param id the ID of the storage to be updated.
+     * @param addressRequests the new address information provided by the client.
+     * @return the response containing information about the updated storage.
+     * @throws PersistStorageException if the postal code does not exist.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageResponse updateStorageAddress(Long id, AddressRequests addressRequests) {
-
-        // find the storage by id
         StorageEntity storage = storageService.findStorageById(id);
-
-        // convert the address request to address entity
         AddressEntity address = addressService.generateAddress(addressRequests);
-
-        // if the address is existed, removed and persist a new one
         if (storage.getAddress() != null) {
             boolean removed = addressService.remove(storage.getAddress());
             System.out.printf(
@@ -60,18 +103,21 @@ public class StorageServiceManagement {
                     removed
             );
         }
-
         storage.setAddress(address);
+
         return storageMapper.toResponse(storageService.updateAddress(storage));
     }
 
+    /**
+     * Updates the details of a storage entity.
+     * @param id the ID of the storage to be updated.
+     * @param storageRequest the new storage information provided by the client.
+     * @return the response containing information about the updated storage.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageResponse updateStorageDetails(Long id, StorageRequest storageRequest) {
-
-        // find the storage by id
         StorageEntity storage = storageService.findStorageById(id);
-
-        // convert the storage request to storage entity
         StorageEntity updated = storageMapper.toStorage(
                 storageRequest,
                 storage.getOwner(),
@@ -82,46 +128,61 @@ public class StorageServiceManagement {
         return storageMapper.toResponse(storageService.updateStorage(updated));
     }
 
+    /**
+     * Verifies a storage entity by checking the existence of its postal code.
+     * @param id the ID of the storage to be verified.
+     * @return the response containing information about the verified storage.
+     * @throws PersistStorageException if the postal code does not exist.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageResponse verifyStorageById(Long id) {
-
-        // find the storage by id
         StorageEntity storage = storageService.findStorageById(id);
-
-        // check the address detail is existed
         if (storage.getAddress().getDetails() == null) {
             throw new PersistStorageException("postal code is not exist");
         }
-
         storage.setVerified(StorageVerifiedEnum.VERIFIED);
+
         return storageMapper.toResponse(storageService.updateStorage(storage));
     }
 
+    /**
+     * Removes a storage entity if it is not in a guilty status.
+     * @param id the ID of the storage to be removed.
+     * @param notStatus the status to filter out the storage from being removed.
+     * @return the response containing information about the removed storage.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageResponse removeStorageById(Long id, StorageStatusEnum notStatus) {
-
-        // find the storage by id
         StorageEntity storage = storageService.findStorageById(id);
-
-        // remove the storage
         storageService.removeStorage(storage, notStatus);
+
         return storageMapper.toResponse(storage);
     }
 
+    /**
+     * Toggles the visibility of a storage entity.
+     * @param id the ID of the storage to be updated.
+     * @param enabled the flag indicating whether the storage should be enabled or disabled.
+     * @return the response containing information about the updated storage.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageResponse displayStorage(Long id, boolean enabled) {
-
-        // find the storage by id
         StorageEntity storage = storageService.findStorageById(id);
-
         storage.setEnabled(enabled);
+
         return storageMapper.toResponse(storageService.updateStorage(storage));
     }
 
-    /*
-    * find the legal storage by id
-    * This function checks the storage is marked or liked by current user
-    * */
+    /**
+     * Finds a storage entity by its ID, including whether it is marked or favorited by the current authenticated user.
+     * @param id the ID of the storage to be found.
+     * @param userId the ID of the current authenticated user.
+     * @return the response containing information about the found storage.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public StorageResponse findStorageById(Long id, UUID userId) {
         StorageEntity storage = storageService.findStorageById(
@@ -129,16 +190,20 @@ public class StorageServiceManagement {
                 true,
                 StorageStatusEnum.ON_BLOCK_STASH
         );
-
         BookmarkEntity bookmark = bookmarkService.findByIdAndStorageId(userId, id);
         storage.setMarked(bookmark != null);
-
         FavouritesBookEntity favouritesBook = favouritesBookService.findByIdAndStorageId(userId, id);
         storage.setFavourite(favouritesBook != null);
 
         return storageMapper.toResponse(storage);
     }
 
+    /**
+     * Finds a storage entity by its ID.
+     * @param id the ID of the storage to be found.
+     * @return the response containing information about the found storage.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public StorageResponse findStorageById(Long id) {
         StorageEntity storage = storageService.findStorageById(
@@ -146,31 +211,38 @@ public class StorageServiceManagement {
                 true,
                 StorageStatusEnum.ON_BLOCK_STASH
         );
+
         return storageMapper.toResponse(storage);
     }
 
-    /*
-    * find all storages by user id
-    * This function checks the storages are marked or liked by current user
-    * */
+    /**
+     * Finds all storage entities owned by a specific user.
+     * @param userId the ID of the user whose storages are to be found.
+     * @param pageable pagination information.
+     * @return a page of responses containing information about the user's storages.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public Page<StorageResponse> findStoragesByUserId(UUID userId, Pageable pageable) {
-
-        // find the storages and bookmarks and favourites
         Page<StorageEntity> storages = storageService.findStoragesByOwner(userId, pageable);
         List<BookmarkEntity> bookmarks = bookmarkService.findByUserId(userId); // order by desc
         List<FavouritesBookEntity> favourites = favouritesBookService.findByUserId(userId);
-
         List<StorageEntity> checkedStorages = updateStoragesWithUserStatus(storages.getContent(), bookmarks, favourites);
+
         return new PageImpl<>(checkedStorages, pageable, storages.getTotalElements())
                 .map(storageMapper::toResponse);
     }
 
-    /*
-    * find the legal storages
-    * this function checks the reservation stats by dates and category
-    * This function checks the storages are marked or liked by current user
-    * */
+    /**
+     * Finds all legal storage entities with filtering options.
+     * @param category the storage category to filter by.
+     * @param fromDate the start date for reservation filtering.
+     * @param toDate the end date for reservation filtering.
+     * @param pageable pagination information.
+     * @param userId the ID of the current authenticated user.
+     * @return a page of responses containing information about the storages.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<StorageResponse> findStorages(
             String category,
@@ -179,38 +251,38 @@ public class StorageServiceManagement {
             Pageable pageable,
             UUID userId
     ) {
-        // convert the string to StorageCategoryEnum
         StorageCategoryEnum categoryEnum = storageMapper.convertStorageCategory(category);
-
-        // find the storages by category
         Page<StorageEntity> storages = storageService.findStoragesByCategory(
                 categoryEnum,
                 true,
                 StorageStatusEnum.ON_BLOCK_STASH,
                 pageable
         );
-
-        // find the reserved storages
         Set<Long> reservedStorageIds = findReservedStorageIdsByCategoryAndReservedTime(
                 categoryEnum,
                 fromDate,
                 toDate
         );
-
-        // find the filtered storages and bookmarks
         List<StorageEntity> filteredStorages = storages.stream()
                 .filter(storage -> !reservedStorageIds.contains(storage.getId()))
                 .collect(Collectors.toList());
-
-        // // find bookmarks and favourites
         List<BookmarkEntity> bookmarks = bookmarkService.findByUserId(userId); // order by desc
         List<FavouritesBookEntity> favourites = favouritesBookService.findByUserId(userId);
-
         List<StorageEntity> checkedStorages = updateStoragesWithUserStatus(filteredStorages, bookmarks, favourites);
+
         return new PageImpl<>(checkedStorages, pageable, storages.getTotalElements())
                 .map(storageMapper::toResponse);
     }
 
+    /**
+     * Finds all legal storage entities with filtering options.
+     * @param category the storage category to filter by.
+     * @param fromDate the start date for reservation filtering.
+     * @param toDate the end date for reservation filtering.
+     * @param pageable pagination information.
+     * @return a page of responses containing information about the storages.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<StorageResponse> findStorages(
             String category,
@@ -218,25 +290,18 @@ public class StorageServiceManagement {
             LocalDate toDate,
             Pageable pageable
     ) {
-        // convert the string to StorageCategoryEnum
         StorageCategoryEnum categoryEnum = storageMapper.convertStorageCategory(category);
-
-        // find the storages by category
         Page<StorageEntity> storages = storageService.findStoragesByCategory(
                 categoryEnum,
                 true,
                 StorageStatusEnum.ON_BLOCK_STASH,
                 pageable
         );
-
-        // find the reserved storages
         Set<Long> reservedStorageIds = findReservedStorageIdsByCategoryAndReservedTime(
                 categoryEnum,
                 fromDate,
                 toDate
         );
-
-        // find the filtered storages and bookmarks
         List<StorageEntity> filteredStorages = storages.stream()
                 .filter(storage -> !reservedStorageIds.contains(storage.getId()))
                 .collect(Collectors.toList());
@@ -245,34 +310,46 @@ public class StorageServiceManagement {
                 .map(storageMapper::toResponse);
     }
 
-    /*
-    * find the legal storages by keyword
-    * This function checks the storages are marked or liked by current user
-    * */
+    /**
+     * Searches for storage entities by keyword, such as postal code or address.
+     * @param value the keyword to search for.
+     * @param pageable pagination information.
+     * @param userId the ID of the current authenticated user.
+     * @return a page of responses containing information about the storages.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<StorageResponse> searchStorages(String value, Pageable pageable, UUID userId) {
-
-        // find the storages and bookmarks and favourites
         Page<StorageEntity> storages = storageService.searchStoragesByValue(value, true, pageable);
         List<BookmarkEntity> bookmarks = bookmarkService.findByUserId(userId);
         List<FavouritesBookEntity> favourites = favouritesBookService.findByUserId(userId);
-
         List<StorageEntity> checkedStorages = updateStoragesWithUserStatus(storages.getContent(), bookmarks, favourites);
+
         return new PageImpl<>(checkedStorages, pageable, storages.getTotalElements())
                 .map(storageMapper::toResponse);
     }
 
+    /**
+     * Searches for storage entities by keyword, such as postal code or address.
+     * @param value the keyword to search for.
+     * @param pageable pagination information.
+     * @return a page of responses containing information about the storages.
+     * @since 1.0
+     */
     @Transactional(propagation = Propagation.REQUIRES_NEW, readOnly = true)
     public Page<StorageResponse> searchStorages(String value, Pageable pageable) {
-
-        // find the storages and bookmarks and favourites
         return storageService.searchStoragesByValue(value, true, pageable)
                 .map(storageMapper::toResponse);
     }
 
-    /*
-    * find unique reserved storages for finding storages by category and from and to dates
-    * */
+    /**
+     * Finds the IDs of reserved storages based on category and reservation time.
+     * @param category the storage category to filter by.
+     * @param fromDate the start date for reservation filtering.
+     * @param toDate the end date for reservation filtering.
+     * @return a set of IDs of reserved storages.
+     * @since 1.0
+     */
     private Set<Long> findReservedStorageIdsByCategoryAndReservedTime(StorageCategoryEnum category, LocalDate fromDate, LocalDate toDate) {
         List<ReservationEntity> reservations = reservationService.findAllReservationsByCategoryAndReservedTime(category, fromDate, toDate);
         return reservations.stream()
@@ -280,6 +357,14 @@ public class StorageServiceManagement {
                 .collect(Collectors.toSet());
     }
 
+    /**
+     * Updates the storage list with user-specific status (marked or favorite).
+     * @param storages the list of storages to be updated.
+     * @param bookmarks the list of bookmarks.
+     * @param favourites the list of favorites.
+     * @return the updated list of storages with user-specific status.
+     * @since 1.0
+     */
     private List<StorageEntity> updateStoragesWithUserStatus(List<StorageEntity> storages, List<BookmarkEntity> bookmarks, List<FavouritesBookEntity> favourites) {
         Map<Long, Boolean> markedMap = bookmarks.stream()
                 .collect(Collectors.toMap(b -> b.getId().getStorage().getId(), b -> true));

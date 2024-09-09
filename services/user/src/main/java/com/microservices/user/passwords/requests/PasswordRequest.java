@@ -7,6 +7,10 @@ import lombok.Builder;
 
 import java.util.UUID;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @Builder
 public record PasswordRequest(
         @JsonProperty("id")

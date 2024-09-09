@@ -1,6 +1,5 @@
 
-
-# Use tthe official Maven image to build the app
+# Use the official Maven image to build the app
 FROM maven:3.9.9-amazoncorretto-21 AS build
 WORKDIR /app
 COPY . /app

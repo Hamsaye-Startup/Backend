@@ -8,10 +8,16 @@ import lombok.experimental.SuperBuilder;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * This class is an entity class for multi-reservation in the warehouse.
+ * It extends the {@link ReservationEntity} class and adds support for multiple installments.
+ *
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -22,8 +28,8 @@ public class MultiReservationEntity
         extends ReservationEntity implements Serializable {
 
     @Builder(builderMethodName = "singleBuilder")
-    public MultiReservationEntity(UUID uid, UUID reservedBy, Long warehouse, UUID owner, LocalDate fromDate, LocalDate toDate, LocalDateTime createdAt, LocalDateTime modifiedAt, Set<InstallmentEntity> installments) {
-        super(uid, reservedBy, warehouse, owner, fromDate, toDate, createdAt, modifiedAt);
+    public MultiReservationEntity(UUID uid, UUID reservedBy, Long warehouse, UUID owner, LocalDate fromDate, LocalDate toDate, ReservationStats stats, LocalDateTime createdAt, LocalDateTime modifiedAt, Set<InstallmentEntity> installments) {
+        super(uid, reservedBy, warehouse, owner, fromDate, toDate, stats, createdAt, modifiedAt);
         this.installments = installments;
     }
 

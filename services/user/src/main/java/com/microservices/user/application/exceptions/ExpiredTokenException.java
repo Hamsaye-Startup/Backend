@@ -2,6 +2,10 @@ package com.microservices.user.application.exceptions;
 
 import com.microservices.user.application.responses.ResponseMessageType;
 
+/**
+ * @author Pouria Ghafarbeigi
+ * @version 1.0
+ */
 public class ExpiredTokenException extends CustomRuntimeException {
 
     private static final String message = ResponseMessageType.EXPIRED_TOKEN.message();
