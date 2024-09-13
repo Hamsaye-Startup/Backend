@@ -1,0 +1,52 @@
+erDiagram
+    %% Entities
+    ViolationEntity {
+        Long id PK
+        UUID trackingNum
+        UUID reporterId
+        Date incidentDate
+        LocalDateTime createdAt
+        LocalDateTime modifiedAt
+        String incidentDesc
+        ViolationStatus status
+    }
+
+    DistributedViolationEntity {
+        Long id PK
+        UUID agentId
+        ViolationResultStatus status
+        ViolationPriority priority
+        LocalDateTime createdAt
+        LocalDateTime startedAt
+        LocalDateTime finishedAt
+    }
+
+    ViolationDetailEntity {
+        Long id PK
+        String documentId
+    }
+
+    UserViolationEntity {
+        UUID userId
+    }
+
+    WarehouseViolationEntity {
+        Long warehouseId
+    }
+
+    ViolationTypeEntity {
+        Long id PK
+        String code
+        String title
+        ViolationTypeCategory group
+        ViolationPriority priority
+        String desc
+    }
+
+    %% Relationships
+    ViolationEntity ||--o| ViolationTypeEntity : "violation_type (fk_violation_type_id_violate)"
+    ViolationEntity ||--o| DistributedViolationEntity : "track_number (fk_violation_track_dist)"
+    ViolationEntity ||--o| ViolationDetailEntity : "track_number (fk_violation_track_detail)"
+
+    UserViolationEntity }|--|| ViolationEntity : "extends"
+    WarehouseViolationEntity }|--|| ViolationEntity : "extends"

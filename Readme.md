@@ -255,7 +255,7 @@ The list of packages managed includes:
 
    * **authentication:** Refer to this package to check login process and creation of tokens.
 
-   * **customer:** This package is used for customer management, customer classification and any 
+   * **user detail:** This package is used for user detail management, user classification and any 
    other changes.
 
    * **password:** This package is used for password management.
@@ -336,6 +336,7 @@ You can refer to the ER diagram below for a visual representation of the databas
 - **Warehouse Database ER Diagram:** [Link to Warehouse ER Diagram](diagrams/V1.0.0/db_warehouses_er_diagram.mermaid)
 - **User Database ER Diagram:** [Link to User ER Diagram](diagrams/V1.0.0/db_users_er_diagram.mermaid)
 - **Reservation Database ER Diagram:** [Link to Reservation ER Diagram](diagrams/V1.0.0/db_reservations_er_diagram.mermaid)
+- **Report Database ER Diagram:** [Link to Report ER Diagram](diagrams/V1.0.0/db_reports_er_diagram.mermaid)
 
 ### API Structure
 

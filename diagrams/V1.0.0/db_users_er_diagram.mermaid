@@ -26,15 +26,16 @@ erDiagram
         timestamp expired_at
     }
 
-    tb_customers {
-        UUID customer_id PK
+    tb_user_detail {
+        UUID detail_id PK
         varchar nid
         uuid user_id FK
         timestamp created_at
         timestamp modified_at
         varchar bio
         varchar gender
-        varchar loyalty_status
+        varchar loyalty
+        varchar connection
     }
 
     tb_authorities {
