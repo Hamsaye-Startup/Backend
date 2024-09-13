@@ -1,6 +1,6 @@
 package com.microservices.user.kafka.producers;
 
-import com.microservices.user.users.requests.UserNotifyRequest;
+import com.microservices.user.kafka.requests.UserNotifyRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;

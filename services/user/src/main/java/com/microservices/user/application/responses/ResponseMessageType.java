@@ -53,9 +53,9 @@ public class ResponseMessageType {
     /**
      * Response format for a customer not found error.
      */
-    public static final ResponseFormat CUSTOMER_NOT_FOUND = ResponseFormat.builder()
+    public static final ResponseFormat USER_DETAIL_NOT_FOUND = ResponseFormat.builder()
             .code(14004)
-            .message("customer not found")
+            .message("user detail information not found")
             .build();
 
     /**
@@ -77,9 +77,9 @@ public class ResponseMessageType {
     /**
      * Response format for a failure to persist customer information.
      */
-    public static final ResponseFormat PERSIST_CUSTOMER = ResponseFormat.builder()
+    public static final ResponseFormat PERSIST_USER_DETAIL = ResponseFormat.builder()
             .code(16052)
-            .message("customer information cannot be registered")
+            .message("user detail information cannot be registered")
             .build();
 
     /**

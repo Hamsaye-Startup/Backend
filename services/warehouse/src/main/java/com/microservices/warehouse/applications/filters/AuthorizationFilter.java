@@ -29,7 +29,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-        // get the X_USER_N and X_ROLE_A
+        // get the X_USER_ID and X_ROLE_A
         String username = request.getHeader("X_USER_ID");
         String authority = request.getHeader("X_ROLE_A");
 

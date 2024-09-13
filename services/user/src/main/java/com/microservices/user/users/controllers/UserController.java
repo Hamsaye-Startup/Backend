@@ -5,7 +5,6 @@ import com.microservices.user.users.requests.RegistrationRequest;
 import com.microservices.user.users.requests.UserRequest;
 import com.microservices.user.users.responses.UserResponse;
 import com.microservices.user.users.services.UserServiceManagement;
-import com.microservices.user.application.utils.log.CustomLogger;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +34,6 @@ public class UserController {
 
     private final UserServiceManagement management;
     private final MessageMapper mapper;
-    private final CustomLogger logger = CustomLogger.getInstance();
 
     /**
      * Helper method to check if a user has the required authority based on the request header.
