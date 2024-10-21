@@ -1,6 +1,6 @@
 package com.microservices.warehouse.storages.services;
 
-import com.microservices.warehouse.storages.exceptions.NotFoundPolicyException;
+import com.microservices.warehouse.application.exceptions.CustomNotFoundException;
 import com.microservices.warehouse.storages.mappers.PolicyRowMapper;
 import com.microservices.warehouse.storages.models.PolicyEntity;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class PolicyJDBCService {
      *
      * @param code The code of the policy to be found.
      * @return The {@link PolicyEntity} corresponding to the policy code.
-     * @throws NotFoundPolicyException If no policy with the specified code is found.
+     * @throws CustomNotFoundException If no policy with the specified code is found.
      * @since 1.0
      */
     public PolicyEntity findPolicyByCode(String code) {
@@ -47,7 +47,7 @@ public class PolicyJDBCService {
                 """;
         List<PolicyEntity> policies = jdbcTemplate.query(sql, new PolicyRowMapper(), code);
         return policies.stream().findFirst()
-                .orElseThrow(() -> new NotFoundPolicyException(code));
+                .orElseThrow(() -> new CustomNotFoundException("policy [" + code + "] is not exist"));
     }
 
     /**

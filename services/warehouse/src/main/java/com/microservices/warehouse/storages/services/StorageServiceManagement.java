@@ -1,11 +1,11 @@
 package com.microservices.warehouse.storages.services;
 
+import com.microservices.warehouse.application.exceptions.CustomJpaPersistanceException;
 import com.microservices.warehouse.geos.models.AddressEntity;
 import com.microservices.warehouse.geos.requests.AddressRequests;
 import com.microservices.warehouse.geos.services.AddressService;
 import com.microservices.warehouse.reservations.models.ReservationEntity;
 import com.microservices.warehouse.reservations.services.ReservationService;
-import com.microservices.warehouse.storages.exceptions.PersistStorageException;
 import com.microservices.warehouse.storages.mappers.StorageMapper;
 import com.microservices.warehouse.storages.models.*;
 import com.microservices.warehouse.storages.requests.StorageRequest;
@@ -88,7 +88,7 @@ public class StorageServiceManagement {
      * @param id the ID of the storage to be updated.
      * @param addressRequests the new address information provided by the client.
      * @return the response containing information about the updated storage.
-     * @throws PersistStorageException if the postal code does not exist.
+     * @throws CustomJpaPersistanceException if the postal code does not exist.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED)
@@ -132,14 +132,14 @@ public class StorageServiceManagement {
      * Verifies a storage entity by checking the existence of its postal code.
      * @param id the ID of the storage to be verified.
      * @return the response containing information about the verified storage.
-     * @throws PersistStorageException if the postal code does not exist.
+     * @throws CustomJpaPersistanceException if the postal code does not exist.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageResponse verifyStorageById(Long id) {
         StorageEntity storage = storageService.findStorageById(id);
         if (storage.getAddress().getDetails() == null) {
-            throw new PersistStorageException("postal code is not exist");
+            throw new CustomJpaPersistanceException("postal code is not exist");
         }
         storage.setVerified(StorageVerifiedEnum.VERIFIED);
 

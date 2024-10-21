@@ -1,6 +1,6 @@
 package com.microservices.warehouse.storages.services;
 
-import com.microservices.warehouse.storages.exceptions.NotFoundFeatureException;
+import com.microservices.warehouse.application.exceptions.CustomNotFoundException;
 import com.microservices.warehouse.storages.mappers.FeatureRowMapper;
 import com.microservices.warehouse.storages.models.FeatureEntity;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class FeatureJDBCService {
      *
      * @param code The code of the feature to be found.
      * @return The {@link FeatureEntity} associated with the given code.
-     * @throws NotFoundFeatureException If no feature with the specified code is found.
+     * @throws CustomNotFoundException If no feature with the specified code is found.
      * @since 1.0
      */
     public FeatureEntity findFeatureByCode(String code) {
@@ -43,7 +43,7 @@ public class FeatureJDBCService {
                 """;
         List<FeatureEntity> features = jdbcTemplate.query(sql, new FeatureRowMapper(), code);
         return features.stream().findFirst()
-                .orElseThrow(() -> new NotFoundFeatureException(code));
+                .orElseThrow(() -> new CustomNotFoundException("feature [" + code + "] is not exist"));
     }
 
     /**

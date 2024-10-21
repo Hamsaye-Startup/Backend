@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2024-09-09">
-<meta name="description" content="declaration: package: com.microservices.warehouse.applications.responses, class: ResponseMessageType">
+<meta name="description" content="declaration: package: com.microservices.warehouse.application.api, class: ResponseMessageType">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -83,18 +83,18 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.microservices.warehouse.applications.responses</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.microservices.warehouse.application.api</a></div>
 <h1 title="Class ResponseMessageType" class="title">Class ResponseMessageType</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.microservices.warehouse.applications.responses.ResponseMessageType</div>
+<div class="inheritance">com.microservices.warehouse.application.api.ResponseMessageType</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="type-signature"><span class="annotations">@Component
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">ResponseMessageType</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">A component class that defines various <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses"><code>ResponseFormat</code></a> constants for standard response messages.
+<div class="block">A component class that defines various <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api"><code>ResponseFormat</code></a> constants for standard response messages.
 
  <p>This class contains predefined response formats for different scenarios including success, errors,
  and various specific cases such as scope not found or feature persistence failure.</p>
@@ -120,97 +120,97 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#AUTHENTICATION_CREDENTIAL_NOT_FOUND" class="member-name-link">AUTHENTICATION_CREDENTIAL_NOT_FOUND</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for missing authentication credentials.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#BOOKMARK_NOT_FOUND" class="member-name-link">BOOKMARK_NOT_FOUND</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for a bookmark not found error.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#COMMENT_NOT_FOUND" class="member-name-link">COMMENT_NOT_FOUND</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for a comment not found error.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#EMPTY_FILE_UPLOADED" class="member-name-link">EMPTY_FILE_UPLOADED</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for an empty file upload attempt.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#FAILED_UPLOAD_FILE" class="member-name-link">FAILED_UPLOAD_FILE</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for a failed file upload.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#FEATURE_NOT_FOUND" class="member-name-link">FEATURE_NOT_FOUND</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for a feature not found error.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#ILLEGAL_REQUEST" class="member-name-link">ILLEGAL_REQUEST</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for an illegal request.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#INTERNAL" class="member-name-link">INTERNAL</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for an internal server error.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#NOT_REMOVABLE_STORAGE" class="member-name-link">NOT_REMOVABLE_STORAGE</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for storage that is not removable.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#PERSIST_ADDRESS" class="member-name-link">PERSIST_ADDRESS</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for a failure to persist address information.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#PERSIST_BOOKMARK" class="member-name-link">PERSIST_BOOKMARK</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for a failure to persist bookmark information.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#PERSIST_COMMENT" class="member-name-link">PERSIST_COMMENT</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for a failure to persist comment information.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#PERSIST_FAVOURITES_BOOK" class="member-name-link">PERSIST_FAVOURITES_BOOK</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for a failure to persist favourite book information.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#PERSIST_FEATURE" class="member-name-link">PERSIST_FEATURE</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for a failure to persist feature information.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#PERSIST_STORAGE" class="member-name-link">PERSIST_STORAGE</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for a failure to persist storage information.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#POLICY_NOT_FOUND" class="member-name-link">POLICY_NOT_FOUND</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for a policy not found error.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#RESERVATION_NOT_FOUND" class="member-name-link">RESERVATION_NOT_FOUND</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for a reservation not found error.</div>
 </div>
-<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#STORAGE_NOT_FOUND" class="member-name-link">STORAGE_NOT_FOUND</a></code></div>
 <div class="col-last odd-row-color">
 <div class="block">Response format for a storage not found error.</div>
 </div>
-<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></code></div>
 <div class="col-second even-row-color"><code><a href="#SUCCESS" class="member-name-link">SUCCESS</a></code></div>
 <div class="col-last even-row-color">
 <div class="block">Response format for a successful operation.</div>
@@ -252,133 +252,133 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="SUCCESS">
 <h3>SUCCESS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">SUCCESS</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">SUCCESS</span></div>
 <div class="block">Response format for a successful operation.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="INTERNAL">
 <h3>INTERNAL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">INTERNAL</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">INTERNAL</span></div>
 <div class="block">Response format for an internal server error.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="FEATURE_NOT_FOUND">
 <h3>FEATURE_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">FEATURE_NOT_FOUND</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">FEATURE_NOT_FOUND</span></div>
 <div class="block">Response format for a feature not found error.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="POLICY_NOT_FOUND">
 <h3>POLICY_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">POLICY_NOT_FOUND</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">POLICY_NOT_FOUND</span></div>
 <div class="block">Response format for a policy not found error.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="STORAGE_NOT_FOUND">
 <h3>STORAGE_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">STORAGE_NOT_FOUND</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">STORAGE_NOT_FOUND</span></div>
 <div class="block">Response format for a storage not found error.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="BOOKMARK_NOT_FOUND">
 <h3>BOOKMARK_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">BOOKMARK_NOT_FOUND</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">BOOKMARK_NOT_FOUND</span></div>
 <div class="block">Response format for a bookmark not found error.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="RESERVATION_NOT_FOUND">
 <h3>RESERVATION_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">RESERVATION_NOT_FOUND</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">RESERVATION_NOT_FOUND</span></div>
 <div class="block">Response format for a reservation not found error.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="COMMENT_NOT_FOUND">
 <h3>COMMENT_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">COMMENT_NOT_FOUND</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">COMMENT_NOT_FOUND</span></div>
 <div class="block">Response format for a comment not found error.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="PERSIST_FEATURE">
 <h3>PERSIST_FEATURE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_FEATURE</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_FEATURE</span></div>
 <div class="block">Response format for a failure to persist feature information.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="PERSIST_STORAGE">
 <h3>PERSIST_STORAGE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_STORAGE</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_STORAGE</span></div>
 <div class="block">Response format for a failure to persist storage information.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="PERSIST_ADDRESS">
 <h3>PERSIST_ADDRESS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_ADDRESS</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_ADDRESS</span></div>
 <div class="block">Response format for a failure to persist address information.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="PERSIST_BOOKMARK">
 <h3>PERSIST_BOOKMARK</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_BOOKMARK</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_BOOKMARK</span></div>
 <div class="block">Response format for a failure to persist bookmark information.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="PERSIST_COMMENT">
 <h3>PERSIST_COMMENT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_COMMENT</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_COMMENT</span></div>
 <div class="block">Response format for a failure to persist comment information.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="PERSIST_FAVOURITES_BOOK">
 <h3>PERSIST_FAVOURITES_BOOK</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_FAVOURITES_BOOK</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">PERSIST_FAVOURITES_BOOK</span></div>
 <div class="block">Response format for a failure to persist favourite book information.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ILLEGAL_REQUEST">
 <h3>ILLEGAL_REQUEST</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">ILLEGAL_REQUEST</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">ILLEGAL_REQUEST</span></div>
 <div class="block">Response format for an illegal request.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="AUTHENTICATION_CREDENTIAL_NOT_FOUND">
 <h3>AUTHENTICATION_CREDENTIAL_NOT_FOUND</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">AUTHENTICATION_CREDENTIAL_NOT_FOUND</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">AUTHENTICATION_CREDENTIAL_NOT_FOUND</span></div>
 <div class="block">Response format for missing authentication credentials.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="NOT_REMOVABLE_STORAGE">
 <h3>NOT_REMOVABLE_STORAGE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">NOT_REMOVABLE_STORAGE</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">NOT_REMOVABLE_STORAGE</span></div>
 <div class="block">Response format for storage that is not removable.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="FAILED_UPLOAD_FILE">
 <h3>FAILED_UPLOAD_FILE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">FAILED_UPLOAD_FILE</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">FAILED_UPLOAD_FILE</span></div>
 <div class="block">Response format for a failed file upload.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="EMPTY_FILE_UPLOADED">
 <h3>EMPTY_FILE_UPLOADED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.applications.responses">ResponseFormat</a></span>&nbsp;<span class="element-name">EMPTY_FILE_UPLOADED</span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ResponseFormat.html" title="class in com.microservices.warehouse.application.api">ResponseFormat</a></span>&nbsp;<span class="element-name">EMPTY_FILE_UPLOADED</span></div>
 <div class="block">Response format for an empty file upload attempt.</div>
 </section>
 </li>

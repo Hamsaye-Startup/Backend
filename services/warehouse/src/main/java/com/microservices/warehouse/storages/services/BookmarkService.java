@@ -1,9 +1,10 @@
 package com.microservices.warehouse.storages.services;
 
-import com.microservices.warehouse.storages.exceptions.PersistBookmarkException;
+import com.microservices.warehouse.application.exceptions.CustomJpaPersistanceException;
 import com.microservices.warehouse.storages.models.BookmarkEntity;
 import com.microservices.warehouse.storages.repositories.BookmarkRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,16 +38,12 @@ public class BookmarkService {
      *
      * @param bookmark The BookmarkEntity to be persisted.
      * @return The persisted BookmarkEntity.
-     * @throws PersistBookmarkException If an exception occurs while persisting the bookmark.
+     * @throws CustomJpaPersistanceException If an exception occurs while persisting the bookmark.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public BookmarkEntity persist(BookmarkEntity bookmark) {
-        try {
-            return repository.saveAndFlush(bookmark);
-        } catch (RuntimeException ex) {
-            throw new PersistBookmarkException(ex.getCause(), bookmark.getId().toString());
-        }
+        return repository.saveAndFlush(bookmark);
     }
 
     /**

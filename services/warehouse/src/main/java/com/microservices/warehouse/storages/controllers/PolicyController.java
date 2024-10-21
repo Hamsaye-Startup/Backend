@@ -1,8 +1,8 @@
 package com.microservices.warehouse.storages.controllers;
 
-import com.microservices.warehouse.applications.mapper.MessageMapper;
+import com.microservices.warehouse.application.mapper.MessageMapper;
 import com.microservices.warehouse.storages.dto.PolicyDTO;
-import com.microservices.warehouse.storages.exceptions.AuthenticationCredentialNotFoundException;
+import com.microservices.warehouse.application.exceptions.AuthenticationCredentialNotFoundException;
 import com.microservices.warehouse.storages.responses.StorageResponse;
 import com.microservices.warehouse.storages.services.PolicyServiceManagement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ public class PolicyController {
 
     /**
      * Mapper for transforming between different representations of policies.
-     * See {@link com.microservices.warehouse.applications.mapper.MessageMapper} for more details.
+     * See {@link com.microservices.warehouse.application.mapper.MessageMapper} for more details.
      */
     private final MessageMapper mapper;
 
@@ -42,16 +42,30 @@ public class PolicyController {
     private final PolicyServiceManagement policyServiceManagement;
 
     /**
-     * Extracts the user ID from the HTTP request header.
+     * Extracts the user ID from the HTTP request header, throwing an exception if not found.
      * @param request the HTTP request containing the user ID header
      * @return the extracted user ID as a {@link UUID}
      * @throws AuthenticationCredentialNotFoundException if the user ID header is missing
      * @since 1.0
      */
-    private UUID findUserByHeader(HttpServletRequest request) {
+    private UUID findUserByHeaderOrThrow(HttpServletRequest request) {
         String userId = request.getHeader("X_USER_ID");
         if (userId == null) {
             throw new AuthenticationCredentialNotFoundException("user id header not found");
+        }
+        return UUID.fromString(userId);
+    }
+
+    /**
+     * Extracts the user ID from the HTTP request header, returning null if not found.
+     * @param request the HTTP request containing the user ID header
+     * @return the extracted user ID as a {@link UUID}, or null if the header is missing
+     * @since 1.0
+     */
+    private UUID findUserByHeaderOrNull(HttpServletRequest request) {
+        String userId = request.getHeader("X_USER_ID");
+        if (userId == null) {
+            return null;
         }
         return UUID.fromString(userId);
     }
@@ -64,10 +78,15 @@ public class PolicyController {
      */
     @PostMapping
     public ResponseEntity<?> addPolicy(
-            @RequestBody @Valid PolicyDTO policy
+            @RequestBody @Valid PolicyDTO policy,
+            HttpServletRequest request
     ) {
         PolicyDTO response = policyServiceManagement.insertPolicy(policy);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -78,10 +97,15 @@ public class PolicyController {
      */
     @PutMapping
     public ResponseEntity<?> updatePolicy(
-            @RequestBody @Valid PolicyDTO policy
+            @RequestBody @Valid PolicyDTO policy,
+            HttpServletRequest request
     ) {
         PolicyDTO response = policyServiceManagement.updatePolicy(policy);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -101,9 +125,13 @@ public class PolicyController {
         StorageResponse response = policyServiceManagement.updateStoragePolicyByCodes(
                 storageId,
                 policyCodes,
-                findUserByHeader(request)
+                findUserByHeaderOrThrow(request)
         );
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -114,10 +142,15 @@ public class PolicyController {
      */
     @DeleteMapping("/code/{code}")
     public ResponseEntity<?> removePolicy(
-            @PathVariable("code") String code
+            @PathVariable("code") String code,
+            HttpServletRequest request
     ) {
         PolicyDTO response = policyServiceManagement.deletePolicyByCode(code);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -128,10 +161,15 @@ public class PolicyController {
      */
     @GetMapping("/code/{code}")
     public ResponseEntity<?> findPolicyByCode(
-            @PathVariable("code") String code
+            @PathVariable("code") String code,
+            HttpServletRequest request
     ) {
         PolicyDTO response = policyServiceManagement.findPolicyByCode(code);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -142,10 +180,15 @@ public class PolicyController {
      */
     @GetMapping
     public ResponseEntity<?> findAllPolicies(
-            Pageable pageable
+            Pageable pageable,
+            HttpServletRequest request
     ) {
         Page<PolicyDTO> responses = policyServiceManagement.findAllPolicies(pageable);
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -156,12 +199,17 @@ public class PolicyController {
      */
     @GetMapping("/storage/id/{storageId}")
     public ResponseEntity<?> findAllPoliciesByStorageId(
-            @PathVariable("storageId") Long storageId
+            @PathVariable("storageId") Long storageId,
+            HttpServletRequest request
     ) {
         List<PolicyDTO> responses = policyServiceManagement.findAllPoliciesByStorageId(
                 storageId
         );
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -178,10 +226,14 @@ public class PolicyController {
     )
     public ResponseEntity<?> uploadPolicyDocument(
             @PathVariable("code") String code,
-            @RequestParam("file") MultipartFile multipartFile
+            @RequestParam("file") MultipartFile multipartFile,
+            HttpServletRequest request
     ) {
         policyServiceManagement.uploadPolicyDocumentByCode(code, multipartFile);
-        return ResponseEntity.ok(mapper.toResponse());
+        return ResponseEntity.ok(mapper.toResponse(
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**

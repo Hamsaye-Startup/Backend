@@ -18,6 +18,7 @@ import java.util.UUID;
  * @author Pouria Ghafarbeigi
  * @version 1.0
  */
+
 @Repository
 public interface BookmarkRepository extends JpaRepository<BookmarkEntity, BookmarkId> {
 

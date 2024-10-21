@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="dc.created" content="2024-09-09">
-<meta name="description" content="declaration: package: com.microservices.warehouse.applications.mapper, class: MessageMapper">
+<meta name="description" content="declaration: package: com.microservices.warehouse.application.mapper, class: MessageMapper">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -83,11 +83,11 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.microservices.warehouse.applications.mapper</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">com.microservices.warehouse.application.mapper</a></div>
 <h1 title="Class MessageMapper" class="title">Class MessageMapper</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.microservices.warehouse.applications.mapper.MessageMapper</div>
+<div class="inheritance">com.microservices.warehouse.application.mapper.MessageMapper</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Service class for mapping exceptions and response objects to standard response formats.
 
- <p>This service provides methods to create standardized <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ResponseMessage</code></a> and <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ExceptionMessage</code></a>
+ <p>This service provides methods to create standardized <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ResponseMessage</code></a> and <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ExceptionMessage</code></a>
  objects for success responses and error handling, respectively.</p></div>
 <dl class="notes">
 <dt>Since:</dt>
@@ -133,27 +133,27 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages">ExceptionMessage</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages">ExceptionMessage</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toException(jakarta.ws.rs.InternalServerErrorException,int)" class="member-name-link">toException</a><wbr>(jakarta.ws.rs.InternalServerErrorException&nbsp;ex,
  int&nbsp;code)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ExceptionMessage</code></a> for an <code>InternalServerErrorException</code> with a specific code.</div>
+<div class="block">Creates an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ExceptionMessage</code></a> for an <code>InternalServerErrorException</code> with a specific code.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T extends <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.applications.exceptions">CustomRuntimeException</a>&gt;<br><a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages">ExceptionMessage</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T extends <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.application.exceptions">CustomRuntimeException</a>&gt;<br><a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages">ExceptionMessage</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toException(T,int)" class="member-name-link">toException</a><wbr>(T&nbsp;ex,
  int&nbsp;code)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ExceptionMessage</code></a> for a given <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.applications.exceptions"><code>CustomRuntimeException</code></a> with a specific code.</div>
+<div class="block">Creates an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ExceptionMessage</code></a> for a given <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.application.exceptions"><code>CustomRuntimeException</code></a> with a specific code.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages">ResponseMessage</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages">ResponseMessage</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toResponse()" class="member-name-link">toResponse</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ResponseMessage</code></a> for a successful response without a result object.</div>
+<div class="block">Creates a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ResponseMessage</code></a> for a successful response without a result object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages">ResponseMessage</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages">ResponseMessage</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toResponse(java.lang.Object)" class="member-name-link">toResponse</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ResponseMessage</code></a> for a successful response with a result object.</div>
+<div class="block">Creates a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ResponseMessage</code></a> for a successful response with a result object.</div>
 </div>
 </div>
 </div>
@@ -189,57 +189,57 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="toResponse(java.lang.Object)">
 <h3>toResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages">ResponseMessage</a></span>&nbsp;<span class="element-name">toResponse</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</span></div>
-<div class="block">Creates a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ResponseMessage</code></a> for a successful response with a result object.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages">ResponseMessage</a></span>&nbsp;<span class="element-name">toResponse</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;object)</span></div>
+<div class="block">Creates a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ResponseMessage</code></a> for a successful response with a result object.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>object</code> - the result object to include in the response.</dd>
 <dt>Returns:</dt>
-<dd>a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ResponseMessage</code></a> with a success code and the provided result object.</dd>
+<dd>a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ResponseMessage</code></a> with a success code and the provided result object.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toResponse()">
 <h3>toResponse</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages">ResponseMessage</a></span>&nbsp;<span class="element-name">toResponse</span>()</div>
-<div class="block">Creates a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ResponseMessage</code></a> for a successful response without a result object.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages">ResponseMessage</a></span>&nbsp;<span class="element-name">toResponse</span>()</div>
+<div class="block">Creates a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ResponseMessage</code></a> for a successful response without a result object.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ResponseMessage</code></a> with a success code.</dd>
+<dd>a <a href="../messages/ResponseMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ResponseMessage</code></a> with a success code.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toException(T,int)">
 <h3 id="toException(com.microservices.warehouse.applications.exceptions.CustomRuntimeException,int)">toException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.applications.exceptions">CustomRuntimeException</a>&gt;</span>
-<span class="return-type"><a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages">ExceptionMessage</a></span>&nbsp;<span class="element-name">toException</span><wbr><span class="parameters">(T&nbsp;ex,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.application.exceptions">CustomRuntimeException</a>&gt;</span>
+<span class="return-type"><a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages">ExceptionMessage</a></span>&nbsp;<span class="element-name">toException</span><wbr><span class="parameters">(T&nbsp;ex,
  int&nbsp;code)</span></div>
-<div class="block">Creates an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ExceptionMessage</code></a> for a given <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.applications.exceptions"><code>CustomRuntimeException</code></a> with a specific code.</div>
+<div class="block">Creates an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ExceptionMessage</code></a> for a given <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.application.exceptions"><code>CustomRuntimeException</code></a> with a specific code.</div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><code>T</code> - the type of the exception.</dd>
 <dt>Parameters:</dt>
-<dd><code>ex</code> - the <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.applications.exceptions"><code>CustomRuntimeException</code></a> to map.</dd>
+<dd><code>ex</code> - the <a href="../exceptions/CustomRuntimeException.html" title="class in com.microservices.warehouse.application.exceptions"><code>CustomRuntimeException</code></a> to map.</dd>
 <dd><code>code</code> - the error code to include in the exception message.</dd>
 <dt>Returns:</dt>
-<dd>an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ExceptionMessage</code></a> with the provided code and exception details.</dd>
+<dd>an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ExceptionMessage</code></a> with the provided code and exception details.</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="toException(jakarta.ws.rs.InternalServerErrorException,int)">
 <h3>toException</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages">ExceptionMessage</a></span>&nbsp;<span class="element-name">toException</span><wbr><span class="parameters">(jakarta.ws.rs.InternalServerErrorException&nbsp;ex,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages">ExceptionMessage</a></span>&nbsp;<span class="element-name">toException</span><wbr><span class="parameters">(jakarta.ws.rs.InternalServerErrorException&nbsp;ex,
  int&nbsp;code)</span></div>
-<div class="block">Creates an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ExceptionMessage</code></a> for an <code>InternalServerErrorException</code> with a specific code.</div>
+<div class="block">Creates an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ExceptionMessage</code></a> for an <code>InternalServerErrorException</code> with a specific code.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>ex</code> - the <code>InternalServerErrorException</code> to map.</dd>
 <dd><code>code</code> - the error code to include in the exception message.</dd>
 <dt>Returns:</dt>
-<dd>an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.applications.messages"><code>ExceptionMessage</code></a> with the provided code and exception details.</dd>
+<dd>an <a href="../messages/ExceptionMessage.html" title="class in com.microservices.warehouse.application.messages"><code>ExceptionMessage</code></a> with the provided code and exception details.</dd>
 </dl>
 </section>
 </li>

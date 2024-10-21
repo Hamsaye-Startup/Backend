@@ -1,9 +1,8 @@
 package com.microservices.warehouse.storages.services;
 
-import com.microservices.warehouse.geos.exceptions.PersistAddressException;
-import com.microservices.warehouse.storages.exceptions.NotFoundStorageException;
-import com.microservices.warehouse.storages.exceptions.PersistStorageException;
-import com.microservices.warehouse.storages.exceptions.StorageIsNotRemovableException;
+import com.microservices.warehouse.application.exceptions.CustomJpaPersistanceException;
+import com.microservices.warehouse.application.exceptions.CustomNotFoundException;
+import com.microservices.warehouse.application.exceptions.CustomNotRemovableObjectException;
 import com.microservices.warehouse.storages.models.*;
 import com.microservices.warehouse.storages.repositories.StorageRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,26 +36,16 @@ public class StorageService {
      *
      * @param storage The {@link StorageEntity} to be persisted.
      * @return The persisted {@link StorageEntity}.
-     * @throws PersistStorageException If an error occurs while persisting the storage entity.
+     * @throws CustomJpaPersistanceException If an error occurs while persisting the storage entity.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageEntity persist(StorageEntity storage) {
-        try {
-            storage.setEnabled(true);
-            storage.setVerified(StorageVerifiedEnum.NOT_VERIFIED);
-            storage.setStatus(StorageStatusEnum.COMPLETELY_SAFE);
-            storage.setScore(
-                    Score.builder()
-                            .score(0f)
-                            .votes(0)
-                            .build()
-            );
-            return storageRepository.save(storage);
-        }
-        catch (RuntimeException ex) {
-            throw new PersistStorageException(ex.getCause(), storage.getOwner().toString());
-        }
+        storage.setEnabled(true);
+        storage.setVerified(StorageVerifiedEnum.NOT_VERIFIED);
+        storage.setStatus(StorageStatusEnum.COMPLETELY_SAFE);
+        storage.setScore(Score.builder().score(0f).votes(0).build());
+        return storageRepository.save(storage);
     }
 
     /**
@@ -64,16 +53,12 @@ public class StorageService {
      *
      * @param storage The {@link StorageEntity} with updated address information.
      * @return The updated {@link StorageEntity}.
-     * @throws PersistAddressException If an error occurs while updating the address.
+     * @throws CustomJpaPersistanceException If an error occurs while updating the address.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageEntity updateAddress(StorageEntity storage) {
-        try {
-            return storageRepository.save(storage);
-        } catch (RuntimeException ex) {
-            throw new PersistAddressException(ex.getCause(), storage.getId().toString());
-        }
+        return storageRepository.save(storage);
     }
 
     /**
@@ -81,16 +66,12 @@ public class StorageService {
      *
      * @param storage The {@link StorageEntity} with updated information.
      * @return The updated {@link StorageEntity}.
-     * @throws PersistStorageException If an error occurs while updating the storage entity.
+     * @throws CustomJpaPersistanceException If an error occurs while updating the storage entity.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public StorageEntity updateStorage(StorageEntity storage) {
-        try {
-            return storageRepository.save(storage);
-        } catch (RuntimeException ex) {
-            throw new PersistStorageException(ex.getCause(), storage.getId().toString());
-        }
+        return storageRepository.save(storage);
     }
 
     /**
@@ -98,13 +79,13 @@ public class StorageService {
      *
      * @param storage The {@link StorageEntity} to be removed.
      * @param notStatus The status that prevents removal.
-     * @throws StorageIsNotRemovableException If the storage entity's status matches the specified status.
+     * @throws CustomNotRemovableObjectException If the storage entity's status matches the specified status.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void removeStorage(StorageEntity storage, StorageStatusEnum notStatus) {
         if (storage.getStatus().equals(notStatus)) {
-            throw new StorageIsNotRemovableException(
+            throw new CustomNotRemovableObjectException(
                     String.format("Cannot remove storageId[%s] with %s status", storage.getId().toString(), notStatus)
             );
         }
@@ -127,13 +108,13 @@ public class StorageService {
      *
      * @param id The ID of the storage entity.
      * @return The {@link StorageEntity} with the specified ID.
-     * @throws NotFoundStorageException If no storage entity with the specified ID is found.
+     * @throws CustomNotFoundException If no storage entity with the specified ID is found.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public StorageEntity findStorageById(Long id) {
         return storageRepository.findById(id)
-                .orElseThrow(() -> new NotFoundStorageException(id.toString()));
+                .orElseThrow(() -> new CustomNotFoundException("storage id [" + id + "] is not exist"));
     }
 
     /**
@@ -143,13 +124,13 @@ public class StorageService {
      * @param enabled Flag indicating whether the storage is enabled.
      * @param notStatus The status to exclude from results.
      * @return The {@link StorageEntity} matching the criteria.
-     * @throws NotFoundStorageException If no storage entity matching the criteria is found.
+     * @throws CustomNotFoundException If no storage entity matching the criteria is found.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public StorageEntity findStorageById(Long id, boolean enabled, StorageStatusEnum notStatus) {
         return storageRepository.findByIdAndEnabledAndStatusNot(id, enabled, notStatus)
-                .orElseThrow(() -> new NotFoundStorageException(id.toString()));
+                .orElseThrow(() -> new CustomNotFoundException("storage id [" + id + "] is not exist"));
     }
 
     /**

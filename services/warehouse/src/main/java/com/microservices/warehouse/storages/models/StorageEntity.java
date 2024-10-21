@@ -20,6 +20,7 @@ import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 @Getter
 @Setter
 @Builder
@@ -36,7 +37,7 @@ public class StorageEntity implements Serializable {
     @Column(name = "storage_id", columnDefinition = "bigint", unique = true, nullable = false, updatable = false)
     private Long id;
 
-    @Column(name = "owner", columnDefinition = "uuid", unique = true, nullable = false, updatable = false)
+    @Column(name = "owner", columnDefinition = "uuid", nullable = false, updatable = false)
     private UUID owner;
 
     @Enumerated(EnumType.STRING)

@@ -1,8 +1,8 @@
 package com.microservices.warehouse.storages.controllers;
 
-import com.microservices.warehouse.applications.mapper.MessageMapper;
+import com.microservices.warehouse.application.mapper.MessageMapper;
 import com.microservices.warehouse.storages.dto.FeatureDTO;
-import com.microservices.warehouse.storages.exceptions.AuthenticationCredentialNotFoundException;
+import com.microservices.warehouse.application.exceptions.AuthenticationCredentialNotFoundException;
 import com.microservices.warehouse.storages.responses.StorageResponse;
 import com.microservices.warehouse.storages.services.FeatureServiceManagement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class FeatureController {
 
     /**
      * Mapper for transforming between different representations of features.
-     * See {@link com.microservices.warehouse.applications.mapper.MessageMapper} for more details.
+     * See {@link com.microservices.warehouse.application.mapper.MessageMapper} for more details.
      */
     private final MessageMapper mapper;
 
@@ -39,16 +39,30 @@ public class FeatureController {
     private final FeatureServiceManagement featureServiceManagement;
 
     /**
-     * Extracts the user ID from the HTTP request header.
+     * Extracts the user ID from the HTTP request header, throwing an exception if not found.
      * @param request the HTTP request containing the user ID header
      * @return the extracted user ID as a {@link UUID}
      * @throws AuthenticationCredentialNotFoundException if the user ID header is missing
      * @since 1.0
      */
-    private UUID findUserByHeader(HttpServletRequest request) {
+    private UUID findUserByHeaderOrThrow(HttpServletRequest request) {
         String userId = request.getHeader("X_USER_ID");
         if (userId == null) {
             throw new AuthenticationCredentialNotFoundException("user id header not found");
+        }
+        return UUID.fromString(userId);
+    }
+
+    /**
+     * Extracts the user ID from the HTTP request header, returning null if not found.
+     * @param request the HTTP request containing the user ID header
+     * @return the extracted user ID as a {@link UUID}, or null if the header is missing
+     * @since 1.0
+     */
+    private UUID findUserByHeaderOrNull(HttpServletRequest request) {
+        String userId = request.getHeader("X_USER_ID");
+        if (userId == null) {
+            return null;
         }
         return UUID.fromString(userId);
     }
@@ -61,10 +75,15 @@ public class FeatureController {
      */
     @PostMapping
     public ResponseEntity<?> addFeature(
-            @RequestBody FeatureDTO feature
+            @RequestBody FeatureDTO feature,
+            HttpServletRequest request
     ) {
         FeatureDTO response = featureServiceManagement.insertFeature(feature);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -75,10 +94,15 @@ public class FeatureController {
      */
     @PutMapping
     public ResponseEntity<?> updateFeature(
-            @RequestBody FeatureDTO feature
+            @RequestBody FeatureDTO feature,
+            HttpServletRequest request
     ) {
         FeatureDTO response = featureServiceManagement.updateFeature(feature);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -98,9 +122,13 @@ public class FeatureController {
         StorageResponse response = featureServiceManagement.updateStorageFeatureByCodes(
                 storageId,
                 featureCodes,
-                findUserByHeader(request)
+                findUserByHeaderOrThrow(request)
         );
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -111,10 +139,15 @@ public class FeatureController {
      */
     @DeleteMapping("/code/{code}")
     public ResponseEntity<?> deleteFeature(
-            @PathVariable("code") String code
+            @PathVariable("code") String code,
+            HttpServletRequest request
     ) {
         FeatureDTO response = featureServiceManagement.deleteFeatureByCode(code);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -125,10 +158,15 @@ public class FeatureController {
      */
     @GetMapping("/code/{code}")
     public ResponseEntity<?> findFeatureByCode(
-            @PathVariable("code") String code
+            @PathVariable("code") String code,
+            HttpServletRequest request
     ) {
         FeatureDTO response = featureServiceManagement.findFeatureByCode(code);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -139,10 +177,15 @@ public class FeatureController {
      */
     @GetMapping
     public ResponseEntity<?> findAllFeatures(
-            Pageable pageable
+            Pageable pageable,
+            HttpServletRequest request
     ) {
         Page<FeatureDTO> responses = featureServiceManagement.findAllFeatures(pageable);
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -153,11 +196,16 @@ public class FeatureController {
      */
     @GetMapping("/storage/id/{storageId}")
     public ResponseEntity<?> findAllFeaturesByStorageId(
-            @PathVariable("storageId") Long storageId
+            @PathVariable("storageId") Long storageId,
+            HttpServletRequest request
     ) {
         List<FeatureDTO> responses = featureServiceManagement.findAllFeaturesByStorageId(
                 storageId
         );
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 }

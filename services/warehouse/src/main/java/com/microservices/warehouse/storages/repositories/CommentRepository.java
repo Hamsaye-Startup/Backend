@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
  * @author Pouria Ghafarbeigi
  * @version 1.0
  */
+
 @Repository
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
 

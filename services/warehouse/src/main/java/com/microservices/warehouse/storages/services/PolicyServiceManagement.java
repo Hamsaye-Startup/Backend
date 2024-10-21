@@ -1,9 +1,9 @@
 package com.microservices.warehouse.storages.services;
 
 import com.microservices.warehouse.storages.dto.PolicyDTO;
-import com.microservices.warehouse.applications.exceptions.IllegalOperationException;
-import com.microservices.warehouse.storages.exceptions.EmptyFileUploadedException;
-import com.microservices.warehouse.storages.exceptions.FailedUploadFile;
+import com.microservices.warehouse.application.exceptions.IllegalOperationException;
+import com.microservices.warehouse.application.exceptions.EmptyFileUploadedException;
+import com.microservices.warehouse.application.exceptions.FailedUploadFileException;
 import com.microservices.warehouse.storages.mappers.PolicyMapper;
 import com.microservices.warehouse.storages.mappers.StorageMapper;
 import com.microservices.warehouse.storages.models.PolicyEntity;
@@ -179,7 +179,7 @@ public class PolicyServiceManagement {
      * @param code The code of the policy for which the document is being uploaded.
      * @param multipartFile The file to be uploaded.
      * @throws EmptyFileUploadedException If the uploaded file is empty.
-     * @throws FailedUploadFile If an error occurs during the file upload.
+     * @throws FailedUploadFileException If an error occurs during the file upload.
      * @since 1.0
      */
     public void uploadPolicyDocumentByCode(String code, MultipartFile multipartFile) {
@@ -194,7 +194,7 @@ public class PolicyServiceManagement {
             byte[] bytes = multipartFile.getBytes();
 
         } catch (IOException e) {
-            throw new FailedUploadFile(e.getCause(), code);
+            throw new FailedUploadFileException(e.getMessage());
         }
 
         // TODO: Persist the key in the database

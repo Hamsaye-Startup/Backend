@@ -36,7 +36,7 @@ public class CommentEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "storage", unique = true, updatable = false, columnDefinition = "bigint", foreignKey = @ForeignKey(name = "fk_storage_comment"))
+    @JoinColumn(name = "storage", updatable = false, columnDefinition = "bigint", foreignKey = @ForeignKey(name = "fk_storage_comment"))
     private StorageEntity storage;
 
     @Column(name = "comment_by", columnDefinition = "uuid", nullable = false, updatable = false)

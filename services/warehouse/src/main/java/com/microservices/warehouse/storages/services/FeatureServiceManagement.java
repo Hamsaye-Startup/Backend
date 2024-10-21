@@ -1,7 +1,7 @@
 package com.microservices.warehouse.storages.services;
 
 import com.microservices.warehouse.storages.dto.FeatureDTO;
-import com.microservices.warehouse.applications.exceptions.IllegalOperationException;
+import com.microservices.warehouse.application.exceptions.IllegalOperationException;
 import com.microservices.warehouse.storages.mappers.FeatureMapper;
 import com.microservices.warehouse.storages.mappers.StorageMapper;
 import com.microservices.warehouse.storages.models.FeatureEntity;

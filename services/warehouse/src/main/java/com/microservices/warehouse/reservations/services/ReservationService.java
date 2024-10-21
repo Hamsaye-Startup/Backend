@@ -1,8 +1,8 @@
 package com.microservices.warehouse.reservations.services;
 
+import com.microservices.warehouse.application.exceptions.CustomNotFoundException;
 import com.microservices.warehouse.reservations.models.ReservationEntity;
 import com.microservices.warehouse.reservations.repositories.ReservationRepository;
-import com.microservices.warehouse.storages.exceptions.NotFoundReservationException;
 import com.microservices.warehouse.storages.models.StorageCategoryEnum;
 import com.microservices.warehouse.storages.models.StorageEntity;
 import lombok.RequiredArgsConstructor;
@@ -56,13 +56,13 @@ public class ReservationService {
      *
      * @param reservationId the UUID of the reservation to retrieve
      * @return the reservation entity associated with the given ID
-     * @throws NotFoundReservationException if no reservation is found with the specified ID
+     * @throws CustomNotFoundException if no reservation is found with the specified ID
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true)
     public ReservationEntity findReservationById(UUID reservationId) {
         return reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new NotFoundReservationException(reservationId.toString()));
+                .orElseThrow(() -> new CustomNotFoundException("reservation [" + reservationId + "] is not exist"));
     }
 
     /**

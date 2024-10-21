@@ -1,7 +1,7 @@
 package com.microservices.warehouse.storages.controllers;
 
-import com.microservices.warehouse.applications.mapper.MessageMapper;
-import com.microservices.warehouse.storages.exceptions.AuthenticationCredentialNotFoundException;
+import com.microservices.warehouse.application.mapper.MessageMapper;
+import com.microservices.warehouse.application.exceptions.AuthenticationCredentialNotFoundException;
 import com.microservices.warehouse.storages.models.FavouritesBookEntity;
 import com.microservices.warehouse.storages.services.FavouritesBookServiceManagement;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,21 +32,35 @@ public class FavouritesBookController {
 
     /**
      * Mapper for transforming between different representations of favorite books.
-     * See {@link com.microservices.warehouse.applications.mapper.MessageMapper} for more details.
+     * See {@link com.microservices.warehouse.application.mapper.MessageMapper} for more details.
      */
     private final MessageMapper mapper;
 
     /**
-     * Extracts the user ID from the HTTP request header.
+     * Extracts the user ID from the HTTP request header, throwing an exception if not found.
      * @param request the HTTP request containing the user ID header
      * @return the extracted user ID as a {@link UUID}
      * @throws AuthenticationCredentialNotFoundException if the user ID header is missing
      * @since 1.0
      */
-    private UUID findUserByHeader(HttpServletRequest request) {
+    private UUID findUserByHeaderOrThrow(HttpServletRequest request) {
         String userId = request.getHeader("X_USER_ID");
         if (userId == null) {
             throw new AuthenticationCredentialNotFoundException("user id header not found");
+        }
+        return UUID.fromString(userId);
+    }
+
+    /**
+     * Extracts the user ID from the HTTP request header, returning null if not found.
+     * @param request the HTTP request containing the user ID header
+     * @return the extracted user ID as a {@link UUID}, or null if the header is missing
+     * @since 1.0
+     */
+    private UUID findUserByHeaderOrNull(HttpServletRequest request) {
+        String userId = request.getHeader("X_USER_ID");
+        if (userId == null) {
+            return null;
         }
         return UUID.fromString(userId);
     }
@@ -65,9 +79,13 @@ public class FavouritesBookController {
     ) {
         FavouritesBookEntity response = management.addFavouritesBook(
                 id,
-                findUserByHeader(request)
+                findUserByHeaderOrThrow(request)
         );
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -84,9 +102,13 @@ public class FavouritesBookController {
     ) {
         FavouritesBookEntity response = management.deleteFavouritesBookByStorageIdAndUserId(
                 id,
-                findUserByHeader(request)
+                findUserByHeaderOrThrow(request)
         );
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -99,13 +121,18 @@ public class FavouritesBookController {
     @GetMapping("/user/id/{id}")
     public ResponseEntity<?> findFavouritesBookById(
             @PathVariable("id") UUID uid,
-            Pageable pageable
+            Pageable pageable,
+            HttpServletRequest request
     ) {
         Page<FavouritesBookEntity> responses = management.findFavouritesBookByUserId(
                 uid,
                 pageable
         );
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -121,10 +148,14 @@ public class FavouritesBookController {
             Pageable pageable
     ) {
         Page<FavouritesBookEntity> responses = management.findFavouritesBookByUserId(
-                findUserByHeader(request),
+                findUserByHeaderOrThrow(request),
                 pageable
         );
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
 }

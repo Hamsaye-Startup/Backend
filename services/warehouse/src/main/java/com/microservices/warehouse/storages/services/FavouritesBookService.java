@@ -1,9 +1,10 @@
 package com.microservices.warehouse.storages.services;
 
-import com.microservices.warehouse.storages.exceptions.PersistFavouritesBookException;
+import com.microservices.warehouse.application.exceptions.CustomJpaPersistanceException;
 import com.microservices.warehouse.storages.models.FavouritesBookEntity;
 import com.microservices.warehouse.storages.repositories.FavouritesBookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,16 +36,12 @@ public class FavouritesBookService {
      *
      * @param favourites The {@link FavouritesBookEntity} to be persisted.
      * @return The persisted {@link FavouritesBookEntity}.
-     * @throws PersistFavouritesBookException if an error occurs during the persistence operation.
+     * @throws CustomJpaPersistanceException if an error occurs during the persistence operation.
      * @since 1.0
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public FavouritesBookEntity persist(FavouritesBookEntity favourites) {
-        try {
-            return repository.saveAndFlush(favourites);
-        } catch (RuntimeException ex) {
-            throw new PersistFavouritesBookException(ex.getCause(), favourites.getId().toString());
-        }
+        return repository.saveAndFlush(favourites);
     }
 
     /**

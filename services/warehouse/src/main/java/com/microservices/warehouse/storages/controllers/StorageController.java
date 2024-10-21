@@ -1,8 +1,8 @@
 package com.microservices.warehouse.storages.controllers;
 
-import com.microservices.warehouse.applications.mapper.MessageMapper;
+import com.microservices.warehouse.application.mapper.MessageMapper;
 import com.microservices.warehouse.geos.requests.AddressRequests;
-import com.microservices.warehouse.storages.exceptions.AuthenticationCredentialNotFoundException;
+import com.microservices.warehouse.application.exceptions.AuthenticationCredentialNotFoundException;
 import com.microservices.warehouse.storages.models.StorageStatusEnum;
 import com.microservices.warehouse.storages.requests.StorageRequest;
 import com.microservices.warehouse.storages.responses.StorageResponse;
@@ -31,7 +31,7 @@ public class StorageController {
 
     /**
      * Mapper for transforming between different representations of storage information.
-     * See {@link com.microservices.warehouse.applications.mapper.MessageMapper} for more details.
+     * See {@link com.microservices.warehouse.application.mapper.MessageMapper} for more details.
      */
     private final MessageMapper mapper;
 
@@ -86,7 +86,11 @@ public class StorageController {
                 storageRequest,
                 findUserByHeaderOrThrow(request)
         );
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -99,13 +103,18 @@ public class StorageController {
     @PutMapping("/id/{storageId}/address")
     public ResponseEntity<?> updateStorageAddress(
             @PathVariable("storageId") Long id,
-            @RequestBody @Valid AddressRequests addressRequests
+            @RequestBody @Valid AddressRequests addressRequests,
+            HttpServletRequest request
     ) {
         StorageResponse response = storageServiceManagement.updateStorageAddress(
                 id,
                 addressRequests
         );
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -118,13 +127,18 @@ public class StorageController {
     @PutMapping("/id/{storageId}/details")
     public ResponseEntity<?> updateStorageDetails(
             @PathVariable("storageId") Long id,
-            @RequestBody @Valid StorageRequest storageRequest
+            @RequestBody @Valid StorageRequest storageRequest,
+            HttpServletRequest request
     ) {
         StorageResponse response = storageServiceManagement.updateStorageDetails(
                 id,
                 storageRequest
         );
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -134,9 +148,16 @@ public class StorageController {
      * @since 1.0
      */
     @PutMapping("/id/{storageId}/verify")
-    public ResponseEntity<?> verifyStorage(@PathVariable("storageId") Long id) {
+    public ResponseEntity<?> verifyStorage(
+            @PathVariable("storageId") Long id,
+            HttpServletRequest request
+    ) {
         StorageResponse response = storageServiceManagement.verifyStorageById(id);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -146,9 +167,16 @@ public class StorageController {
      * @since 1.0
      */
     @DeleteMapping("/id/{storageId}/host")
-    public ResponseEntity<?> removeStorageByHost(@PathVariable("storageId") Long id) {
+    public ResponseEntity<?> removeStorageByHost(
+            @PathVariable("storageId") Long id,
+            HttpServletRequest request
+    ) {
         StorageResponse response = storageServiceManagement.removeStorageById(id, StorageStatusEnum.ON_BLOCK_STASH);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -161,10 +189,15 @@ public class StorageController {
     @PostMapping("/id/{storageId}/display")
     public ResponseEntity<?> showStorage(
             @PathVariable("storageId") Long id,
-            @RequestParam(name = "displayable") boolean enabled
+            @RequestParam(name = "displayable") boolean enabled,
+            HttpServletRequest request
     ) {
         StorageResponse response = storageServiceManagement.displayStorage(id, enabled);
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -192,7 +225,11 @@ public class StorageController {
             response = storageServiceManagement.findStorageById(id);
         }
 
-        return ResponseEntity.ok(mapper.toResponse(response));
+        return ResponseEntity.ok(mapper.toResponse(
+                response,
+                userId,
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -205,10 +242,15 @@ public class StorageController {
     @GetMapping("/host")
     public ResponseEntity<?> findStoragesByHost(
             @RequestParam(name = "uid") UUID userId,
-            Pageable pageable
+            Pageable pageable,
+            HttpServletRequest request
     ) {
         Page<StorageResponse> responses = storageServiceManagement.findStoragesByUserId(userId, pageable);
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                findUserByHeaderOrNull(request),
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -249,7 +291,11 @@ public class StorageController {
             );
         }
 
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                userId,
+                request.getContextPath()
+        ));
     }
 
     /**
@@ -282,6 +328,10 @@ public class StorageController {
             );
         }
 
-        return ResponseEntity.ok(mapper.toResponse(responses));
+        return ResponseEntity.ok(mapper.toResponse(
+                responses,
+                userId,
+                request.getContextPath()
+        ));
     }
 }

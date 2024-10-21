@@ -29,3 +29,69 @@ eureka:
   client:
     service-url:
       defaultZone: http://discovery-service:8761/eureka
+
+
+---
+
+api:
+  responses:
+    success:
+      title: 'successful'
+      code: 0
+      status: 200
+      description: ''
+    validation:
+      title: 'internal server error is occurred'
+      code: 400
+      status: 400
+      description: ''
+    internal:
+      title: 'internal server error is occurred'
+      code: 500
+      status: 500
+      description: ''
+    not-found-object:
+      title: 'entity or object not found'
+      code: 14014
+      status: 404
+      description: ''
+    exist-object:
+      title: 'entity or object is already exist'
+      code: 14015
+      status: 409
+      description: ''
+    cannot-persist-object:
+      title: 'entity or object cannot be persisted'
+      code: 16060
+      status: 400
+      description: ''
+    illegal-request-happened:
+      title: 'illegal request is detected'
+      code: -1
+      status: 400
+      description: ''
+    not-exist-authentication-credential:
+      title: 'authentication credential not exist'
+      code: 10049
+      status: 400
+      description: ''
+    not-removable-object:
+      title: 'entity or object not removable'
+      code: 10050
+      status: 400
+      description: ''
+    cannot-remove-object:
+      title: 'entity or object cannot be removed'
+      code: 10051
+      status: 400
+      description: ''
+    failed-upload-file:
+      title: 'uploading file was failed'
+      code: 10052
+      status: 400
+      description: ''
+    empty-file-uploaded:
+      title: 'uploaded file is empty'
+      code: 10053
+      status: 400
+      description: ''

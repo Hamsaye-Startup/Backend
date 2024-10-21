@@ -18,6 +18,7 @@ import java.util.UUID;
  * @author Pouria Ghafarbeigi
  * @version 1.0
  */
+
 @Repository
 public interface StorageRepository extends JpaRepository<StorageEntity, Long> {
     Optional<StorageEntity> findByIdAndEnabledAndStatusNot(
