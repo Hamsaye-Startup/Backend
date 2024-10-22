@@ -46,7 +46,7 @@ public class AddressService {
         return AddressEntity.builder()
                 .address(addressRequests.address())
                 .addressCompat(addressRequests.addressCompat())
-                .coordinate(addressRequests.lat() + "," + addressRequests.lon())
+                .coordinate(addressRequests.lat() + ";" + addressRequests.lon())
                 .details(generateAddressDetails(addressRequests.postalCode(), addressRequests))
                 .build();
     }

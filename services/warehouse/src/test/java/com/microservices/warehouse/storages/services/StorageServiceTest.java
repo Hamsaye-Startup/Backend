@@ -9,6 +9,7 @@ import com.microservices.warehouse.storages.models.StorageCategoryEnum;
 import com.microservices.warehouse.storages.models.StorageEntity;
 import com.microservices.warehouse.storages.models.StorageStatusEnum;
 import com.microservices.warehouse.storages.repositories.StorageRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -316,13 +317,6 @@ class StorageServiceTest {
                 "This is sample description for first storage",
                 "This is simple address for first storage",
                 "12"
-        );
-
-        StorageEntity second = generateStorage(
-                userId,
-                "This is sample description for second storage",
-                "This is simple address for second storage",
-                "121"
         );
 
         PageImpl<StorageEntity> storages = new PageImpl<>(Collections.singletonList(first));

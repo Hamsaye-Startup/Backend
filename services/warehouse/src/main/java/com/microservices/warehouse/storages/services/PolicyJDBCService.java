@@ -143,7 +143,7 @@ public class PolicyJDBCService {
      */
     public void deletePolicyByCode(String code) {
 
-        // Delete policies from child table
+        // Delete policies from interface table
         deleteStoragePoliciesByCode(code);
 
         // Delete policies from parent table

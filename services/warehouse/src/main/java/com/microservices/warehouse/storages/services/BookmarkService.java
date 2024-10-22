@@ -43,7 +43,7 @@ public class BookmarkService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public BookmarkEntity persist(BookmarkEntity bookmark) {
-        return repository.saveAndFlush(bookmark);
+        return repository.save(bookmark);
     }
 
     /**

@@ -4,7 +4,6 @@ import com.microservices.warehouse.application.exceptions.CustomJpaPersistanceEx
 import com.microservices.warehouse.storages.models.FavouritesBookEntity;
 import com.microservices.warehouse.storages.repositories.FavouritesBookRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -41,7 +40,7 @@ public class FavouritesBookService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public FavouritesBookEntity persist(FavouritesBookEntity favourites) {
-        return repository.saveAndFlush(favourites);
+        return repository.save(favourites);
     }
 
     /**
