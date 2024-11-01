@@ -15,14 +15,12 @@ import com.microservices.warehouse.storages.responses.StorageFlagsResponse;
 import com.microservices.warehouse.storages.responses.StorageResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -63,7 +61,7 @@ class StorageServiceManagementTest {
             .build();
     private final StorageEntity storage = StorageEntity.builder()
             .owner(userId)
-            .category(StorageCategoryEnum.BUSINESS)
+            .category(StorageCategoryEnum.valueOf(storageRequest.category()))
             .width(storageRequest.width())
             .height(storageRequest.height())
             .amount(storageRequest.amount())
@@ -236,9 +234,9 @@ class StorageServiceManagementTest {
         // generate request entities
         StorageEntity persistedStorage = createPersistedStorage();
 
-        StorageEntity filteredStorage = createPersistedStorage();
-        filteredStorage.setMarked(false);
-        filteredStorage.setFavourite(false);
+        // Marking the same storage entity as favourite and bookmarked
+        persistedStorage.setMarked(false);
+        persistedStorage.setFavourite(false);
 
         StorageResponse expectedResponse = createStorageResponse(persistedStorage);
 
@@ -249,7 +247,7 @@ class StorageServiceManagementTest {
                 .thenReturn(null);
         Mockito.when(favouritesBookService.findByIdAndStorageId(userId, storageId))
                 .thenReturn(null);
-        Mockito.when(storageMapper.toResponse(filteredStorage))
+        Mockito.when(storageMapper.toResponse(persistedStorage))
                 .thenReturn(expectedResponse);
 
         // when
@@ -267,9 +265,9 @@ class StorageServiceManagementTest {
         // generate request entities
         StorageEntity persistedStorage = createPersistedStorage();
 
-        StorageEntity filteredStorage = createPersistedStorage();
-        filteredStorage.setMarked(true);
-        filteredStorage.setFavourite(true);
+        // Marking the same storage entity as favourite and bookmarked
+        persistedStorage.setMarked(true);
+        persistedStorage.setFavourite(true);
 
         StorageResponse expectedResponse = createStorageResponse(persistedStorage);
 
@@ -280,7 +278,7 @@ class StorageServiceManagementTest {
                 .thenReturn(new BookmarkEntity(new BookmarkId(userId, persistedStorage), LocalDateTime.now()));
         Mockito.when(favouritesBookService.findByIdAndStorageId(userId, storageId))
                 .thenReturn(new FavouritesBookEntity(new FavouritesId(userId, persistedStorage), LocalDateTime.now()));
-        Mockito.when(storageMapper.toResponse(filteredStorage))
+        Mockito.when(storageMapper.toResponse(persistedStorage))
                 .thenReturn(expectedResponse);
 
         // when
@@ -326,6 +324,166 @@ class StorageServiceManagementTest {
         assertNotNull(results);
         assertEquals(1L, results.getTotalElements());
         assertEquals(1L, results.getContent().size());
+        assertEquals(expectedResponses.getContent(), results.getContent());
+    }
+
+    @Test
+    void check_finding_storage_page_successful_with_marker() {
+        // given
+        // declare the inputs
+        String category = "BUSINESS";
+        LocalDate fromDate = LocalDateTime.now().minusDays(1L).toLocalDate(), toDate = LocalDateTime.now().plusDays(1L).toLocalDate();
+
+        // generate the entities
+        StorageCategoryEnum categoryEnum = StorageCategoryEnum.valueOf(category);
+        StorageEntity persistedStorage = createPersistedStorage();
+        Page<StorageEntity> storages = new PageImpl<>(Collections.singletonList(persistedStorage));
+        List<BookmarkEntity> bookmarks = Collections.singletonList(new BookmarkEntity(new BookmarkId(userId, persistedStorage), LocalDateTime.now()));
+        List<FavouritesBookEntity> favourites = Collections.singletonList(new FavouritesBookEntity(new FavouritesId(userId, persistedStorage), LocalDateTime.now()));
+
+        // Marking the same storage entity as favourite and bookmarked
+        persistedStorage.setMarked(true);
+        persistedStorage.setFavourite(true);
+
+        StorageResponse expectedResponse = createStorageResponse(persistedStorage);
+        PageImpl<StorageResponse> expectedResponses = new PageImpl<>(Collections.singletonList(expectedResponse), Pageable.unpaged(), 1);
+
+        // mock
+        Mockito.when(storageMapper.convertStorageCategory(category))
+                .thenReturn(categoryEnum);
+        Mockito.when(storageService.findStoragesByCategory(categoryEnum, true, StorageStatusEnum.ON_BLOCK_STASH, Pageable.unpaged()))
+                .thenReturn(storages);
+        Mockito.when(bookmarkService.findByUserId(userId))
+                .thenReturn(bookmarks);
+        Mockito.when(favouritesBookService.findByUserId(userId))
+                .thenReturn(favourites);
+        Mockito.when(storageMapper.toResponse(persistedStorage))
+                .thenReturn(expectedResponse);
+
+        // when
+        Page<StorageResponse> results = underTest.findStorages(category, fromDate, toDate, Pageable.unpaged(), userId);
+
+        // then
+        // assertion
+        assertNotNull(results);
+        assertEquals(1L, results.getTotalElements());
+        assertEquals(1, results.getContent().size());
+        assertEquals(expectedResponses.getContent(), results.getContent());
+    }
+
+    @Test
+    void check_finding_storage_page_successful_without_marker() {
+        // given
+        // declare the inputs
+        String category = "BUSINESS";
+        LocalDate fromDate = LocalDateTime.now().minusDays(1L).toLocalDate(), toDate = LocalDateTime.now().plusDays(1L).toLocalDate();
+
+        // generate the entities
+        StorageCategoryEnum categoryEnum = StorageCategoryEnum.valueOf(category);
+        StorageEntity persistedStorage = createPersistedStorage();
+        Page<StorageEntity> storages = new PageImpl<>(Collections.singletonList(persistedStorage));
+
+        // Marking the same storage entity as favourite and bookmarked
+        persistedStorage.setMarked(false);
+        persistedStorage.setFavourite(false);
+
+        StorageResponse expectedResponse = createStorageResponse(persistedStorage);
+        PageImpl<StorageResponse> expectedResponses = new PageImpl<>(Collections.singletonList(expectedResponse), Pageable.unpaged(), 1);
+
+        // mock
+        Mockito.when(storageMapper.convertStorageCategory(category))
+                .thenReturn(categoryEnum);
+        Mockito.when(storageService.findStoragesByCategory(categoryEnum, true, StorageStatusEnum.ON_BLOCK_STASH, Pageable.unpaged()))
+                .thenReturn(storages);
+        Mockito.when(storageMapper.toResponse(persistedStorage))
+                .thenReturn(expectedResponse);
+
+        // when
+        Page<StorageResponse> results = underTest.findStorages(category, fromDate, toDate, Pageable.unpaged());
+
+        // then
+        // assertion
+        assertNotNull(results);
+        assertEquals(1L, results.getTotalElements());
+        assertEquals(1, results.getContent().size());
+        assertEquals(expectedResponses.getContent(), results.getContent());
+    }
+
+    @Test
+    void check_searching_storage_page_by_postal_code_successful_with_marker() {
+        // given
+        // declare the inputs
+        String value = "4311";
+
+        // generate the entities
+        AddressRequests addressRequests = createAddressRequests();
+        AddressEntity address = createAddressEntity(addressRequests);
+        StorageEntity persistedStorage = createUpdatedStorage(address);
+        Page<StorageEntity> storages = new PageImpl<>(Collections.singletonList(persistedStorage));
+        List<BookmarkEntity> bookmarks = Collections.singletonList(new BookmarkEntity(new BookmarkId(userId, persistedStorage), LocalDateTime.now()));
+        List<FavouritesBookEntity> favourites = Collections.singletonList(new FavouritesBookEntity(new FavouritesId(userId, persistedStorage), LocalDateTime.now()));
+
+        // Marking the same storage entity as favourite and bookmarked
+        persistedStorage.setMarked(true);
+        persistedStorage.setFavourite(true);
+
+        StorageResponse expectedResponse = createStorageResponse(persistedStorage);
+        PageImpl<StorageResponse> expectedResponses = new PageImpl<>(Collections.singletonList(expectedResponse), Pageable.unpaged(), 1);
+
+        // mock
+        Mockito.when(storageService.searchStoragesByValue(value, true, Pageable.unpaged()))
+                .thenReturn(storages);
+        Mockito.when(bookmarkService.findByUserId(userId))
+                .thenReturn(bookmarks);
+        Mockito.when(favouritesBookService.findByUserId(userId))
+                .thenReturn(favourites);
+        Mockito.when(storageMapper.toResponse(persistedStorage))
+                .thenReturn(expectedResponse);
+
+        // when
+        Page<StorageResponse> results = underTest.searchStorages(value, Pageable.unpaged(), userId);
+
+        // then
+        // assertion
+        assertNotNull(results);
+        assertEquals(1L, results.getTotalElements());
+        assertEquals(1, results.getContent().size());
+        assertEquals(expectedResponses.getContent(), results.getContent());
+    }
+
+    @Test
+    void check_searching_storage_page_by_address_successful_without_marker() {
+        // given
+        // declare the inputs
+        String value = "address";
+
+        // generate the entities
+        AddressRequests addressRequests = createAddressRequests();
+        AddressEntity address = createAddressEntity(addressRequests);
+        StorageEntity persistedStorage = createUpdatedStorage(address);
+        Page<StorageEntity> storages = new PageImpl<>(Collections.singletonList(persistedStorage));
+
+        // Marking the same storage entity as favourite and bookmarked
+        persistedStorage.setMarked(false);
+        persistedStorage.setFavourite(false);
+
+        StorageResponse expectedResponse = createStorageResponse(persistedStorage);
+        PageImpl<StorageResponse> expectedResponses = new PageImpl<>(Collections.singletonList(expectedResponse), Pageable.unpaged(), 1);
+
+        // mock
+        Mockito.when(storageService.searchStoragesByValue(value, true, Pageable.unpaged()))
+                .thenReturn(storages);
+        Mockito.when(storageMapper.toResponse(persistedStorage))
+                .thenReturn(expectedResponse);
+
+        // when
+        Page<StorageResponse> results = underTest.searchStorages(value, Pageable.unpaged());
+
+        // then
+        // assertion
+        assertNotNull(results);
+        assertEquals(1L, results.getTotalElements());
+        assertEquals(1, results.getContent().size());
         assertEquals(expectedResponses.getContent(), results.getContent());
     }
 
